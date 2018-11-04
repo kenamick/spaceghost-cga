@@ -22,6 +22,7 @@ const {
   WEBPACK_DEV_SERVER_HOST = '0.0.0.0',
   WEBPACK_DEV_SERVER_PORT = 3001,
   WEBPACK_PUBLIC_PATH = './',
+  WEBPACK_HASH_LENGTH = 10,
 } = process.env
 
 const isDevelopment = NODE_ENV === 'development'
@@ -34,7 +35,8 @@ const entry = {
 const output = {
   path: buildDirAbsolutePath,
   filename: isDevelopment ?
-    'assets/[name]-[hash].js' : 'assets/[name]-[chunkhash].js',
+    `assets/[name]-[hash:${WEBPACK_HASH_LENGTH}].js` :
+    `assets/[name]-[chunkhash:${WEBPACK_HASH_LENGTH}].js`,
   publicPath: isDevelopment ? '/' : WEBPACK_PUBLIC_PATH,
 };
 
@@ -77,15 +79,16 @@ const devServer = {
   stats: { colors: true },
 };
 
-const fileNameFormat = '[name]-[hash].[ext]'
+const fileNameFormat = `[name]-[hash:${WEBPACK_HASH_LENGTH}].[ext]`
 
-const urlLoader = {
-  loader: 'url-loader',
+const getFileLoader = (location) => ({
+  loader: 'file-loader',
   options: {
-    limit: 25000,
-    name: `assets/graphics/${fileNameFormat}`,
+    name: `assets/${location}/${fileNameFormat}`,
   },
-}
+})
+
+const graphicsLoader = getFileLoader('graphics')
 
 const rules = {
   common: [{
@@ -94,33 +97,21 @@ const rules = {
     use: ['babel-loader'],
   }, {
     test: /\.(mp3|ogg|m4a|aac)$/,
-    use: [{
-      loader: 'file-loader',
-      options: {
-        limit: 25000,
-        name: `assets/audio/${fileNameFormat}`,
-      },
-    }],
+    use: [getFileLoader('audio')],
   }, {
     test: /\.(ttf|woff)$/,
-    use: [{
-      loader: 'file-loader',
-      options: {
-        limit: 25000,
-        name: `assets/fonts/${fileNameFormat}`,
-      },
-    }],
+    use: [getFileLoader('fonts')],
   }],
 
   development: [{
     test: /\.(png|jpg|jpeg|gif)$/,
-    use: [urlLoader],
+    use: [graphicsLoader],
   }],
 
   production: [{
     test: /\.(png|jpg|jpeg|gif)$/,
     use: [
-      urlLoader, {
+      graphicsLoader, {
         loader: 'image-webpack-loader',
         options: {
           mozjpeg: {
