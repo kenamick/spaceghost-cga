@@ -1,11 +1,12 @@
-import Phaser, { Game, Math } from 'phaser'
+import Phaser, { Game, Math } from 'phaser';
+import KPPipeline from './shaders/pipeline';
 import { FireFly } from './player';
 // From https://phaser.io/tutorials/getting-started-phaser3/part5
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 960,
+  height: 640,
   antialias: false,
   physics: {
     default: 'arcade',
@@ -51,6 +52,8 @@ window.onload = () => {
   window.addEventListener('resize', resize)
 }
 
+let customPipeline;
+
 function preload() {
   // backgrounds
   ['purple', 'blue'].map(item => 
@@ -61,6 +64,9 @@ function preload() {
   // ships
   ['1-red'].map(item =>
     this.load.image(`ship-${item}`, require(`../assets/ships/${item}.png`)));
+
+  customPipeline = game.renderer.addPipeline('Custom', new KPPipeline(game, 'noise'));
+  customPipeline.setFloat2('resolution', game.config.width, game.config.height);
 } 
 
 var player;
@@ -73,11 +79,11 @@ function create() {
 
   var particles = this.add.particles('p-red');
   var emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 0.5, end: 0 },
-      blendMode: 'ADD',
-      followOffset: new Math.Vector2(0, 40),
-      follow: player.gameSprite
+    speed: 100,
+    scale: { start: 0.5, end: 0 },
+    blendMode: 'ADD',
+    followOffset: new Math.Vector2(0, 40),
+    follow: player.gameSprite
   });
   //emitter.startFollow(player.gameSprite);
 
@@ -85,8 +91,18 @@ function create() {
   // logo.setVelocity(100, 200);
   // logo.setBounce(1, 1);
   // logo.setCollideWorldBounds(true);
+
+  // add shader
+  this.cameras.main.setBounds(0, 0, 1024, 2048);
+  this.cameras.main.setRenderToTexture(customPipeline);
 }
+
+let time = 0;
 
 function update() {
   player.update();
+
+  customPipeline.setFloat1('Time', time);
+
+  time += 0.005;
 }

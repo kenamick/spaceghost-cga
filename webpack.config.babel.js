@@ -101,6 +101,9 @@ const rules = {
   }, {
     test: /\.(ttf|woff)$/,
     use: [getFileLoader('fonts')],
+  }, {
+    test: /\.(glsl)$/,
+    use: [getFileLoader('audio')],
   }],
 
   development: [{
