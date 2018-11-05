@@ -1,6 +1,6 @@
-# Yet Another Phaser Boilerplate
+# game-off-2018
 
-A very minimalistic boilerplate to kickstart your Phaser 3 project
+
 
 ## Installation
 

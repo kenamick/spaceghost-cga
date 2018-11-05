@@ -1,24 +1,29 @@
 {
-  "name": "yapb",
+  "name": "game-off-2018",
   "version": "0.1.0",
-  "description": "Yet Another Phaser Boilerplate",
+  "description": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/n3tn0de/yapb.git"
+    "url": "git+https://github.com/kenamick/game-off-2018.git"
   },
   "keywords": [
     "Phaser",
     "Phaser 3",
     "webpack",
     "webpack 4",
-    "boilerplate"
+    "game-off",
+    "game-off-2018"
   ],
-  "author": "Alexey Vishnyakov <n3tn0de@gmail.com> (github.com/n3tn0de)",
+  "contributors": [
+    "Alexey Vishnyakov <n3tn0de@gmail.com> (github.com/n3tn0de)",
+    "Carlos Braga <carlos.braga@admcsc.com.br> (github.com/charliiee)",
+    "Petar Petrov <petar.petrov.georgiev@gmail.com> (github.com/petarov)"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/n3tn0de/yapb/issues"
+    "url": "https://github.com/kenamick/game-off-2018/issues"
   },
-  "homepage": "https://github.com/n3tn0de/yapb#readme",
+  "homepage": "https://github.com/kenamick/game-off-2018#readme",
   "private": true,
   "dependencies": {
     "phaser": "^3.15.1"
