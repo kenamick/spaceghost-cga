@@ -1,6 +1,5 @@
 import Phaser, { Game } from 'phaser'
-
-
+import { FireFly } from './player';
 // From https://phaser.io/tutorials/getting-started-phaser3/part5
 
 const config = {
@@ -11,12 +10,18 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 200 },
+      fps: 60,
+      gravity: { y: 0 }
     }
+  },
+  input: {
+    gamepad: true,
+    keyboard: true
   },
   scene: {
     preload: preload,
     create: create,
+    update: update
   }
 };
 
@@ -47,29 +52,39 @@ window.onload = () => {
 }
 
 function preload() {
-  this.load.setBaseURL('http://labs.phaser.io');
+  // backgrounds
+  ['purple', 'blue'].map(item => 
+      this.load.image(`bkg-${item}`, require(`../assets/backdrops/${item}.png`)));
+  // particles
+  ['red'].map(item =>
+    this.load.image(`p-${item}`, require(`../assets/particles/${item}.png`)));
+  // ships
+  ['1-red'].map(item =>
+    this.load.image(`ship-${item}`, require(`../assets/ships/${item}.png`)));
+} 
 
-  this.load.image('sky', 'assets/skies/space3.png');
-  this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-  this.load.image('red', 'assets/particles/red.png');
-}
+var player;
 
 function create() {
-  this.add.image(400, 300, 'sky');
+  this.add.tileSprite(0, 0, 
+    game.config.width * 2, game.config.height * 2, 'bkg-purple');
 
-  var particles = this.add.particles('red');
+  player = new FireFly(this, { x: 100, y: 300 });
 
+  var particles = this.add.particles('p-red');
   var emitter = particles.createEmitter({
       speed: 100,
       scale: { start: 1, end: 0 },
       blendMode: 'ADD'
   });
+  emitter.startFollow(player.gameSprite);
 
-  var logo = this.physics.add.image(400, 100, 'logo');
+  // var logo = this.physics.add.image(400, 100, 'logo');
+  // logo.setVelocity(100, 200);
+  // logo.setBounce(1, 1);
+  // logo.setCollideWorldBounds(true);
+}
 
-  logo.setVelocity(100, 200);
-  logo.setBounce(1, 1);
-  logo.setCollideWorldBounds(true);
-
-  emitter.startFollow(logo);
+function update() {
+  player.update();
 }
