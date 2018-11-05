@@ -1,4 +1,4 @@
-import Phaser, { Game } from 'phaser'
+import Phaser, { Game, Math } from 'phaser'
 import { FireFly } from './player';
 // From https://phaser.io/tutorials/getting-started-phaser3/part5
 
@@ -74,10 +74,12 @@ function create() {
   var particles = this.add.particles('p-red');
   var emitter = particles.createEmitter({
       speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: 'ADD'
+      scale: { start: 0.5, end: 0 },
+      blendMode: 'ADD',
+      followOffset: new Math.Vector2(0, 40),
+      follow: player.gameSprite
   });
-  emitter.startFollow(player.gameSprite);
+  //emitter.startFollow(player.gameSprite);
 
   // var logo = this.physics.add.image(400, 100, 'logo');
   // logo.setVelocity(100, 200);

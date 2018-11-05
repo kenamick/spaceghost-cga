@@ -17,7 +17,7 @@ class FireFly {
   }
 
   get gameSprite() {
-    return this._sprite;
+    return this.sprite;
   }
 
   update() {
