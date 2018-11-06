@@ -1,6 +1,7 @@
 import Phaser, { Game, Math } from 'phaser';
 import KPPipeline from './shaders/pipeline';
 import { FireFly } from './player';
+import Controls from './controls';
 // From https://phaser.io/tutorials/getting-started-phaser3/part5
 
 const config = {
@@ -75,17 +76,7 @@ function create() {
   this.add.tileSprite(0, 0, 
     game.config.width * 2, game.config.height * 2, 'bkg-purple');
 
-  player = new FireFly(this, { x: 100, y: 300 });
-
-  var particles = this.add.particles('p-red');
-  var emitter = particles.createEmitter({
-    speed: 100,
-    scale: { start: 0.5, end: 0 },
-    blendMode: 'ADD',
-    followOffset: new Math.Vector2(0, 40),
-    follow: player.gameSprite
-  });
-  //emitter.startFollow(player.gameSprite);
+  player = new FireFly(this, new Controls(this), { x: 100, y: 300 });
 
   // var logo = this.physics.add.image(400, 100, 'logo');
   // logo.setVelocity(100, 200);
@@ -99,8 +90,8 @@ function create() {
 
 let time = 0;
 
-function update() {
-  player.update();
+function update(time, delta) {
+  player.update(time, delta);
 
   customPipeline.setFloat1('Time', time);
 

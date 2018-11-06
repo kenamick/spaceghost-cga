@@ -33,20 +33,17 @@ class Controls {
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
       ],
-      attack: [
-        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H),
+      attack1: [
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
-        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
       ],
-      // kicks: [
-      //   game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J),
-      //   game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
-      //   game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE)
-      // ],
-      // jumps: [
-      //   game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J),
-      //   game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-      // ]
+      attack2: [
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+      ]
     };
 
     // allow for testing game stuff
@@ -73,8 +70,11 @@ class Controls {
         if (k.justPressed())
           return true;
       } else {
-        if (k.isDown)
+        if (k.isDown) {
+          if (k.keyCode == 65)
+            console.log(k);
           return true;
+        }
       }
 
     }
@@ -109,7 +109,7 @@ class Controls {
   }
 
   get down() {
-    this._keyPressed(this.keys.downs);
+    return this._keyPressed(this.keys.downs);
     // return (
     //   this._keyPressed(this.keys.downs) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_DPAD_DOWN) ||
@@ -120,7 +120,7 @@ class Controls {
   }
 
   get left() {
-    this._keyPressed(this.keys.lefts);
+    return this._keyPressed(this.keys.lefts);
     // return (
     //   this._keyPressed(this.keys.lefts) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_DPAD_LEFT) ||
@@ -131,7 +131,7 @@ class Controls {
   }
 
   get right() {
-    this._keyPressed(this.keys.rights);
+    return this._keyPressed(this.keys.rights);
     // return (
     //   this._keyPressed(this.keys.rights) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_DPAD_RIGHT) ||
@@ -141,16 +141,16 @@ class Controls {
     // );
   }
 
-  get punch() {
-    this._keyPressed(this.keys.punches);
+  get attack1() {
+    return this._keyPressed(this.keys.attack1);
     // return (
-    //   this._keyPressed(this.keys.punches) ||
-    //   this._padPressed(Phaser.Gamepad.XBOX360_X)
+    //   this._keyPressed(this.keys.kicks) ||
+    //   this._padPressed(Phaser.Gamepad.XBOX360_A)
     // );
   }
 
-  get attack() {
-    this._keyPressed(this.keys.attack);
+  get attack2() {
+    return this._keyPressed(this.keys.attack2);
     // return (
     //   this._keyPressed(this.keys.kicks) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_A)
