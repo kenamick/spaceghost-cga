@@ -68,6 +68,9 @@ function preload() {
   // bullets
   ['simple'].map(item =>
     this.load.image(`bullet-${item}`, require(`../assets/bullets/${item}.png`)));
+  // foods
+  ['simple'].map(item =>
+    this.load.image(`food-${item}`, require(`../assets/foods/${item}.png`)));
 
   customPipeline = game.renderer.addPipeline('Custom', new KPPipeline(game, 'noise'));
   customPipeline.setFloat2('resolution', game.config.width, game.config.height);
