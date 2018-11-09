@@ -1,6 +1,6 @@
 import Phaser, { Game, Math } from 'phaser';
 import KPPipeline from './shaders/pipeline';
-import { FireFly } from './player';
+import { FireFly } from './entities';
 import Controls from './controls';
 // From https://phaser.io/tutorials/getting-started-phaser3/part5
 
@@ -57,7 +57,7 @@ let customPipeline;
 
 function preload() {
   // backgrounds
-  ['purple', 'blue'].map(item => 
+  ['purple', 'blue'].map(item =>
       this.load.image(`bkg-${item}`, require(`../assets/backdrops/${item}.png`)));
   // particles
   ['red'].map(item =>
@@ -68,12 +68,12 @@ function preload() {
 
   customPipeline = game.renderer.addPipeline('Custom', new KPPipeline(game, 'noise'));
   customPipeline.setFloat2('resolution', game.config.width, game.config.height);
-} 
+}
 
 var player;
 
 function create() {
-  this.add.tileSprite(0, 0, 
+  this.add.tileSprite(0, 0,
     game.config.width * 2, game.config.height * 2, 'bkg-purple');
 
   player = new FireFly(this, new Controls(this), { x: 100, y: 300 });

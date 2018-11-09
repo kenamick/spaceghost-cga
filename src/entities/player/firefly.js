@@ -1,6 +1,7 @@
 // firefly.js - Player's glorious ship
 import { Math } from 'phaser';
-import Globals from '../globals';
+import Globals from '../../globals';
+import { Weapon } from '../weapons/weapon';
 
 class FireFly {
 
@@ -17,6 +18,8 @@ class FireFly {
     this.sprite.setMaxVelocity(600);
 
     this.controls = controls;
+
+    this.weapon = new Weapon(game, this);
 
     this.attachEngine();
   }
@@ -38,10 +41,11 @@ class FireFly {
   }
 
   update(time, delta) {
-    const { controls, game, sprite } = this;
+    const { controls, game, sprite, weapon } = this;
 
     if (controls.up) {
       game.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
+      weapon.fire(time);
     } else {
       sprite.setAcceleration(0);
     }
