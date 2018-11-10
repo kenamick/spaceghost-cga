@@ -9,23 +9,37 @@ class Preloader extends BaseScene {
   }
 
   preload() {
-    const assetsDir = '../../assets';
-    
-    // backgrounds
-    ['purple', 'blue'].map(item =>
-      this.load.image(`bkg-${item}`, require(`${assetsDir}/backdrops/${item}.png`)));
-    // particles
-    ['red'].map(item =>
-      this.load.image(`p-${item}`, require(`${assetsDir}/particles/${item}.png`)));
-    // ships
-    ['1-red'].map(item =>
-      this.load.image(`ship-${item}`, require(`${assetsDir}/ships/${item}.png`)));
-    // bullets
-    ['simple'].map(item =>
-      this.load.image(`bullet-${item}`, require(`${assetsDir}/bullets/${item}.png`)));
-    // foods
-    ['simple'].map(item =>
-      this.load.image(`food-${item}`, require(`${assetsDir}/foods/${item}.png`)));
+    const assets = {
+      backdrops: {
+        key: 'bkg',
+        items: ['purple', 'blue']
+      },
+      particles: {
+        key: 'p',
+        items: ['red']
+      },
+      ships: {
+        key: 'ship',
+        items: ['1-red']
+      },
+      bullets: {
+        key: 'bullet',
+        items: ['simple']
+      },
+      foods: {
+        key: 'food',
+        items: ['simple']
+      },
+    }
+
+    Object.keys(assets).map(assetCategory => {
+      assets[assetCategory].items.map(asset =>
+        this.load.image(
+          `${assets[assetCategory].key}-${asset}`,
+          require(`../../assets/${assetCategory}/${asset}.png`)
+        )
+      )
+    })
 
     super.loadShaders();
   }
