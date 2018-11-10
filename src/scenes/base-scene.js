@@ -13,35 +13,30 @@ class BaseScene extends Phaser.Scene {
     this.showFps();
   }
 
-  initShaders() {
-    if (this.customPipeline) {
-      this.cameras.main.setRenderToTexture(customPipeline);
-    }
-  }
-
-  loadShaders() {
+  addShaders() {
     this.customPipeline = Globals.game.renderer.addPipeline('Custom', 
       new KPPipeline(Globals.game, 'noise'));
     this.customPipeline.setFloat2('resolution', 
       Globals.game.config.width, Globals.game.config.height);
+    this.cameras.main.setRenderToTexture(this.customPipeline);
   }
 
   showFps() {
     if (Globals.debug || Globals.showFps) {
-      this.fps = this.add.bitmapText(7, 5, Globals.bitmapFont, '-1', 7);
-      this.fps.anchor.setTo(0.5);
+      this.fps = this.add.bitmapText(10, 10, Globals.bitmapFont, '');
+      // this.fps.anchor.setTo(0.5);
       this.fps.fixedToCamera = true;
-      this.world.bringToTop(this.fps);
+      //this.children.bringToTop(this.fps);
     }
   }
 
   update(time, delta) {
     if (this.fps) {
-      this.fps.text = this.game.time.fps;
+      this.fps.text = this.time.fps;
     }
 
     if (this.customPipeline) {
-      this.customPipeline.setFloat1('Time', this.time);
+      this.customPipeline.setFloat1('Time', this.shaderDeltaTime);
       this.shaderDeltaTime += 0.005;
     }
   }

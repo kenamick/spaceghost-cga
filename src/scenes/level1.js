@@ -11,11 +11,8 @@ class Level1 extends BaseScene {
   }
 
   create() {
-    const { game } =  this;
-
-    this.time = 0;
-    
-    super.initShaders();
+    super.create();
+    super.addShaders();
 
     this.add.tileSprite(0, 0,
       Globals.game.config.width * 2, 
