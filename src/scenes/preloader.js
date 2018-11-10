@@ -32,6 +32,10 @@ class Preloader extends BaseScene {
       },
     }
 
+    this.load.bitmapFont(Globals.bitmapFont,
+      require('../../assets/fonts/standard-0753.png'),
+      require('../../assets/fonts/standard-0753.xml'))
+
     Object.keys(assets).map(assetCategory => {
       assets[assetCategory].items.map(asset =>
         this.load.image(
@@ -40,11 +44,11 @@ class Preloader extends BaseScene {
         )
       )
     })
-
-    super.loadShaders();
   }
 
   create() {
+    super.create();
+
     const { game } = this;
 
     // debug - start directly a game state
