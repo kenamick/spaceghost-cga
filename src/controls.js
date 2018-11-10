@@ -33,13 +33,13 @@ class Controls {
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT)
       ],
-      attack1: [
+      action1: [
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
       ],
-      attack2: [
+      action2: [
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
@@ -139,16 +139,16 @@ class Controls {
     // );
   }
 
-  get attack1() {
-    return this._keyPressed(this.keys.attack1);
+  get action1() {
+    return this._keyPressed(this.keys.action1);
     // return (
     //   this._keyPressed(this.keys.kicks) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_A)
     // );
   }
 
-  get attack2() {
-    return this._keyPressed(this.keys.attack2);
+  get action2() {
+    return this._keyPressed(this.keys.action2);
     // return (
     //   this._keyPressed(this.keys.kicks) ||
     //   this._padPressed(Phaser.Gamepad.XBOX360_A)

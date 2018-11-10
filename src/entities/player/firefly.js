@@ -45,7 +45,6 @@ class FireFly {
 
     if (controls.up) {
       game.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
-      weapon.fire(time);
     } else {
       sprite.setAcceleration(0);
     }
@@ -56,6 +55,10 @@ class FireFly {
       sprite.setAngularVelocity(300);
     } else {
       sprite.setAngularVelocity(0);
+    }
+
+    if (controls.action1) {
+      weapon.fire(time);
     }
 
     game.physics.world.wrap(sprite, 32);
