@@ -7,22 +7,24 @@ import {
   Level1
 } from './scenes';
 
-const resize = (game) => {
-  // https://stackoverflow.com/questions/51518818/how-to-make-canvas-responsive-using-phaser-3
-  // https://www.emanueleferonato.com/2018/02/16/how-to-scale-your-html5-games-if-your-framework-does-not-feature-a-scale-manager-or-if-you-do-not-use-any-framework/
-  const canvas = game.canvas
-  const width = window.innerWidth
-  const height = window.innerHeight
-  const windowRatio = width / height
-  const gameRatio = game.config.width / game.config.height
+const resize = () => {
+  const game = Globals.game;
+    if (game) {
+    // https://stackoverflow.com/questions/51518818/how-to-make-canvas-responsive-using-phaser-3
+    // https://www.emanueleferonato.com/2018/02/16/how-to-scale-your-html5-games-if-your-framework-does-not-feature-a-scale-manager-or-if-you-do-not-use-any-framework/
+    const canvas = game.canvas
+    const width = window.innerWidth
+    const height = window.innerHeight
+    const windowRatio = width / height
+    const gameRatio = game.config.width / game.config.height
 
-  if (windowRatio < gameRatio) {
-    canvas.style.width = width + 'px'
-    canvas.style.height = (width / gameRatio) + 'px'
-  }
-  else {
-    canvas.style.width = (height * gameRatio) + 'px'
-    canvas.style.height = height + 'px'
+    if (windowRatio < gameRatio) {
+      canvas.style.width = width + 'px'
+      canvas.style.height = (width / gameRatio) + 'px'
+    } else {
+      canvas.style.width = (height * gameRatio) + 'px'
+      canvas.style.height = height + 'px'
+    }
   }
 };
 
@@ -50,5 +52,7 @@ window.onload = function () {
 
   Globals.game = game; // not quite nice!
 
-  window.addEventListener('resize', (game) => resize);
+  resize();
 };
+
+window.addEventListener('resize', resize);

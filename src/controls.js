@@ -71,8 +71,6 @@ class Controls {
           return true;
       } else {
         if (k.isDown) {
-          if (k.keyCode == 65)
-            console.log(k);
           return true;
         }
       }
