@@ -67,7 +67,7 @@ class Controls {
     for (const k of keys) {
 
       if (this.justPressed) {
-        if (k.justPressed())
+        if (Phaser.Input.Keyboard.JustUp(k))
           return true;
       } else {
         if (k.isDown) {
