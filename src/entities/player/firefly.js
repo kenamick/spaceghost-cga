@@ -5,11 +5,11 @@ import { Weapon } from '../weapons/weapon';
 
 class FireFly {
 
-  constructor(game, controls, config) {
-    this.game = game;
+  constructor(scene, controls, config) {
+    this.scene = scene;
 
-    this.sprite = game.physics.add.image(config.x, config.y, Globals.atlas1, 'playerShip1_red.png');
-    this.sprite.rotation = 3.14;
+    this.sprite = scene.physics.add.image(config.x, config.y, Globals.atlas1, 'playerShip1_red.png');
+    //this.sprite.rotation = Math.PI / 2;
     this.sprite.setDepth(2);
 
     // this.sprite.setDamping(true);
@@ -19,13 +19,13 @@ class FireFly {
 
     this.controls = controls;
 
-    this.weapon = new Weapon(game, this);
+    this.weapon = new Weapon(scene, this);
 
     this.attachEngine();
   }
 
   attachEngine() {
-    var particles = this.game.add.particles('p-red');
+    var particles = this.scene.add.particles('p-red');
     var emitter = particles.createEmitter({
       speed: 100,
       scale: { start: 0.4, end: 0 },
@@ -41,10 +41,10 @@ class FireFly {
   }
 
   update(time, delta) {
-    const { controls, game, sprite, weapon } = this;
+    const { controls, scene, sprite, weapon } = this;
 
     if (controls.up) {
-      game.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
+      scene.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
     } else {
       sprite.setAcceleration(0);
     }
@@ -61,7 +61,7 @@ class FireFly {
       weapon.fire(time);
     }
 
-    game.physics.world.wrap(sprite, 32);
+    scene.physics.world.wrap(sprite, 32);
   }
 
 }
