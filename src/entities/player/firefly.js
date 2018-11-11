@@ -8,7 +8,8 @@ class FireFly {
   constructor(scene, controls, config) {
     this.scene = scene;
 
-    this.sprite = scene.physics.add.image(config.x, config.y, Globals.atlas1, 'playerShip1_red.png');
+    this.sprite = scene.physics.add.image(config.x, config.y, 
+      Globals.atlas1, 'playerShip1_red.png');
     //this.sprite.rotation = Math.PI / 2;
     this.sprite.setDepth(2);
 

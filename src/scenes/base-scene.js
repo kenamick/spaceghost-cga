@@ -22,17 +22,26 @@ class BaseScene extends Phaser.Scene {
   }
 
   showFps() {
-    // if (Globals.debug || Globals.showFps) {
-    //   this.fps = this.add.bitmapText(10, 10, Globals.bitmapFont, '');
-    //   // this.fps.anchor.setTo(0.5);
-    //   this.fps.fixedToCamera = true;
-    //   //this.children.bringToTop(this.fps);
-    // }
+    if (Globals.debug || Globals.showFps) {
+      this.fps = {
+        count: 0,
+        lastUpdateTime: 0,
+        sprite: this.add.bitmapText(0, 5, Globals.bitmapFont, '', 14)
+      };
+      this.fps.sprite.fixedToCamera = true;
+      this.children.bringToTop(this.fps.sprite);
+    }
   }
 
   update(time, delta) {
     if (this.fps) {
-      this.fps.text = this.time.fps;
+      let currTime = Date.now();
+      this.fps.counter++;
+      if (currTime > this.fps.lastUpdateTime + 1000) {
+        this.fps.lastUpdateTime = currTime;
+        this.fps.sprite.setText(this.fps.counter);
+        this.fps.counter = 0;
+      }
     }
 
     if (this.customPipeline) {

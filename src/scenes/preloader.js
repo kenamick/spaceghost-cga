@@ -18,10 +18,6 @@ class Preloader extends BaseScene {
         key: 'p',
         items: ['red']
       },
-      ships: {
-        key: 'ship',
-        items: ['1-red']
-      },
       bullets: {
         key: 'bullet',
         items: ['simple']
@@ -33,8 +29,8 @@ class Preloader extends BaseScene {
     }
 
     this.load.bitmapFont(Globals.bitmapFont,
-      require('../../assets/fonts/standard-0753.png'),
-      require('../../assets/fonts/standard-0753.xml'))
+      require('../../assets/fonts/kenney_future_regular_24.png'),
+      require('../../assets/xml/kenney_future_regular_24.xml'))
 
     this.load.atlasXML(Globals.atlas1, 
       require('../../assets/atlas-kenney/sheet.png'),
