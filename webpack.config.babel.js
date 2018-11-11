@@ -101,12 +101,9 @@ const rules = {
   }, {
     test: /\.(ttf|woff)$/,
     use: [getFileLoader('fonts')],
-  }, {
-    test: /((fonts\/(.*)\.png)|(fonts\/(.*)\.xml))$/,
-    use: [getFileLoader('fonts')],
   },{
     test: /\.xml$/,
-    use: [getFileLoader('xml')],
+    use: [getFileLoader('data')],
   }],
 
   development: [{
