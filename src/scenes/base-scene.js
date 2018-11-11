@@ -22,12 +22,12 @@ class BaseScene extends Phaser.Scene {
   }
 
   showFps() {
-    if (Globals.debug || Globals.showFps) {
-      this.fps = this.add.bitmapText(10, 10, Globals.bitmapFont, '');
-      // this.fps.anchor.setTo(0.5);
-      this.fps.fixedToCamera = true;
-      //this.children.bringToTop(this.fps);
-    }
+    // if (Globals.debug || Globals.showFps) {
+    //   this.fps = this.add.bitmapText(10, 10, Globals.bitmapFont, '');
+    //   // this.fps.anchor.setTo(0.5);
+    //   this.fps.fixedToCamera = true;
+    //   //this.children.bringToTop(this.fps);
+    // }
   }
 
   update(time, delta) {
