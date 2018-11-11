@@ -31,8 +31,8 @@ const resize = () => {
 window.onload = function () {
   const config = {
     type: Phaser.AUTO,
-    width: 960,
-    height: 640,
+    width: 1920,
+    height: 1080,
     antialias: false,
     physics: {
       default: 'arcade',
