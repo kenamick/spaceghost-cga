@@ -8,6 +8,14 @@ class MainMenu extends BaseScene {
     super('MainMenu');
   }
 
+  create() {
+    super.create();
+
+    this.add.tileSprite(0, 0,
+      Globals.game.config.width * 2,
+      Globals.game.config.height * 2, 'bkg-blue');
+  }
+
 }
 
 export { MainMenu };
