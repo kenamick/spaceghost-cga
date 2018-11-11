@@ -36,7 +36,8 @@ class Preloader extends BaseScene {
       require('../../assets/fonts/standard-0753.png'),
       require('../../assets/fonts/standard-0753.xml'))
 
-    this.load.atlasXML('atlas-k', require('../../assets/atlas-kenney/sheet.png'), 
+    this.load.atlasXML(Globals.atlas1, 
+      require('../../assets/atlas-kenney/sheet.png'),
       require('../../assets/xml/sheet.xml'));
 
     // sprite assets

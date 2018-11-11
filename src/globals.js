@@ -11,6 +11,7 @@ window.location.search.slice(1).split('&').map((option) => {
 const Globals = {
   // misc
   bitmapFont: 'standard',
+  atlas1: 'atlas-k',
   // development
   debug: checkStringBoolean(localStorage.getItem(`debug`)),
   debugPhysics: checkStringBoolean(localStorage.getItem(`debugPhysics`)),

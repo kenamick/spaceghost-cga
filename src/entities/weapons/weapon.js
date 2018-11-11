@@ -10,7 +10,8 @@ class Weapon {
 
     this.bullets = scene.physics.add.group();
     this.bullets.createMultiple({
-      key: 'bullet-simple',
+      key: Globals.atlas1,
+      frame: 'laserRed04.png',
       active: false,
       visible: false,
       repeat: 20,
