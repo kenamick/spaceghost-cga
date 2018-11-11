@@ -48,17 +48,11 @@ class Preloader extends BaseScene {
   }
 
   create() {
-    super.create();
-
-    const { game } = this;
-
-    // debug - start directly a game state
+    // debug - start a game scene directly
     if (Globals.debug && Globals.scene) {
       this.scene.start(Globals.scene);
+      return;
     }
-
-    // set background to the game average color (optional)
-    //this.game.stage.backgroundColor = Globals.palette.menuBackground.hex;
 
     this.scene.start('MainMenu');
   }
