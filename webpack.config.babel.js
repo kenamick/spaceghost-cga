@@ -104,6 +104,9 @@ const rules = {
   }, {
     test: /((fonts\/(.*)\.png)|(fonts\/(.*)\.xml))$/,
     use: [getFileLoader('fonts')],
+  },{
+    test: /\.xml$/,
+    use: [getFileLoader('xml')],
   }],
 
   development: [{

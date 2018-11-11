@@ -36,6 +36,10 @@ class Preloader extends BaseScene {
       require('../../assets/fonts/standard-0753.png'),
       require('../../assets/fonts/standard-0753.xml'))
 
+    this.load.atlasXML('atlas-k', require('../../assets/atlas-kenney/sheet.png'), 
+      require('../../assets/xml/sheet.xml'));
+
+    // sprite assets
     Object.keys(assets).map(assetCategory => {
       assets[assetCategory].items.map(asset =>
         this.load.image(
@@ -53,13 +57,13 @@ class Preloader extends BaseScene {
 
     // debug - start directly a game state
     if (Globals.debug && Globals.scene) {
-      this.state.start(Globals.scene);
+      this.scene.start(Globals.scene);
     }
 
     // set background to the game average color (optional)
     //this.game.stage.backgroundColor = Globals.palette.menuBackground.hex;
 
-    this.scene.start('Level1');
+    this.scene.start('MainMenu');
   }
 
 }
