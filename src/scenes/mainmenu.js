@@ -38,22 +38,24 @@ class MainMenu extends BaseScene {
 
     const { cursor } = this.menu;
 
-    if (this.controls.up) {
-      cursor.pos -= 1;
-      if (cursor.pos < 0) {
-        cursor.pos = this.menu.options.length - 1;
+    if (!cursor.spinning) {
+      if (this.controls.up) {
+        cursor.pos -= 1;
+        if (cursor.pos < 0) {
+          cursor.pos = this.menu.options.length - 1;
+        }
+        this.updateCursor();
+      } else if (this.controls.down) {
+        cursor.pos += 1;
+        if (cursor.pos >= this.menu.options.length) {
+          cursor.pos = 0;
+        }
+        this.updateCursor();
+      } else if (this.controls.action1) {
+        // select
+        this.spinCursor(() => 
+          this.scene.start(this.menu.options[cursor.pos].scene));
       }
-      this.updateCursor();
-    } else if (this.controls.down) {
-      cursor.pos += 1;
-      if (cursor.pos >= this.menu.options.length) {
-        cursor.pos = 0;
-      }
-      this.updateCursor();
-    } else if (this.controls.action1) {
-      // select
-      this.spinCursor(() => 
-        this.scene.start(this.menu.options[cursor.pos].scene));
     }
   }
 
@@ -128,7 +130,7 @@ class MainMenu extends BaseScene {
 
   spinCursor(cb) {
     const { cursor } = this.menu;
-    cursor.sprite.setOrigin(0.5);
+    cursor.spinning = true;
     this.tweens.add({
       targets: cursor.sprite,
       rotation: 2 * Math.PI + Math.PI / 2,
