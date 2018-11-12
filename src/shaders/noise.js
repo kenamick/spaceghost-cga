@@ -20,7 +20,7 @@ export const code = `
 
     // Noise color using random number.
     vec3 noise = vec3(r);
-    float noise_intensity = 0.07; // THIS MATTERS A LOT!
+    float noise_intensity = 0.09; // THIS MATTERS A LOT!
 
     // Combined colors.
     color = mix(color, noise, noise_intensity);
