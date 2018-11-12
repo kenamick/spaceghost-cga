@@ -1,6 +1,5 @@
 // base-state.js - common scene function calls
 import Globals from '../globals';
-import KPPipeline from '../shaders/pipeline';
 
 class BaseScene extends Phaser.Scene {
 
@@ -14,11 +13,9 @@ class BaseScene extends Phaser.Scene {
   }
 
   addShaders() {
-    this.customPipeline = Globals.game.renderer.addPipeline('Custom', 
-      new KPPipeline(Globals.game, 'noise'));
-    this.customPipeline.setFloat2('resolution', 
-      Globals.game.config.width, Globals.game.config.height);
-    this.cameras.main.setRenderToTexture(this.customPipeline);
+    if (Globals.pipeline) {
+      this.cameras.main.setRenderToTexture(Globals.pipeline);
+    }
   }
 
   showFps() {
@@ -44,8 +41,8 @@ class BaseScene extends Phaser.Scene {
       }
     }
 
-    if (this.customPipeline) {
-      this.customPipeline.setFloat1('Time', this.shaderDeltaTime);
+    if (Globals.pipeline) {
+      Globals.pipeline.setFloat1('Time', this.shaderDeltaTime);
       this.shaderDeltaTime += 0.005;
     }
   }

@@ -17,6 +17,7 @@ class MainMenu extends BaseScene {
   }
 
   create() {
+    super.addShaders();
     const { width, height } = Globals.game.config;
 
     const backg = this.add.tileSprite(0, 0,

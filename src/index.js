@@ -1,5 +1,6 @@
 import Phaser, { Game, Math } from 'phaser';
 import Globals from './globals';
+import KPPipeline from './shaders/pipeline';
 
 import {
   Preloader,
@@ -9,7 +10,7 @@ import {
 
 const resize = () => {
   const game = Globals.game;
-    if (game) {
+  if (game) {
     // https://stackoverflow.com/questions/51518818/how-to-make-canvas-responsive-using-phaser-3
     // https://www.emanueleferonato.com/2018/02/16/how-to-scale-your-html5-games-if-your-framework-does-not-feature-a-scale-manager-or-if-you-do-not-use-any-framework/
     const canvas = game.canvas
@@ -26,6 +27,13 @@ const resize = () => {
       canvas.style.height = height + 'px'
     }
   }
+};
+
+const createShaders = () => {
+  Globals.pipeline = Globals.game.renderer.addPipeline('Custom',
+    new KPPipeline(Globals.game, 'noise'));
+  Globals.pipeline.setFloat2('resolution',
+    Globals.game.config.width, Globals.game.config.height);
 };
 
 window.onload = function () {
@@ -49,9 +57,9 @@ window.onload = function () {
   };
 
   const game = new Game(config);
-
   Globals.game = game; // not quite nice!
 
+  createShaders();
   resize();
 };
 
