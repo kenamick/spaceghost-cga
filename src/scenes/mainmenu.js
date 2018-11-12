@@ -3,6 +3,7 @@ import BaseScene from './base-scene';
 import Globals from '../globals';
 import Phaser from 'phaser';
 import Controls from '../controls';
+import { Pacman, PacmanStates } from '../entities/enemies';
 
 const Menus = [
     { text: 'PLAY', scene: 'Level1' },
@@ -23,12 +24,11 @@ class MainMenu extends BaseScene {
     const backg = this.add.tileSprite(0, 0,
       width * 2, height * 2, 'bkg-blue');
 
-      this.addMenu();
+    this.addPacman();
+    this.addMenu();
     this.addTweenText(50, 10, 'SPACE-O-MAN', 50, (tween) => {
-      //this.addMenu();
+      this.controls = new Controls(this, true);
     });
-
-    this.controls = new Controls(this, true);
 
     // always last
     super.create();
@@ -37,27 +37,51 @@ class MainMenu extends BaseScene {
   update(time, delta) {
     super.update(time, delta);
 
-    const { cursor } = this.menu;
+    if (this.menu && this.controls) {
+      const { cursor } = this.menu;
 
-    if (!cursor.spinning) {
-      if (this.controls.up) {
-        cursor.pos -= 1;
-        if (cursor.pos < 0) {
-          cursor.pos = this.menu.options.length - 1;
+      if (!cursor.spinning) {
+        if (this.controls.up) {
+          cursor.pos -= 1;
+          if (cursor.pos < 0) {
+            cursor.pos = this.menu.options.length - 1;
+          }
+          this.updateCursor();
+        } else if (this.controls.down) {
+          cursor.pos += 1;
+          if (cursor.pos >= this.menu.options.length) {
+            cursor.pos = 0;
+          }
+          this.updateCursor();
+        } else if (this.controls.action1) {
+          // select
+          this.spinCursor(() => 
+            this.scene.start(this.menu.options[cursor.pos].scene));
         }
-        this.updateCursor();
-      } else if (this.controls.down) {
-        cursor.pos += 1;
-        if (cursor.pos >= this.menu.options.length) {
-          cursor.pos = 0;
-        }
-        this.updateCursor();
-      } else if (this.controls.action1) {
-        // select
-        this.spinCursor(() => 
-          this.scene.start(this.menu.options[cursor.pos].scene));
       }
     }
+
+    if (this.pacman) {
+      this.pacman.update(time, delta);
+      if (this.pacman.gameSprite.x < Globals.game.config.width * 0.5) {
+        // enable wrap once past mid-screen
+        this.pacman.setConfig('noWrap', false);
+      }
+    }
+  }
+
+  addPacman() {
+    const size = Globals.game.config.height * 0.75;
+    this.pacman = new Pacman(this, {
+      x: Globals.game.config.width + 50, //+ size * 0.9, 
+      y: Globals.game.config.height * 0.15, 
+      size,
+      animSpeed: 1300, 
+      facing: 'left', 
+      color: 0xb1b1b1,
+      noWrap: true
+    });
+    this.pacman.setState(PacmanStates.moveLeft, {speed: -150});
   }
 
   addMenu() {

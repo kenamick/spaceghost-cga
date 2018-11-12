@@ -3,16 +3,33 @@ import { Math } from 'phaser';
 import Globals from '../../globals';
 
 const DEFAULT_ANIM_SPEED = 200;
+const PacmanStates = {
+  idle: 1, 
+  follow: 2, 
+  moveLeft: 3, 
+  moveRight: 4, 
+  moveUp: 5, 
+  moveDown: 6
+}
 
 class Pacman {
 
   constructor(screne, config) {
     this.scene = screne;
-    this.sprite = this.createSprite(config.size, config.color);
+
+    this.config = config;
+
+    this.sprite = this.createSprite(config.size, config.color, config.animSpeed);
     this.sprite.x = config.x;
     this.sprite.y = config.y;
+    if (config.facing === 'left') {
+      this.sprite.flipX = true;
+    }
+
     // bind a physics body to this render tex
     this.scene.physics.add.existing(this.sprite);
+
+    this._state = PacmanStates.idle;
   }
 
   createSprite(size, color, animSpeed = DEFAULT_ANIM_SPEED) {
@@ -49,10 +66,35 @@ class Pacman {
     return this.sprite;
   }
 
+  setConfig(key, value) {
+    this.config[key] = value;
+  }
+
+  setState(value, config) {
+    this._state = value;
+
+    switch (this._state) {
+      case PacmanStates.moveLeft:
+        this.sprite.body.setVelocity(-config.speed, 0);
+      default:
+      
+      case PacmanStates.moveRight:
+        this.sprite.body.setVelocity(config.speed, 0);
+      break;
+
+      // TODO other states
+
+      case PacmanStates.idle:
+        break;
+    }
+  }
+
   update(time, delta) {
-    this.sprite.x += 0.5;
+    if (!this.config.noWrap) {
+      this.scene.physics.world.wrap(this.sprite, this.config.size);
+    }
   }
 
 }
 
-export { Pacman };
+export { Pacman, PacmanStates };
