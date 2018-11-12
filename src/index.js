@@ -45,6 +45,7 @@ window.onload = function () {
     physics: {
       default: 'arcade',
       arcade: {
+        debug: Globals.debug || Globals.debugPhysics,
         fps: 60,
         gravity: { y: 0 }
       }
