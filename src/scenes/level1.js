@@ -1,7 +1,7 @@
 // level1.js - game play
 import BaseScene from './base-scene';
 import Globals from '../globals';
-import { FireFly } from '../entities';
+import { FireFly, Pacman } from '../entities';
 import Controls from '../controls';
 
 class Level1 extends BaseScene {
@@ -21,6 +21,11 @@ class Level1 extends BaseScene {
     this.cameras.main.setBounds(0, 0, 
       Globals.game.config.width, Globals.game.config.height);
 
+    this.pacman = new Pacman(this, {
+      x: 10, y: 190,
+      size: 100, color: 0xffff00
+    });
+
     // always last
     super.create();
   }
@@ -30,6 +35,7 @@ class Level1 extends BaseScene {
     super.update(time, delta);
 
     this.player.update(time, delta);
+    this.pacman.update(time, delta);
   }
 
 }
