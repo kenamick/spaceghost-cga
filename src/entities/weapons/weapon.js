@@ -1,6 +1,7 @@
 // weapon.js - Base Shooter
 import { Math } from 'phaser';
 import Globals from '../../globals';
+import { Bullet } from './bullets/bullet';
 
 class Weapon {
 
@@ -8,19 +9,13 @@ class Weapon {
     this.scene = scene;
     this.player = player;
 
-    this.bullets = scene.physics.add.group();
-    this.bullets.createMultiple({
-      key: Globals.atlas1,
-      frame: 'laserRed04.png',
-      active: false,
-      visible: false,
-      repeat: 20,
-      setScale: { x: 0.35, y: 0.35 },
-      ...config,
+    this.bullets = scene.physics.add.group({
+      classType: Bullet,
+      maxSize: 30,
+      runChildUpdate: true,
     });
 
     this.nextFire = 0;
-    this.bulletSpeed = 500;
     this.fireRate = 400;
   }
 
@@ -28,21 +23,17 @@ class Weapon {
     if(time < this.nextFire)
       return;
 
-    const bullet = this.bullets.getFirstDead();
+    const bullet = this.bullets.get();
     if(!bullet)
       return;
 
-    const playerBody = this.player.sprite.body;
-
-    bullet.enableBody(true, playerBody.center.x, playerBody.center.y, true, true);
-    bullet.setAngle(playerBody.rotation);
-    this.scene.physics.velocityFromAngle(playerBody.rotation, this.bulletSpeed + playerBody.speed, bullet.body.velocity);
+    const { center, rotation } = this.player.sprite.body;
+    bullet.fire(center.x, center.y, rotation);
 
     this.nextFire = time + this.fireRate;
   }
 
   update(time, delta) {
-    scene.physics.world.wrap(this.bullets, 32);
   }
 
 }

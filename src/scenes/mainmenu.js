@@ -12,7 +12,7 @@ const Menus = [
 ];
 
 class MainMenu extends BaseScene {
-  
+
   constructor() {
     super('MainMenu');
   }
@@ -55,7 +55,7 @@ class MainMenu extends BaseScene {
           this.updateCursor();
         } else if (this.controls.action1) {
           // select
-          this.spinCursor(() => 
+          this.spinCursor(() =>
             this.scene.start(this.menu.options[cursor.pos].scene));
         }
       }
@@ -73,11 +73,11 @@ class MainMenu extends BaseScene {
   addPacman() {
     const size = Globals.game.config.height * 0.75;
     this.pacman = new Pacman(this, {
-      x: Globals.game.config.width + 50, //+ size * 0.9, 
-      y: Globals.game.config.height * 0.15, 
+      x: Globals.game.config.width + 50, //+ size * 0.9,
+      y: Globals.game.config.height * 0.15,
       size,
-      animSpeed: 1300, 
-      facing: 'left', 
+      animSpeed: 1300,
+      facing: 'left',
       color: 0xb1b1b1,
       noWrap: true
     });
