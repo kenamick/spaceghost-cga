@@ -1,7 +1,7 @@
 // level1.js - game play
 import BaseScene from './base-scene';
 import Globals from '../globals';
-import { FireFly, Pacman } from '../entities';
+import { FireFly, Pacman, PacmanStates } from '../entities';
 import Controls from '../controls';
 
 class Level1 extends BaseScene {
@@ -40,6 +40,13 @@ class Level1 extends BaseScene {
 
     this.player.update(time, delta);
     this.pacman.update(time, delta);
+
+    if(this.foods.countActive())
+      this.pacman.setState(PacmanStates.follow)
+
+    this.physics.overlap(this.pacman.sprite, this.foods, (pacman, food) => {
+      this.foods.killAndHide(food);
+    });
   }
 
   popFood(x, y) {

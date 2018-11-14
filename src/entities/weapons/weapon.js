@@ -34,7 +34,7 @@ class Weapon {
     this.nextFire = time + this.fireRate;
     this.amountShots++;
 
-    if(this.amountShots >= 10) {
+    if(this.amountShots >= 5) {
       this.player.sprite.emit('popFood', this.player.sprite.x, this.player.sprite.y);
       this.amountShots = 0;
     }

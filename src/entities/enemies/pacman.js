@@ -4,11 +4,11 @@ import Globals from '../../globals';
 
 const DEFAULT_ANIM_SPEED = 200;
 const PacmanStates = {
-  idle: 1, 
-  follow: 2, 
-  moveLeft: 3, 
-  moveRight: 4, 
-  moveUp: 5, 
+  idle: 1,
+  follow: 2,
+  moveLeft: 3,
+  moveRight: 4,
+  moveUp: 5,
   moveDown: 6
 }
 
@@ -47,10 +47,10 @@ class Pacman {
         // thx Phaser guys! - https://labs.phaser.io/edit.html?src=src/game%20objects/graphics/pacman%20arc%20chomp%20chomp.js
         graphics.clear();
         graphics.fillStyle(color, 1);
-        graphics.slice(size * 0.5, size * 0.5, 
+        graphics.slice(size * 0.5, size * 0.5,
           size * 0.5, // radius
-          Phaser.Math.DegToRad(330 + t), 
-          Phaser.Math.DegToRad(30 - t), 
+          Phaser.Math.DegToRad(330 + t),
+          Phaser.Math.DegToRad(30 - t),
           true);
         graphics.fillPath();
         // update render tex w/h new image
@@ -77,16 +77,38 @@ class Pacman {
       case PacmanStates.moveLeft:
         this.sprite.body.setVelocity(-config.speed, 0);
       default:
-      
+
       case PacmanStates.moveRight:
         this.sprite.body.setVelocity(config.speed, 0);
       break;
 
+      case PacmanStates.follow:
+        this.track();
+      break;
       // TODO other states
 
       case PacmanStates.idle:
         break;
     }
+  }
+
+  track() {
+    // this is a very naive approach to the nearest neighbor search
+    // if anyone knows a better way change it please
+    const { foods } = this.scene;
+    let nearestFood = foods.getFirstAlive();
+    let distance = Math.Distance.Between(this.sprite.x, this.sprite.y, nearestFood.x, nearestFood.y);
+    let bestDistance = distance;
+    for(let food of foods.getChildren()) {
+      if(food.active) {
+        distance = Math.Distance.Between(this.sprite.x, this.sprite.y, food.x, food.y);
+        if(distance < bestDistance) {
+          bestDistance = distance;
+          nearestFood = food;
+        }
+      }
+    }
+    this.scene.physics.moveToObject(this.sprite, nearestFood);
   }
 
   update(time, delta) {
