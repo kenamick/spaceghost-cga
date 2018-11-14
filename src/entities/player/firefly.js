@@ -8,9 +8,9 @@ class FireFly {
   constructor(scene, controls, config) {
     this.scene = scene;
 
-    this.sprite = scene.physics.add.image(config.x, config.y, 
+    this.sprite = scene.physics.add.image(config.x, config.y,
       Globals.atlas1, 'playerShip1_red.png');
-    //this.sprite.rotation = Math.PI / 2;
+    this.sprite.texture.rotation = Math.TAU;
     this.sprite.setDepth(2);
 
     // this.sprite.setDamping(true);
@@ -45,7 +45,7 @@ class FireFly {
     const { controls, scene, sprite, weapon } = this;
 
     if (controls.up) {
-      scene.physics.velocityFromRotation(sprite.rotation, 200, sprite.body.acceleration);
+      scene.physics.velocityFromRotation(sprite.rotation - Math.TAU, 200, sprite.body.acceleration);
     } else {
       sprite.setAcceleration(0);
     }
@@ -62,6 +62,7 @@ class FireFly {
       weapon.fire(time);
     }
 
+    weapon.update(time, delta);
     scene.physics.world.wrap(sprite, 32);
   }
 
