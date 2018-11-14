@@ -1,7 +1,10 @@
 // level1.js - game play
 import BaseScene from './base-scene';
 import Globals from '../globals';
-import { FireFly, Pacman, PacmanStates } from '../entities';
+import { FireFly, 
+  Pacman, PacmanStates,
+  Ghost, GhostStates
+} from '../entities';
 import Controls from '../controls';
 
 class Level1 extends BaseScene {
@@ -22,31 +25,68 @@ class Level1 extends BaseScene {
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
-    this.pacman = new Pacman(this, {
-      x: 10, y: 190,
-      size: 100, color: 0xffff00
-    });
-
     this.foods = this.physics.add.group({
       defaultKey: 'food-simple',
     });
 
+    this.addPacmans();
+    this.addEnemies();
+
     // always last
     super.create();
+  }
+
+  addPacmans() {
+    this.pacmans = [
+      new Pacman(this, {
+        x: 300, y: 190, size: 80, 
+        color: Globals.palette.pacman.body
+      })
+    ];
+  }
+
+  addEnemies() {
+    const topLeft = {x: 10, y: 10 };
+    const topRight = {x: Globals.game.config.width - 50, y: 10 };
+
+    this.enemies = [
+      new Ghost(this, {
+        x: topLeft.x, y: topLeft.y, size: 80,
+        palette: Globals.palette.ghost1
+      }),
+      new Ghost(this, {
+        x: topRight.x, y: topRight.y, size: 100,
+        palette: Globals.palette.ghost2
+      })
+    ];
+
+    // track player ship
+    for (const enemy of this.enemies) {
+      enemy.setState(GhostStates.follow, { target: this.player.gameSprite });
+    }
   }
 
   update(time, delta) {
     super.update(time, delta);
 
     this.player.update(time, delta);
-    this.pacman.update(time, delta);
 
-    if(this.foods.countActive())
-      this.pacman.setState(PacmanStates.follow)
+    // --- ghosts AI
+    for (const enemy of this.enemies) {
+      enemy.update(time, delta);
+    }
 
-    this.physics.overlap(this.pacman.sprite, this.foods, (pacman, food) => {
-      this.foods.killAndHide(food);
-    });
+    // --- pacmans AI
+    for (const pacman of this.pacmans) {
+      pacman.update(time, delta);
+
+      if (this.foods.countActive())
+        pacman.setState(PacmanStates.follow);
+
+      this.physics.overlap(pacman.sprite, this.foods, (pacman, food) => {
+        this.foods.killAndHide(food);
+      });
+    }
   }
 
   popFood(x, y) {

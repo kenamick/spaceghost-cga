@@ -12,6 +12,27 @@ const Globals = {
   // misc
   bitmapFont: 'standard',
   atlas1: 'atlas-k',
+  palette: {
+    pacman: {
+      body: 0xffff00
+    },
+    ghost1: {
+      body: 0x00ffde,
+      eyes: 0xffffff,
+    },
+    ghost2: {
+      body: 0xff0000,
+      eyes: 0x010101,
+    },
+    ghost3: {
+      body: 0xffb8de,
+      eyes: 0xffffff,
+    },
+    ghost4: {
+      body: 0xffb847,
+      eyes: 0xff0000,
+    }
+  },
   // development
   debug: checkStringBoolean(localStorage.getItem(`debug`)),
   debugPhysics: checkStringBoolean(localStorage.getItem(`debugPhysics`)),

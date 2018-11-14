@@ -17,6 +17,9 @@ class Pacman {
   constructor(screne, config) {
     this.scene = screne;
 
+    // defaults
+    config.color = config.color || Globals.palette.pacman.body;
+
     this.config = config;
 
     this.sprite = this.createSprite(config.size, config.color, config.animSpeed);
