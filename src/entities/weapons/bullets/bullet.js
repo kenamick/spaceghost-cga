@@ -9,7 +9,7 @@ class Bullet extends Phaser.Physics.Arcade.Image {
       Globals.atlas1, 'laserRed01.png');
 
     this.setBlendMode('ADD');
-    this.setDepth(2);
+    this.setDepth(0);
     this.setActive(false);
     this.setVisible(false);
 
