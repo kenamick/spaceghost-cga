@@ -17,6 +17,7 @@ class Weapon {
 
     this.nextFire = 0;
     this.fireRate = 400;
+    this.amountShots = 0;
   }
 
   fire(time) {
@@ -31,6 +32,12 @@ class Weapon {
     bullet.fire(center.x, center.y, rotation);
 
     this.nextFire = time + this.fireRate;
+    this.amountShots++;
+
+    if(this.amountShots >= 10) {
+      this.player.sprite.emit('popFood', this.player.sprite.x, this.player.sprite.y);
+      this.amountShots = 0;
+    }
   }
 
   update(time, delta) {
