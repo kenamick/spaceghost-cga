@@ -38,3 +38,8 @@ npm run build
 ## License
 
 [MIT](./LICENSE)
+
+---
+This game is a GitHub [Game Off 2018](https://itch.io/jam/game-off-2018) entry.
+
+![GitHub Game Off 2018 Game Jam](https://user-images.githubusercontent.com/121322/46698489-1e7bd900-cbcc-11e8-8abb-aef7262c968c.png)
