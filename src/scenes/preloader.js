@@ -1,6 +1,7 @@
 // preloader.js - loads all game assets
 import BaseScene from './base-scene';
 import Globals from '../globals';
+import Audio from '../audio';
 
 class Preloader extends BaseScene {
 
@@ -45,6 +46,9 @@ class Preloader extends BaseScene {
         )
       )
     })
+
+    // load audio
+    Audio.load(this);
   }
 
   create() {

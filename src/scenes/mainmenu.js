@@ -1,6 +1,7 @@
 // mainmenu.js - game menu
 import BaseScene from './base-scene';
 import Globals from '../globals';
+import Audio from '../audio';
 import Phaser from 'phaser';
 import Controls from '../controls';
 import { Pacman, PacmanStates } from '../entities/enemies';
@@ -30,6 +31,10 @@ class MainMenu extends BaseScene {
       this.controls = new Controls(this, true);
     });
 
+    // sfx
+    this.audio = new Audio(this);
+    this.audio.playMusic('music-menu', { loop: true });
+
     // always last
     super.create();
   }
@@ -55,8 +60,9 @@ class MainMenu extends BaseScene {
           this.updateCursor();
         } else if (this.controls.action1) {
           // select
-          this.spinCursor(() =>
-            this.scene.start(this.menu.options[cursor.pos].scene));
+          this.spinCursor(() => {
+            this.scene.start(this.menu.options[cursor.pos].scene)
+          });
         }
       }
     }
@@ -151,6 +157,10 @@ class MainMenu extends BaseScene {
       duration: 150,
       ease: 'Easing.Bounce.In'
     });
+
+    // play sfx
+    this.audio.playSound('menu-select');
+
   }
 
   spinCursor(cb) {
@@ -161,8 +171,11 @@ class MainMenu extends BaseScene {
       rotation: 2 * Math.PI + Math.PI / 2,
       duration: 1500,
       ease: 'Power1',
-      onComplete: cb
+      onComplete: this.audio.fadeOut(cb)
     });
+
+    // play sfx
+    this.audio.playSound('menu-tap');
   }
 
 }

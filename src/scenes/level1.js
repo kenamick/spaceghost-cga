@@ -1,6 +1,7 @@
 // level1.js - game play
 import BaseScene from './base-scene';
 import Globals from '../globals';
+import Audio from '../audio';
 import { FireFly, 
   Pacman, PacmanStates,
   Ghost, GhostStates
@@ -31,6 +32,11 @@ class Level1 extends BaseScene {
 
     this.addPacmans();
     this.addEnemies();
+
+    // play music
+    this.audio = new Audio(this);
+    this.audio.playMusic('music-game', { loop: true });
+    this.audio.setMusicVol('music-game', 0.5);
 
     // always last
     super.create();
