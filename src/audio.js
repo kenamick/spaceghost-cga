@@ -2,7 +2,7 @@
 import { Math } from 'phaser';
 import Globals from './globals';
 
-const DEFAULT_FADEOUT = 2500;
+const DEFAULT_FADE_INOUT = 2000;
 
 const ASSETS = {
   'menu-select': {
@@ -104,13 +104,38 @@ class Audio {
     }
   }
 
-  fadeOut(cb, config) {
+  fadeIn(cb, config) {
     if (!this._musicOn) {
-      cb();
+      cb && cb();
       return;
     }
 
-    let duration = 2000
+    //this._currentMusic.volume = 0;
+
+    let duration = DEFAULT_FADE_INOUT
+    let maxVol = 1
+
+    if (config) {
+      duration = config.duration || duration;
+      maxVol = config.maxVol || maxVol
+    }
+
+    this.scene.tweens.add({
+      targets: this._currentMusic,
+      volume: maxVol,
+      ease: 'Linear',
+      duration: duration,
+      onComplete: cb
+    });
+  }
+
+  fadeOut(cb, config) {
+    if (!this._musicOn) {
+      cb && cb();
+      return;
+    }
+
+    let duration = DEFAULT_FADE_INOUT
     if (config && config.duration) {
       duration = config.duration
     }
