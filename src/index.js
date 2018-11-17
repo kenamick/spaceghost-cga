@@ -1,6 +1,6 @@
 import Phaser, { Game, Math } from 'phaser';
 import Globals from './globals';
-import KPPipeline from './shaders/pipeline';
+import * as KPPL from './shaders/pipeline';
 
 import {
   Preloader,
@@ -29,13 +29,6 @@ const resize = () => {
   }
 };
 
-const createShaders = () => {
-  Globals.pipeline = Globals.game.renderer.addPipeline('Custom',
-    new KPPipeline(Globals.game, 'noise'));
-  Globals.pipeline.setFloat2('resolution',
-    Globals.game.config.width, Globals.game.config.height);
-};
-
 window.onload = function () {
   const config = {
     type: Phaser.AUTO,
@@ -60,7 +53,7 @@ window.onload = function () {
   const game = new Game(config);
   Globals.game = game; // not quite nice!
 
-  createShaders();
+  KPPL.setPipeline('noise');
   resize();
 };
 

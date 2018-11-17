@@ -62,7 +62,7 @@ class Level1 extends BaseScene {
       }),
       new Ghost(this, {
         x: topRight.x, y: topRight.y, size: 100,
-        palette: Globals.palette.ghost2
+        palette: Globals.palette.ghost3
       })
     ];
 

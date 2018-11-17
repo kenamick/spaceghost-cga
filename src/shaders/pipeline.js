@@ -1,4 +1,5 @@
 // pipline.js - custom shader pipeline
+import Globals from '../globals';
 
 /**
  * An attempt to add shaders.
@@ -22,4 +23,23 @@ const KPPipeline = new Phaser.Class({
 
 });
 
-export default KPPipeline;
+const clearPipeline = () => {
+  Globals.game.renderer.removePipeline('Custom');
+};
+
+const setPipeline = (name) => {
+  if (Globals.pipeline) {
+    clearPipeline();
+  }
+
+  Globals.pipeline = Globals.game.renderer.addPipeline('Custom',
+    new KPPipeline(Globals.game, name));
+    
+  Globals.pipeline.setFloat2('resolution',
+    Globals.game.config.width, Globals.game.config.height);
+};
+
+export {
+  setPipeline,
+  clearPipeline
+};
