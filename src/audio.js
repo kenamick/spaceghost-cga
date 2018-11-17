@@ -16,6 +16,9 @@ const ASSETS = {
   },
   'music-game': {
     files: ['tkp_game_bkg.ogg']
+  },
+  'ship-laser': {
+    files: ['tkp_laser_1.ogg']
   }
 };
 
@@ -70,14 +73,16 @@ class Audio {
 
     if (config) {
       if (config.idx) {
-        this.sounds[name][config.idx].play();
+        this.scene.sound.play(`${name}${config.idx}`);
+        //this.sounds[name][config.idx].play();
       } else if (config.random) {
         const idx = Math.RandomDataGenerator.between(0, this.sounds[name].length - 1);
         this.sounds[name][idx].play();
       }
     }
 
-    this.sounds[name][0].play();
+    this.scene.sound.play(`${name}1`);
+    // this.sounds[name][0].play();
   }
 
   playMusic(name, config) {

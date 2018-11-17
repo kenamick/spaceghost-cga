@@ -59,10 +59,13 @@ class Weapon {
     this.nextFire = time + this.config.rate;
     this.amountShots++;
 
-    if(this.amountShots >= 2) {
+    if (this.amountShots >= 2) {
       this.player.sprite.emit('popFood', this.player.sprite.x, this.player.sprite.y);
       this.amountShots = 0;
     }
+
+    // play sfx
+    this.scene.audio.playSound('ship-laser');
   }
 
   update(time, delta) {
