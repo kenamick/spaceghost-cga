@@ -7,6 +7,7 @@ import { FireFly,
   Ghost, GhostStates
 } from '../entities';
 import Controls from '../controls';
+import * as KPPL from '../shaders/pipeline';
 
 class Level1 extends BaseScene {
 
@@ -15,8 +16,11 @@ class Level1 extends BaseScene {
   }
 
   create() {
-    super.addShaders();
+    // pre-init
+    KPPL.setPipeline('noisycga');
+    super.enableShaders();
 
+    // in-game stuff
     this.add.tileSprite(0, 0,
       Globals.game.config.width * 2, Globals.game.config.height * 2, 'bkg-purple');
 
@@ -35,8 +39,8 @@ class Level1 extends BaseScene {
 
     // play music
     this.audio = new Audio(this);
-    this.audio.playMusic('music-game', { loop: true });
-    this.audio.setMusicVol('music-game', 0.5);
+    //this.audio.playMusic('music-game', { loop: true });
+    //this.audio.setMusicVol('music-game', 0.5);
 
     // always last
     super.create();

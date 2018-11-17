@@ -5,7 +5,6 @@ import Audio from '../audio';
 import Phaser from 'phaser';
 import Controls from '../controls';
 import { Pacman, PacmanStates } from '../entities/enemies';
-import * as KPPL from '../shaders/pipeline';
 
 const Menus = [
     { text: 'PLAY', scene: 'Level1' },
@@ -20,7 +19,8 @@ class MainMenu extends BaseScene {
   }
 
   create() {
-    super.addShaders();
+    super.enableShaders();
+    
     const { width, height } = Globals.game.config;
 
     const backg = this.add.tileSprite(0, 0,
@@ -64,7 +64,6 @@ class MainMenu extends BaseScene {
         } else if (this.controls.action1) {
           // select
           this.spinCursor(() => {
-            KPPL.setPipeline('noisycga');
             this.scene.start(this.menu.options[cursor.pos].scene)
           });
         }

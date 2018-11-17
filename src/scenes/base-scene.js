@@ -12,7 +12,7 @@ class BaseScene extends Phaser.Scene {
     this.showFps();
   }
 
-  addShaders() {
+  enableShaders() {
     if (Globals.pipeline) {
       this.cameras.main.setRenderToTexture(Globals.pipeline);
     }
