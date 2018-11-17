@@ -20,7 +20,10 @@ class FireFly {
 
     this.controls = controls;
 
-    this.weapon = new Weapon(scene, this);
+    this.weapon = new Weapon(scene, this, {
+      rate: 100,
+      dual: true, dualRadius: 25
+    });
 
     this.attachEngine(this.sprite);
   }

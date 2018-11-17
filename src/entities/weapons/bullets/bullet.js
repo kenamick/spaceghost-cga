@@ -21,7 +21,8 @@ class Bullet extends Phaser.Physics.Arcade.Image {
     this.currentLifespan = this.lifespan;
     this.enableBody(true, x, y, true, true);
     this.setAngle(angle);
-    this.scene.physics.velocityFromAngle(angle - 90, this.speed, this.body.velocity);
+    this.scene.physics.velocityFromAngle(
+      angle - 90, this.speed, this.body.velocity);
   }
 
   update(time, delta) {

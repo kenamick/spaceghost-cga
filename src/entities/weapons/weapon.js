@@ -1,13 +1,21 @@
 // weapon.js - Base Shooter
-import { Math } from 'phaser';
+import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Bullet } from './bullets/bullet';
+
+const DEFAULT_RATE = 400
 
 class Weapon {
 
   constructor(scene, player, config) {
     this.scene = scene;
     this.player = player;
+    this.config = {
+      rate: DEFAULT_RATE,
+      dual: false,
+      offset: 0,
+      ...config
+    };
 
     this.bullets = scene.physics.add.group({
       classType: Bullet,
@@ -16,7 +24,6 @@ class Weapon {
     });
 
     this.nextFire = 0;
-    this.fireRate = 400;
     this.amountShots = 0;
   }
 
@@ -24,14 +31,32 @@ class Weapon {
     if(time < this.nextFire)
       return;
 
-    const bullet = this.bullets.get();
-    if(!bullet)
-      return;
-
     const { center, rotation } = this.player.sprite.body;
-    bullet.fire(center.x, center.y, rotation);
 
-    this.nextFire = time + this.fireRate;
+    if (!this.config.dual) {
+      // single fire
+      const bullet = this.bullets.get();
+      if (!bullet)
+        return;
+
+      bullet.fire(center.x, center.y, rotation);
+    } else {
+      // dual fire
+      let bullet = this.bullets.get();
+      if (bullet) {
+        const phi_x = Math.cos(this.player.sprite.rotation) * this.config.dualRadius;
+        const phi_y = Math.sin(this.player.sprite.rotation) * this.config.dualRadius;
+
+        bullet.fire(center.x + phi_x, center.y + phi_y, rotation);
+
+        bullet = this.bullets.get();
+        if (bullet) {
+          bullet.fire(center.x - phi_x, center.y - phi_y, rotation);
+        }
+      }
+    }
+
+    this.nextFire = time + this.config.rate;
     this.amountShots++;
 
     if(this.amountShots >= 2) {
