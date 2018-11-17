@@ -30,26 +30,18 @@ class FireFly {
     var emitter = particles.createEmitter({
       speed: 100,
       x: {
-        onEmit: () => {
-          const phi = ship.rotation - Phaser.Math.TAU - Math.PI;
-          return Math.cos(phi) * ship.height * 0.6;
-        }
+        onEmit: () => Math.cos(
+          ship.rotation - Phaser.Math.TAU - Math.PI) * ship.height * 0.6
       },
       y: {
-        onEmit: () => {
-          const phi = ship.rotation - Phaser.Math.TAU - Math.PI;
-          return Math.sin(phi) * ship.height * 0.6;
-        }
+        onEmit: () => Math.sin(
+          ship.rotation - Phaser.Math.TAU - Math.PI) * ship.height * 0.6
       },
       lifespan: {
-        onEmit: () => {
-          return Phaser.Math.Percent(ship.body.speed, 0, 300) * 2000;
-        }
+        onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, 300) * 2000
       },
       alpha: {
-        onEmit: () => {
-          return Phaser.Math.Percent(ship.body.speed, 0, 300);
-        }
+        onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, 300)
       },
       angle: {
         onEmit: () => {
@@ -59,7 +51,7 @@ class FireFly {
           return (ship.angle - 180 + 90) + v;
         }
       },
-      scale: { start: 0.6, end: 0 },
+      scale: { start: 0.5, end: 0 },
       blendMode: 'ADD'
     });
 
