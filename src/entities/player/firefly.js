@@ -1,5 +1,5 @@
 // firefly.js - Player's glorious ship
-import { Math } from 'phaser';
+import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Weapon } from '../weapons/weapon';
 
@@ -10,7 +10,7 @@ class FireFly {
 
     this.sprite = scene.physics.add.image(config.x, config.y,
       Globals.atlas1, 'playerShip1_red.png');
-    this.sprite.texture.rotation = Math.TAU;
+    this.sprite.texture.rotation = Phaser.Math.TAU;
     this.sprite.setDepth(2);
 
     // this.sprite.setDamping(true);
@@ -22,20 +22,50 @@ class FireFly {
 
     this.weapon = new Weapon(scene, this);
 
-    this.attachEngine();
+    this.attachEngine(this.sprite);
   }
 
-  attachEngine() {
+  attachEngine(ship) {
     var particles = this.scene.add.particles('p-red');
     var emitter = particles.createEmitter({
       speed: 100,
-      scale: { start: 0.4, end: 0 },
-      blendMode: 'ADD',
-      followOffset: new Math.Vector2(40, 0),
-      follow: this.sprite
+      x: {
+        onEmit: () => {
+          const phi = ship.rotation - Phaser.Math.TAU - Math.PI;
+          return Math.cos(phi) * ship.height * 0.6;
+        }
+      },
+      y: {
+        onEmit: () => {
+          const phi = ship.rotation - Phaser.Math.TAU - Math.PI;
+          return Math.sin(phi) * ship.height * 0.6;
+        }
+      },
+      lifespan: {
+        onEmit: () => {
+          return Phaser.Math.Percent(ship.body.speed, 0, 300) * 2000;
+        }
+      },
+      alpha: {
+        onEmit: () => {
+          return Phaser.Math.Percent(ship.body.speed, 0, 300);
+        }
+      },
+      angle: {
+        onEmit: () => {
+          // var v = 0.5 / Phaser.Math.Between(-10, 10);
+          // return (ship.rotation - Math.PI + Math.TAU) + v;
+          var v = Phaser.Math.Between(-10, 10);
+          return (ship.angle - 180 + 90) + v;
+        }
+      },
+      scale: { start: 0.6, end: 0 },
+      blendMode: 'ADD'
     });
-  //emitter.startFollow(player.gameSprite);
+
+    emitter.startFollow(ship);
   }
+
 
   get gameSprite() {
     return this.sprite;
@@ -45,15 +75,16 @@ class FireFly {
     const { controls, scene, sprite, weapon } = this;
 
     if (controls.up) {
-      scene.physics.velocityFromRotation(sprite.rotation - Math.TAU, 200, sprite.body.acceleration);
+      scene.physics.velocityFromRotation(
+        sprite.rotation - Phaser.Math.TAU, 180, sprite.body.acceleration);
     } else {
       sprite.setAcceleration(0);
     }
 
     if (controls.left) {
-      sprite.setAngularVelocity(-300);
+      sprite.setAngularVelocity(-200);
     } else if (controls.right) {
-      sprite.setAngularVelocity(300);
+      sprite.setAngularVelocity(200);
     } else {
       sprite.setAngularVelocity(0);
     }
