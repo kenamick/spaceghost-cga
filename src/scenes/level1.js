@@ -4,7 +4,7 @@ import Globals from '../globals';
 import Audio from '../audio';
 import { FireFly, 
   Pacman, PacmanStates,
-  Ghost, GhostStates
+  Ghost, GhostTypes, GhostStates
 } from '../entities';
 import Controls from '../controls';
 import * as KPPL from '../shaders/pipeline';
@@ -20,20 +20,14 @@ class Level1 extends BaseScene {
     KPPL.setPipeline('noisycga');
     super.enableShaders();
 
-    // in-game stuff
+    // background
     this.add.tileSprite(0, 0,
       Globals.game.config.width * 2, Globals.game.config.height * 2, 'bkg-purple');
-
-    this.player = new FireFly(this, new Controls(this), { x: 100, y: 300 });
-    this.player.sprite.on('popFood', this.popFood, this);
-
+    
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
-    this.foods = this.physics.add.group({
-      defaultKey: 'food-simple',
-    });
-
+    this.addPlayerShip();
     this.addPacmans();
     this.addEnemies();
 
@@ -46,27 +40,51 @@ class Level1 extends BaseScene {
     super.create();
   }
 
+  addPlayerShip() {
+    this.foods = this.physics.add.group({
+      defaultKey: 'food-simple',
+    });
+
+    this.player = new FireFly(this, new Controls(this), {
+      x: this.cameras.main.centerX, 
+      y: this.cameras.main.centerY 
+    });
+    this.player.sprite.on('popFood', this.popFood, this);
+  }
+
   addPacmans() {
     this.pacmans = [
       new Pacman(this, {
-        x: 300, y: 190, size: 80, 
-        color: Globals.palette.pacman.body
+        x: this.player.gameSprite.x, 
+        y: Globals.game.config.height - 50
       })
     ];
   }
 
   addEnemies() {
-    const topLeft = {x: 10, y: 10 };
-    const topRight = {x: Globals.game.config.width - 50, y: 10 };
+    const offset = 50;
+    const topLeft = { x: -offset, y: -offset };
+    const bottomLeft = { x: -offset, y: Globals.game.config.height + offset};
+    const topRight = { x: Globals.game.config.width + offset, y: -offset};
+    const bottomRight = {x: Globals.game.config.width + offset, 
+      y: Globals.game.config.height - offset};
 
     this.enemies = [
       new Ghost(this, {
-        x: topLeft.x, y: topLeft.y, size: 80,
+        x: topLeft.x, y: topLeft.y, 
         palette: Globals.palette.ghost1
       }),
       new Ghost(this, {
-        x: topRight.x, y: topRight.y, size: 100,
+        x: bottomLeft.x, y: bottomLeft.y, type: GhostTypes.MEDIUM,
+        palette: Globals.palette.ghost4
+      }),
+      new Ghost(this, {
+        x: topRight.x, y: topRight.y, type: GhostTypes.MEDIUM,
         palette: Globals.palette.ghost3
+      }),
+      new Ghost(this, {
+        x: bottomRight.x, y: bottomRight.y, 
+        palette: Globals.palette.ghost4
       })
     ];
 

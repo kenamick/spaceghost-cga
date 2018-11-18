@@ -5,6 +5,12 @@ import Globals from '../../globals';
 const DEFAULT_ANIM_SPEED = 500;
 const DEFAULT_TRACK_INTERVAL = 1500;
 
+const GhostTypes = {
+  SMALL: { size: 50, speed: 120 },
+  MEDIUM: { size: 75, speed: 90 },
+  BIG: { size: 100, speed: 60 }
+};
+
 const GhostStates = {
   idle: 1,
   follow: 2,
@@ -16,20 +22,19 @@ const GhostStates = {
 
 class Ghost {
 
-  constructor(screne, config) {
-    this.scene = screne;
+  constructor(scene, config) {
+    this.scene = scene;
 
-    // defaults
-    config.palette = config.palette || {};
-    config.bodyColor = config.palette.body || Globals.palette.ghost4.body;
-    config.eyeColor = config.palette.eyes || Globals.palette.ghost4.eyes;
+    this.config = {
+      type: GhostTypes.SMALL,
+      animSpeed: DEFAULT_ANIM_SPEED,
+      ...config
+    };
 
-    this.config = config;
-
-    this.sprite = this.createSprite(config.size, 
-      config.bodyColor, config.eyeColor, config.animSpeed);
+    this.sprite = this.createSprite();
     this.sprite.x = config.x;
     this.sprite.y = config.y;
+
     if (config.facing === 'left') {
       this.sprite.flipX = true;
     }
@@ -40,7 +45,11 @@ class Ghost {
     this._state = GhostStates.idle;
   }
 
-  createSprite(size, color, eyeColor, animSpeed = DEFAULT_ANIM_SPEED) {
+  createSprite() {
+    const { type, animSpeed } = this.config;
+    const { body, eyes } = this.config.palette;
+    const size = type.size;
+
     const rt = this.scene.add.renderTexture(0, 0, size, size);
     const graphics = this.scene.add.graphics().setVisible(false);
 
@@ -54,7 +63,8 @@ class Ghost {
         const t = tween.getValue();
 
         graphics.clear();
-        graphics.fillStyle(color, 1);
+        graphics.fillStyle(body, 1);
+        //graphics.fillGradientStyle(0xffff00, 0x00ffde, 0xff0000, 0xffb8de);
         graphics.fillEllipse(size * 0.5, size * 0.38, size, size * 0.7);
 
         const offset = size * 0.15 - t;
@@ -72,7 +82,7 @@ class Ghost {
         graphics.fillPath();
         
         // graphics.lineStyle(1, 0xffffff);
-        graphics.fillStyle(eyeColor, 1);
+        graphics.fillStyle(eyes, 1);
         graphics.beginPath();
         graphics.moveTo(size * 0.15, size * 0.3);
         graphics.lineTo(size * 0.35, size * 0.45 - t * 0.2);
@@ -81,7 +91,7 @@ class Ghost {
         graphics.fillPath();
 
         // graphics.lineStyle(1, 0xffffff);
-        graphics.fillStyle(eyeColor, 1);
+        graphics.fillStyle(eyes, 1);
         graphics.beginPath();
         graphics.moveTo(size - size * 0.15, size * 0.3);
         graphics.lineTo(size - size * 0.35, size * 0.45 - t * 0.2);
@@ -126,14 +136,14 @@ class Ghost {
     }
 
     // adjust target vector
-    this.scene.physics.moveToObject(this.sprite, target);
+    this.scene.physics.moveToObject(this.sprite, target, this.config.type.speed);
 
     // re-adjust target vector every N ms.
     this.trackEvent = this.scene.time.addEvent({
       delay: DEFAULT_TRACK_INTERVAL,
       loop: true,
       callback: () => {
-        this.scene.physics.moveToObject(this.sprite, target);
+        this.scene.physics.moveToObject(this.sprite, target, this.config.type.speed);
       }
     });
   }
@@ -146,4 +156,4 @@ class Ghost {
 
 }
 
-export { Ghost, GhostStates };
+export { Ghost, GhostTypes, GhostStates };
