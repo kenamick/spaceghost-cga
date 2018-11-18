@@ -19,6 +19,9 @@ const ASSETS = {
   },
   'ship-laser': {
     files: ['tkp_laser_1.ogg']
+  },
+  'explosions': {
+    files: ['tkp_explosion_1_2.ogg', 'tkp_explosion_1_5.ogg']
   }
 };
 
@@ -74,10 +77,9 @@ class Audio {
     if (config) {
       if (config.idx) {
         this.scene.sound.play(`${name}${config.idx}`);
-        //this.sounds[name][config.idx].play();
       } else if (config.random) {
         const idx = Math.RandomDataGenerator.between(0, this.sounds[name].length - 1);
-        this.sounds[name][idx].play();
+        this.scene.sound.play(`${name}${idx}`);
       }
     }
 

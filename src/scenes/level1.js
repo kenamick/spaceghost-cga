@@ -32,11 +32,12 @@ class Level1 extends BaseScene {
     this.addPacmans();
     this.addEnemies();
 
+    this.audio = new Audio(this);
+
     // load animations and fx
-    this.gfx = new Gfx(this);
+    this.gfx = new Gfx(this, this.audio);
 
     // play music
-    this.audio = new Audio(this);
     //this.audio.playMusic('music-game', { loop: true });
     //this.audio.setMusicVol('music-game', 0.5);
 

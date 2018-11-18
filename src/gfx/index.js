@@ -11,8 +11,9 @@ const EXPLOSIONS = {
 
 class Gfx {
 
-  constructor(scene) {
+  constructor(scene, audio) {
     this.scene = scene;
+    this.audio = audio;
     
     this.addExplosions();
     this.bindEvents();
@@ -23,6 +24,7 @@ class Gfx {
       this.scene.add.sprite(config.x, config.y, 
         EXPLOSIONS[config.name].atlas).play(config.name);
         // TODO play sfx
+      this.audio.playSound('explosions');
     });
   }
 

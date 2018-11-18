@@ -1,6 +1,6 @@
 # game-off-2018
 
-
+A something ...
 
 ## Installation
 
@@ -24,11 +24,19 @@ npm run build
 
 ## Open Source Tools
 
+  * [Phaser](https://phaser.io/)
+  * [Visual Studio Code](https://code.visualstudio.com/)
   * [Audacity](https://www.audacityteam.org/)
 
-## Assets
+## Assets Credits
+
+### Graphics
+
+  * [Kenney Game Assets #1](https://kenney.itch.io/kenney-game-assets-1)
 
 ### Sfx & Music
+
+CC0 license sound effects by:
 
   * [newagesoup](https://freesound.org/people/newagesoup/sounds/427993/)
   * [waveplay_old](https://freesound.org/people/waveplay_old/sounds/218043/)
