@@ -12,6 +12,9 @@ const Globals = {
   // misc
   bitmapFont: 'standard',
   atlas1: 'atlas-k',
+  atlas_px: 'atlas-px',
+  atlas_regular: 'atlas-reg',
+  atlas_simple: 'atlas-simple',
   palette: {
     pacman: {
       body: 0xffff00

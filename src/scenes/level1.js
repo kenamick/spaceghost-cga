@@ -2,12 +2,13 @@
 import BaseScene from './base-scene';
 import Globals from '../globals';
 import Audio from '../audio';
+import Gfx from '../gfx';
+import * as KPPL from '../shaders/pipeline';
 import { FireFly, 
   Pacman, PacmanStates,
   Ghost, GhostTypes, GhostStates
 } from '../entities';
 import Controls from '../controls';
-import * as KPPL from '../shaders/pipeline';
 
 class Level1 extends BaseScene {
 
@@ -30,6 +31,9 @@ class Level1 extends BaseScene {
     this.addPlayerShip();
     this.addPacmans();
     this.addEnemies();
+
+    // load animations and fx
+    this.gfx = new Gfx(this);
 
     // play music
     this.audio = new Audio(this);

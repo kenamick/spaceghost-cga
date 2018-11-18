@@ -19,10 +19,6 @@ class Preloader extends BaseScene {
         key: 'p',
         items: ['red']
       },
-      bullets: {
-        key: 'bullet',
-        items: ['simple']
-      },
       foods: {
         key: 'food',
         items: ['simple']
@@ -36,6 +32,15 @@ class Preloader extends BaseScene {
     this.load.atlasXML(Globals.atlas1, 
       require('../../assets/atlas-kenney/sheet.png'),
       require('../../assets/xml/sheet.xml'));
+    this.load.atlasXML(Globals.atlas_px,
+      require('../../assets/atlas-kenney/spritesheet_pixelExplosion.png'),
+      require('../../assets/xml/spritesheet_pixelExplosion.xml'));
+    this.load.atlasXML(Globals.atlas_regular,
+      require('../../assets/atlas-kenney/spritesheet_regularExplosion.png'),
+      require('../../assets/xml/spritesheet_regularExplosion.xml'));
+    this.load.atlasXML(Globals.atlas_simple,
+      require('../../assets/atlas-kenney/spritesheet_simpleExplosion.png'),
+      require('../../assets/xml/spritesheet_simpleExplosion.xml'));
 
     // sprite assets
     Object.keys(assets).map(assetCategory => {
