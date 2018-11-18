@@ -28,6 +28,8 @@ class FireFly {
       rate: 100, dual: true, dualRadius: 25
     });
 
+    this.dropFoodInterval = 0; // ? not sure if this is needed
+
     this.attachEngine(this.sprite);
   }
 
@@ -75,6 +77,14 @@ class FireFly {
     if (controls.up) {
       scene.physics.velocityFromRotation(
         sprite.rotation - Phaser.Math.TAU, ACCEL, sprite.body.acceleration);
+
+      // pop food every 2 movement ticks
+      if (this.dropFoodInterval >= 2) {
+        this.sprite.emit('popFood', this.sprite.x, this.sprite.y);
+        this.dropFoodInterval = 0;
+      }
+      this.dropFoodInterval += 1;
+
     } else {
       sprite.setAcceleration(0);
     }

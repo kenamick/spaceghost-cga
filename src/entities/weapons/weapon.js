@@ -24,7 +24,7 @@ class Weapon {
     });
 
     this.nextFire = 0;
-    this.amountShots = 0;
+    //this.amountShots = 0;
   }
 
   fire(time) {
@@ -57,12 +57,7 @@ class Weapon {
     }
 
     this.nextFire = time + this.config.rate;
-    this.amountShots++;
-
-    if (this.amountShots >= 2) {
-      this.player.sprite.emit('popFood', this.player.sprite.x, this.player.sprite.y);
-      this.amountShots = 0;
-    }
+    //this.amountShots++;
 
     // play sfx
     this.scene.audio.playSound('ship-laser');
