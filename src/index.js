@@ -31,7 +31,7 @@ const resize = () => {
 
 window.onload = function () {
   const config = {
-    type: Phaser.AUTO,
+    type: Phaser.WEBGL,
     width: 1920,
     height: 1080,
     antialias: false,
