@@ -5,6 +5,7 @@ import Globals from '../../globals';
 const DEFAULT_SIZE = 50;
 const DEFAULT_SPEED = 120;
 const DEFAULT_ANIM_SPEED = 200;
+const GROWTH_FACTOR = 0.0001;
 
 const PacmanStates = {
   idle: 1,
@@ -47,12 +48,17 @@ class Pacman {
 
   addListeners() {
     this.sprite.on('setState', (newState) => this.setState(newState));
+    this.sprite.on('eatFood', () => {
+      this.sprite.scaleX += GROWTH_FACTOR;
+      this.sprite.scaleY += GROWTH_FACTOR;
+    });
   }
 
   createSprite() {
-    const { size, color, animSpeed } = this.config;
+    const { color, animSpeed } = this.config;
 
-    const rt = this.scene.add.renderTexture(0, 0, size, size);
+    const rt = this.scene.add.renderTexture(0, 0, this.config.size, 
+      this.config.size);
     const graphics = this.scene.add.graphics().setVisible(false);
 
     this.scene.tweens.addCounter({
@@ -62,6 +68,7 @@ class Pacman {
       yoyo: true,
       repeat: -1,
       onUpdate: (tween) => {
+        const size = this.config.size;
         const t = tween.getValue();
         // thx Phaser guys! - https://labs.phaser.io/edit.html?src=src/game%20objects/graphics/pacman%20arc%20chomp%20chomp.js
         graphics.clear();
