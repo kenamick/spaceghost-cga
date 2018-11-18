@@ -3,6 +3,10 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Weapon } from '../weapons/weapon';
 
+const ACCEL = 200; // px/sec
+const MAX_SPEED = 280;
+const ROTATION_SPEED = 250;
+
 class FireFly {
 
   constructor(scene, controls, config) {
@@ -14,15 +18,14 @@ class FireFly {
     this.sprite.setDepth(2);
 
     // this.sprite.setDamping(true);
-    this.sprite.setDrag(150); //300
-    this.sprite.setAngularDrag(400);
-    this.sprite.setMaxVelocity(600);
+    this.sprite.setDrag(ACCEL * 0.1);
+    this.sprite.setAngularDrag(ROTATION_SPEED * 4);
+    this.sprite.setMaxVelocity(MAX_SPEED);
 
     this.controls = controls;
 
     this.weapon = new Weapon(scene, this, {
-      rate: 100,
-      dual: true, dualRadius: 25
+      rate: 100, dual: true, dualRadius: 25
     });
 
     this.attachEngine(this.sprite);
@@ -71,17 +74,17 @@ class FireFly {
 
     if (controls.up) {
       scene.physics.velocityFromRotation(
-        sprite.rotation - Phaser.Math.TAU, 180, sprite.body.acceleration);
+        sprite.rotation - Phaser.Math.TAU, ACCEL, sprite.body.acceleration);
     } else {
       sprite.setAcceleration(0);
     }
 
     if (controls.left) {
-      sprite.setAngularVelocity(-200);
+      sprite.setAngularVelocity(-ROTATION_SPEED);
     } else if (controls.right) {
-      sprite.setAngularVelocity(200);
-    } else {
-      sprite.setAngularVelocity(0);
+      sprite.setAngularVelocity(ROTATION_SPEED);
+    // } else {
+      //sprite.setAngularVelocity(0);
     }
 
     if (controls.action1) {
@@ -89,7 +92,7 @@ class FireFly {
     }
 
     weapon.update(time, delta);
-    scene.physics.world.wrap(sprite, 32);
+    scene.physics.world.wrap(sprite, sprite.width * 0.5);
   }
 
 }
