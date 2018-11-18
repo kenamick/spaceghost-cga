@@ -5,7 +5,7 @@ import Globals from '../../globals';
 const DEFAULT_SIZE = 50;
 const DEFAULT_SPEED = 120;
 const DEFAULT_ANIM_SPEED = 200;
-const GROWTH_FACTOR = 0.0001;
+const GROWTH_FACTOR = 0.00009;
 
 const PacmanStates = {
   idle: 1,
@@ -43,10 +43,10 @@ class Pacman {
 
     this._state = PacmanStates.idle;
 
-    this.addListeners();
+    this.bindEvents();
   }
 
-  addListeners() {
+  bindEvents() {
     this.sprite.on('setState', (newState) => this.setState(newState));
     this.sprite.on('eatFood', () => {
       this.sprite.scaleX += GROWTH_FACTOR;
