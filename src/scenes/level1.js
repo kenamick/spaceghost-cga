@@ -56,7 +56,7 @@ class Level1 extends BaseScene {
     this.pacmans = [
       new Pacman(this, {
         x: this.player.gameSprite.x, 
-        y: Globals.game.config.height - 50
+        y: this.player.gameSprite.y + 100 // Globals.game.config.height - 50
       })
     ];
   }
@@ -108,11 +108,16 @@ class Level1 extends BaseScene {
     for (const pacman of this.pacmans) {
       pacman.update(time, delta);
 
-      if (this.foods.countActive())
-        pacman.setState(PacmanStates.follow);
-
-      this.physics.overlap(pacman.sprite, this.foods, (pacman, food) => {
+      this.physics.overlap(pacman.sprite, this.foods, (pacmanSprite, food) => {
         this.foods.killAndHide(food);
+
+        // TODO add pacman grows
+
+        if (this.foods.countActive()) {
+          pacmanSprite.emit('setState', PacmanStates.trackFood);
+        } else {
+          pacmanSprite.emit('setState', PacmanStates.idle);
+        }
       });
     }
   }
@@ -134,6 +139,10 @@ class Level1 extends BaseScene {
     this.physics.overlap(food, this.foods, () => {
       food.disableBody(true, true);
     });
+
+    // tell pacman it's time to get movin
+    this.pacmans.map(pacman => 
+      pacman.gameSprite.emit('setState', PacmanStates.trackFood));
   }
 
 }

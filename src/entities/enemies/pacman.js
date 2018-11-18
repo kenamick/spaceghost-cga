@@ -3,10 +3,12 @@ import { Math } from 'phaser';
 import Globals from '../../globals';
 
 const DEFAULT_SIZE = 50;
+const DEFAULT_SPEED = 120;
 const DEFAULT_ANIM_SPEED = 200;
+
 const PacmanStates = {
   idle: 1,
-  follow: 2,
+  trackFood: 2,
   moveLeft: 3,
   moveRight: 4,
   moveUp: 5,
@@ -21,6 +23,7 @@ class Pacman {
     this.config = {
       color: Globals.palette.pacman.body,
       animSpeed: DEFAULT_ANIM_SPEED,
+      speed: DEFAULT_SPEED,
       size: DEFAULT_SIZE,
       ...config
     };
@@ -37,6 +40,12 @@ class Pacman {
     this.scene.physics.add.existing(this.sprite);
 
     this._state = PacmanStates.idle;
+
+    this.addListeners();
+  }
+
+  addListeners() {
+    this.sprite.on('setState', (newState) => this.setState(newState));
   }
 
   createSprite() {
@@ -91,13 +100,14 @@ class Pacman {
         this.sprite.body.setVelocity(config.speed, 0);
       break;
 
-      case PacmanStates.follow:
+      case PacmanStates.trackFood:
         this.track();
       break;
       // TODO other states
 
       case PacmanStates.idle:
-        break;
+        this.sprite.body.setVelocity(0, 0);
+      break;
     }
   }
 
@@ -117,7 +127,7 @@ class Pacman {
         }
       }
     }
-    this.scene.physics.moveToObject(this.sprite, nearestFood);
+    this.scene.physics.moveToObject(this.sprite, nearestFood, this.config.speed);
   }
 
   update(time, delta) {
