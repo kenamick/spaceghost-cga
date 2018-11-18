@@ -7,9 +7,10 @@ import Controls from '../controls';
 import { Pacman, PacmanStates } from '../entities/enemies';
 
 const Menus = [
-    { text: 'PLAY', scene: 'Level1' },
-    { text: 'CONTROLS', scene: 'Controls' },
-    { text: 'CREDITS', scene: 'Credits' }
+  { text: 'PLAY', scene: 'Level1' },
+  { text: 'HOW TO PLAY', scene: 'Howtoplay' },
+  { text: 'HISCORES', scene: 'Hiscores' },
+  { text: 'CREDITS', scene: 'Credits' }
 ];
 
 class MainMenu extends BaseScene {
@@ -28,7 +29,7 @@ class MainMenu extends BaseScene {
 
     this.addPacman();
     this.addMenu();
-    this.addTweenText(50, 10, 'SPACE-O-MAN', 50, (tween) => {
+    this.addTitle(50, 10, 'SPACE-O-MAN', 50, (tween) => {
       this.controls = new Controls(this, true);
     });
 
@@ -106,7 +107,7 @@ class MainMenu extends BaseScene {
       pos: 0,
       startY: csy,
       offset: offset,
-      background: this.addRect(sx - 30, csy, Globals.game.config.width * 2, 30),
+      background: this.addRect(sx - 30, csy + 1, Globals.game.config.width * 2, 31),
       sprite: this.addMenuSelector(sx - 30, csy, 20)
     };
 
@@ -120,7 +121,7 @@ class MainMenu extends BaseScene {
     this.add.bitmapText(x, y, Globals.bitmapFont, text, size);
   }
 
-  addTweenText(x, y, text, size = 24, cb) {
+  addTitle(x, y, text, size = 24, cb) {
     this.addRect(x, y + size * 1.15, Globals.game.config.width * 2, size * 1.2);
     const bitmap = this.add.bitmapText(x, y, Globals.bitmapFont, text, size);
     bitmap.alpha = 0;
@@ -163,7 +164,6 @@ class MainMenu extends BaseScene {
 
     // play sfx
     this.audio.playSound('menu-select');
-
   }
 
   spinCursor(cb) {
