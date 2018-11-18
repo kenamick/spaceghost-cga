@@ -29,7 +29,7 @@ class MainMenu extends BaseScene {
 
     this.addPacman();
     this.addMenu();
-    this.addTitle(50, 10, 'SPACE-O-MAN', 50, (tween) => {
+    this.addTitle(50, 10, 'P A C T E R O I D S', 50, (tween) => {
       this.controls = new Controls(this, true);
     });
 
