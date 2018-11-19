@@ -84,7 +84,7 @@ class MainMenu extends BaseScene {
     const size = Globals.game.config.height * 0.75;
     this.pacman = new Pacman(this, {
       x: Globals.game.config.width + 50, //+ size * 0.9,
-      y: Globals.game.config.height * 0.15,
+      y: Globals.game.config.height * 0.5,
       size,
       animSpeed: 1300,
       facing: 'left',

@@ -43,6 +43,7 @@ CC0 license sound effects by:
   * [CadereSounds](https://freesound.org/people/CadereSounds/sounds/221594/)
   * [bruce965](https://freesound.org/people/bruce965/sounds/425050/)
   * [tjcason](https://freesound.org/people/tjcason/sounds/390475/)
+  * [Klerrp](https://freesound.org/people/Klerrp/sounds/121941/)
 
 ## License
 
