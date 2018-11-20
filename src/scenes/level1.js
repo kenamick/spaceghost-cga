@@ -48,7 +48,7 @@ class Level1 extends BaseScene {
   addPlayerShip() {
     this.foods = this.physics.add.group({
       defaultKey: Globals.atlas2,
-      defaultFrame: 'food-simple'
+      defaultFrame: 'food-simple.png'
     });
 
     this.player = new FireFly(this, new Controls(this), {
@@ -68,16 +68,16 @@ class Level1 extends BaseScene {
   }
 
   addEnemies() {
-    const offset = 50;
+    const offset = -100;
     const topLeft = { x: -offset, y: -offset };
     const bottomLeft = { x: -offset, y: Globals.game.config.height + offset};
     const topRight = { x: Globals.game.config.width + offset, y: -offset};
     const bottomRight = {x: Globals.game.config.width + offset, 
-      y: Globals.game.config.height - offset};
+      y: Globals.game.config.height + offset};
 
     this.enemies = [
       new Ghost(this, {
-        x: topLeft.x, y: topLeft.y, 
+        x: topLeft.x, y: topLeft.y, type: GhostTypes.SMALL,
         palette: Globals.palette.ghost1
       }),
       new Ghost(this, {
@@ -85,18 +85,18 @@ class Level1 extends BaseScene {
         palette: Globals.palette.ghost4
       }),
       new Ghost(this, {
-        x: topRight.x, y: topRight.y, type: GhostTypes.MEDIUM,
+        x: topRight.x, y: topRight.y, type: GhostTypes.BIG,
         palette: Globals.palette.ghost3
       }),
       new Ghost(this, {
-        x: bottomRight.x, y: bottomRight.y, 
+        x: bottomRight.x, y: bottomRight.y, type: GhostTypes.SMALL,
         palette: Globals.palette.ghost4
       })
     ];
 
     // track player ship
     for (const enemy of this.enemies) {
-      enemy.setState(GhostStates.follow, { target: this.player.gameSprite });
+      enemy.setState(GhostStates.idle, { target: this.player.gameSprite });
     }
   }
 

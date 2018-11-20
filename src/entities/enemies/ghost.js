@@ -39,6 +39,7 @@ class Ghost {
       this.sprite.flipX = true;
     }
 
+    this.idleState = this.createIdleState(config.type);
     // bind a physics body to this render tex
     this.scene.physics.add.existing(this.sprite);
 
@@ -108,6 +109,36 @@ class Ghost {
     return rt;
   }
 
+  createIdleState(ghostType) {
+    let cfg;
+    switch (ghostType) {
+      case GhostTypes.SMALL:
+        cfg = { ease: 'Linear', duration: 2000, yoyo: false, radius: 40 };
+        break;
+      case GhostTypes.MEDIUM:
+        cfg = { ease: 'Sine.easeInOut', duration: 4000, yoyo: true, radius: 60 };
+        break;
+      case GhostTypes.BIG:
+        cfg = { ease: 'Sine.easeInOut', duration: 6000, yoyo: true, radius: 70 };
+        break;
+    }
+
+    const state = {
+      t: 0,
+      path: new Phaser.Curves.Path(),
+      curve: new Phaser.Curves.Ellipse(this.sprite.x, this.sprite.y, cfg.radius)
+    };
+    state.path.add(state.curve);
+
+    state.tween = this.scene.tweens.add({
+      targets: state,
+      t: 1,
+      repeat: -1,
+      ...cfg
+    });
+    return state;
+  }
+
   get gameSprite() {
     return this.sprite;
   }
@@ -121,11 +152,17 @@ class Ghost {
 
     switch (this._state) {
       case GhostStates.follow:
-        this.track(config.target);
-        break;
+        this.idleState.tween.pause();
+        this.track(config.target); 
+      break;
 
       case GhostStates.idle:
-        break;
+        if (this.idleState.tween.isPaused()) {
+          this.idleState.curve.x = this.sprite.x;
+          this.idleState.curve.y = this.sprite.y;
+          this.idleState.tween.resume();
+        }
+      break;
     }
   }
 
@@ -151,6 +188,15 @@ class Ghost {
   update(time, delta) {
     if (!this.config.noWrap) {
       this.scene.physics.world.wrap(this.sprite, this.config.size);
+    }
+
+    switch (this._state) {
+      case GhostStates.idle:
+        const vec = new Phaser.Math.Vector2();
+        this.idleState.path.getPoint(this.idleState.t, vec);
+        this.sprite.x = vec.x;
+        this.sprite.y = vec.y;
+      break;
     }
   }
 
