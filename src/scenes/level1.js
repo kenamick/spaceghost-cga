@@ -101,13 +101,15 @@ class Level1 extends BaseScene {
   }
 
   update(time, delta) {
+    const ship = this.player.gameSprite;
+
     super.update(time, delta);
 
     this.player.update(time, delta);
 
     // --- ghosts AI
     for (const enemy of this.enemies) {
-      enemy.update(time, delta);
+      enemy.update(time, delta, ship);
     }
 
     // --- pacmans AI
@@ -127,7 +129,7 @@ class Level1 extends BaseScene {
         }
       });
 
-      this.physics.overlap(pacman.sprite, this.player.gameSprite, 
+      this.physics.overlap(pacman.sprite, ship, 
         (pacmanSprite, ship) => ship.emit('hit-by-pacman', pacmanSprite));
     }
   }

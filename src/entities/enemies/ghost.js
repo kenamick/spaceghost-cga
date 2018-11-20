@@ -2,13 +2,14 @@
 import { Math } from 'phaser';
 import Globals from '../../globals';
 
-const DEFAULT_ANIM_SPEED = 500;
-const DEFAULT_TRACK_INTERVAL = 1500;
+const DEFAULT_TRACK_INTERVAL = 500;
+const DETECT_DISTANCE = 350 * 350; // 150 px
+const TRACK_DISTANCE = 550 * 550; // 500 px
 
 const GhostTypes = {
-  SMALL: { size: 50, speed: 120 },
-  MEDIUM: { size: 75, speed: 90 },
-  BIG: { size: 100, speed: 60 }
+  SMALL: { animSpeed: 400, size: 50, speed: 250 },
+  MEDIUM: { animSpeed: 650, size: 75, speed: 200 },
+  BIG: { animSpeed: 750, size: 100, speed: 180 }
 };
 
 const GhostStates = {
@@ -27,7 +28,6 @@ class Ghost {
 
     this.config = {
       type: GhostTypes.SMALL,
-      animSpeed: DEFAULT_ANIM_SPEED,
       ...config
     };
 
@@ -39,7 +39,7 @@ class Ghost {
       this.sprite.flipX = true;
     }
 
-    this.idleState = this.createIdleState(config.type);
+    //this.idleState = this.createIdleState(config.type);
     // bind a physics body to this render tex
     this.scene.physics.add.existing(this.sprite);
 
@@ -47,8 +47,9 @@ class Ghost {
   }
 
   createSprite() {
-    const { type, animSpeed } = this.config;
+    const { type } = this.config;
     const { body, eyes } = this.config.palette;
+    const animSpeed = type.animSpeed;
     const size = type.size;
 
     const rt = this.scene.add.renderTexture(0, 0, size, size);
@@ -126,7 +127,12 @@ class Ghost {
     const state = {
       t: 0,
       path: new Phaser.Curves.Path(),
-      curve: new Phaser.Curves.Ellipse(this.sprite.x, this.sprite.y, cfg.radius)
+      // this needs more work to derive the proper path coordinates
+      // from sprite's position and curve radius
+      curve: new Phaser.Curves.Ellipse(
+        this.sprite.x, 
+        this.sprite.y, 
+        cfg.radius)
     };
     state.path.add(state.curve);
 
@@ -152,16 +158,26 @@ class Ghost {
 
     switch (this._state) {
       case GhostStates.follow:
-        this.idleState.tween.pause();
-        this.track(config.target); 
+        console.log('follow')
+        if (this.idleState) {
+          this.idleState.tween.pause();
+          this.idleState.tween.stop();
+        }
+        this.track(config.target);
       break;
 
       case GhostStates.idle:
-        if (this.idleState.tween.isPaused()) {
-          this.idleState.curve.x = this.sprite.x;
-          this.idleState.curve.y = this.sprite.y;
-          this.idleState.tween.resume();
+        console.log('IDLE')
+        // stop trackig
+        if (this.trackEvent) {
+          this.trackEvent.destroy();
         }
+        // start patrol
+        //if (this.idleState.tween.isPaused()) {
+        this.idleState = this.createIdleState(this.config.type);  
+        // this.idleState.curve.x = this.sprite.x + this.sprite.width * 0.5;
+        // this.idleState.curve.y = this.sprite.y + this.sprite.height * 0.5;
+        //}
       break;
     }
   }
@@ -185,17 +201,38 @@ class Ghost {
     });
   }
 
-  update(time, delta) {
+  update(time, delta, playerShip) {
     if (!this.config.noWrap) {
       this.scene.physics.world.wrap(this.sprite, this.config.size);
     }
 
     switch (this._state) {
       case GhostStates.idle:
+        if (playerShip) {
+          // start following player if it's nearby
+          const dist = Math.Distance.Squared(
+            playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);
+          if (dist < DETECT_DISTANCE) {
+            this.setState(GhostStates.follow, { target: playerShip });
+            break;
+          }
+        }
+
         const vec = new Phaser.Math.Vector2();
         this.idleState.path.getPoint(this.idleState.t, vec);
         this.sprite.x = vec.x;
         this.sprite.y = vec.y;
+      break;
+
+      case GhostStates.follow:
+        if (playerShip) {
+          // stop following player if it's too far
+          const dist = Math.Distance.Squared(
+            playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);
+          if (dist > TRACK_DISTANCE) {
+            this.setState(GhostStates.idle);
+          }
+        }
       break;
     }
   }
