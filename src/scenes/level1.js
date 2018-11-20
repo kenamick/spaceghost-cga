@@ -47,7 +47,8 @@ class Level1 extends BaseScene {
 
   addPlayerShip() {
     this.foods = this.physics.add.group({
-      defaultKey: 'food-simple',
+      defaultKey: Globals.atlas2,
+      defaultFrame: 'food-simple'
     });
 
     this.player = new FireFly(this, new Controls(this), {

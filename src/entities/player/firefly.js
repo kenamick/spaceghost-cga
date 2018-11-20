@@ -60,7 +60,7 @@ class FireFly {
   }
 
   attachEngine(ship) {
-    var particles = this.scene.add.particles('p-red');
+    var particles = this.scene.add.particles(Globals.atlas2, 'particle-red.png');
     var emitter = particles.createEmitter({
       speed: 100,
       x: {

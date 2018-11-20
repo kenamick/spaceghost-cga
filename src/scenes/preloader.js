@@ -10,25 +10,9 @@ class Preloader extends BaseScene {
   }
 
   preload() {
-    const assets = {
-      backdrops: {
-        key: 'bkg',
-        items: ['purple', 'blue']
-      },
-      particles: {
-        key: 'p',
-        items: ['red']
-      },
-      foods: {
-        key: 'food',
-        items: ['simple']
-      },
-    }
-
     this.load.bitmapFont(Globals.bitmapFont,
       require('../../assets/fonts/kenney_future_regular_24.png'),
       require('../../assets/xml/kenney_future_regular_24.xml'))
-
     this.load.atlasXML(Globals.atlas1, 
       require('../../assets/atlas-kenney/sheet.png'),
       require('../../assets/xml/sheet.xml'));
@@ -45,7 +29,13 @@ class Preloader extends BaseScene {
       require('../../assets/atlas-kenney/spritesheet_simpleExplosion.png'),
       require('../../assets/xml/spritesheet_simpleExplosion.xml'));
 
-    // sprite assets
+    // background assets
+    const assets = {
+      backdrops: {
+        key: 'bkg',
+        items: ['purple', 'blue']
+      }
+    }
     Object.keys(assets).map(assetCategory => {
       assets[assetCategory].items.map(asset =>
         this.load.image(
