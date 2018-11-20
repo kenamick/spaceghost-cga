@@ -32,6 +32,9 @@ class Preloader extends BaseScene {
     this.load.atlasXML(Globals.atlas1, 
       require('../../assets/atlas-kenney/sheet.png'),
       require('../../assets/xml/sheet.xml'));
+    this.load.atlas(Globals.atlas2,
+      require('../../assets/atlas-kenney/atlas2.png'),
+      require('../../assets/xml/atlas2.json'));
     this.load.atlasXML(Globals.atlas_px,
       require('../../assets/atlas-kenney/spritesheet_pixelExplosion.png'),
       require('../../assets/xml/spritesheet_pixelExplosion.xml'));

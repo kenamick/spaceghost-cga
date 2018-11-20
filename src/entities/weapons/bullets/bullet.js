@@ -5,7 +5,7 @@ import Globals from '../../../globals';
 class Bullet extends Phaser.Physics.Arcade.Image {
 
   constructor(scene, config) {
-    super(scene, config.x, config.y, Globals.atlas1, 'laserRed01.png');
+    super(scene, config.x, config.y, Globals.atlas2, 'laserBlue01.png');
 
     this.setBlendMode('ADD');
     this.setDepth(0);

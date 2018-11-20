@@ -1,0 +1,60 @@
+{"frames": {
+
+"laserBlue01.png":
+{
+	"frame": {"x":0,"y":0,"w":9,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":9,"h":54},
+	"sourceSize": {"w":9,"h":54}
+},
+"laserRed01.png":
+{
+	"frame": {"x":9,"y":0,"w":9,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":9,"h":54},
+	"sourceSize": {"w":9,"h":54}
+},
+"playerShip1_blue.png":
+{
+	"frame": {"x":18,"y":0,"w":99,"h":75},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":99,"h":75},
+	"sourceSize": {"w":99,"h":75}
+},
+"shield1.png":
+{
+	"frame": {"x":117,"y":0,"w":133,"h":108},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":133,"h":108},
+	"sourceSize": {"w":133,"h":108}
+},
+"shield2.png":
+{
+	"frame": {"x":0,"y":108,"w":143,"h":119},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":143,"h":119},
+	"sourceSize": {"w":143,"h":119}
+},
+"shield3.png":
+{
+	"frame": {"x":0,"y":227,"w":144,"h":137},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":144,"h":137},
+	"sourceSize": {"w":144,"h":137}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "atlas2.png",
+	"format": "RGBA8888",
+	"size": {"w":250,"h":364},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f1a9ad4dae6153a4f27dde7dd3b62d8e:fca6ddf9cfd181f65772f2bebb68c1ef:d2928af382b1462a4e1e9d203dd4c4a5$"
+}
+}

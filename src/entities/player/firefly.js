@@ -13,7 +13,7 @@ class FireFly {
     this.scene = scene;
 
     this.sprite = scene.physics.add.image(config.x, config.y,
-      Globals.atlas1, 'playerShip1_blue.png');
+      Globals.atlas2, 'playerShip1_blue.png');
     this.sprite.texture.rotation = Phaser.Math.TAU;
     this.sprite.setDepth(2);
 
@@ -30,7 +30,33 @@ class FireFly {
 
     this.dropFoodInterval = 0; // ? not sure if this is needed
 
+    this.shields = this.createShieldsSprite();
     this.attachEngine(this.sprite);
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.sprite.on('hit-by-pacman', (pacman) => {
+      this.shields.x = this.sprite.x;
+      this.shields.y = this.sprite.y;
+      this.shields.visible = true;
+
+      // adjust shield facing
+      const theta = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+        pacman.x, pacman.y);
+      this.shields.rotation = theta + Phaser.Math.TAU;
+
+      // TODO hitpoints substract
+
+      this.shields.play('shields', true);
+    });
+  }
+
+  createShieldsSprite() {
+    const shields = this.scene.add.sprite(this.sprite.x, this.sprite.y, Globals.atlas2);
+    shields.visible = false;
+    shields.setDepth(100);
+    return shields;
   }
 
   attachEngine(ship) {
@@ -66,7 +92,6 @@ class FireFly {
     emitter.startFollow(ship);
   }
 
-
   get gameSprite() {
     return this.sprite;
   }
@@ -101,11 +126,13 @@ class FireFly {
       weapon.fire(time);
     }
     if (controls.action2) {
-      if (!this.what || this.what <= 0) {
-        this.scene.events.emit('explosion', { x: 100, y: 200, name: 'explosion-1' });
-        this.what = 20;
+      if (!this.what) {
+        // this.scene.events.emit('explosion', { x: 100, y: 200, name: 'explosion-1' });
+        this.scene.events.emit('shields', { x: 100, y: 200, name: 'shields' });
+        this.what = true;
+      } else {
+        this.what = false;
       }
-      this.what -= 1;
     }
 
     weapon.update(time, delta);

@@ -28,14 +28,14 @@ class Level1 extends BaseScene {
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
-    this.addPlayerShip();
-    this.addPacmans();
-    this.addEnemies();
-
     this.audio = new Audio(this);
 
     // load animations and fx
     this.gfx = new Gfx(this, this.audio);
+
+    this.addPlayerShip();
+    this.addPacmans();
+    this.addEnemies();
 
     // play music
     //this.audio.playMusic('music-game', { loop: true });
@@ -125,6 +125,9 @@ class Level1 extends BaseScene {
           pacmanSprite.emit('setState', PacmanStates.idle);
         }
       });
+
+      this.physics.overlap(pacman.sprite, this.player.gameSprite, 
+        (pacmanSprite, ship) => ship.emit('hit-by-pacman', pacmanSprite));
     }
   }
 

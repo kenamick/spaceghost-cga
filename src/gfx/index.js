@@ -3,7 +3,7 @@ import Globals from '../globals';
 
 const DURATIONS = {
   explosion: 1200,
-  shields: 1500
+  shields: 2000
 };
 
 const EXPLOSIONS = {
@@ -26,24 +26,21 @@ class Gfx {
     this.scene.events.on('explosion', (config) => {
       this.scene.add.sprite(config.x, config.y, 
         EXPLOSIONS[config.name].atlas).play(config.name);
+      if (config.cb) {
+        anim.on('animationcomplete', config.cb)
+      }
       // play sfx
       this.audio.playSound('explosions');
     });
 
     this.scene.events.on('shields', (config) => {
-      const anim = this.scene.add.sprite(config.x, config.y, Globals.atlas1);
+      const anim = this.scene.add.sprite(config.x, config.y, Globals.atlas2);
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
       }
       anim.play('shields', true, 0);
       // TODO play sfx
     });
-  }
-
-  createAnim(sprite, visible = false) {
-    const anim = this.scene.add.sprite(sprite.x, sprite.y, Globals.atlas1);
-    anim.visible = true;
-    return anim;
   }
 
   addAnimations() {
@@ -63,11 +60,11 @@ class Gfx {
 
     scene.anims.create({
       key: 'shields',
-      frames: scene.anims.generateFrameNames(Globals.atlas1, {
-        start: 1, end: 3, prefix: 'wingBlue_', suffix: '.png'}),
-      frameRate: 30, //DURATIONS.shields,
-      repeat: -1,
-      hideOnComplete: false
+      frames: scene.anims.generateFrameNames(Globals.atlas2, {
+        start: 1, end: 3, prefix: 'shield', suffix: '.png'}),
+      frameRate: DURATIONS.shields,
+      repeat: 0,
+      hideOnComplete: true
     });
   }
 

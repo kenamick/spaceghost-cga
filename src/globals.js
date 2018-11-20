@@ -12,6 +12,7 @@ const Globals = {
   // misc
   bitmapFont: 'standard',
   atlas1: 'atlas-k',
+  atlas2: 'atlas2',
   atlas_px: 'atlas-px',
   atlas_regular: 'atlas-reg',
   atlas_simple: 'atlas-simple',
