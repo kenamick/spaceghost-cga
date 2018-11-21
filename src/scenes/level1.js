@@ -4,7 +4,7 @@ import Globals from '../globals';
 import Audio from '../audio';
 import Gfx from '../gfx';
 import * as KPPL from '../shaders/pipeline';
-import { FireFly, 
+import { FireFly, HUD,
   Pacman, PacmanStates,
   Ghost, GhostTypes, GhostStates
 } from '../entities';
@@ -56,6 +56,8 @@ class Level1 extends BaseScene {
       y: this.cameras.main.centerY 
     });
     this.player.sprite.on('popFood', this.popFood, this);
+
+    this.hud = new HUD(this, {player: this.player});
   }
 
   addPacmans() {

@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Bullet } from './bullets/bullet';
 
-const DEFAULT_RATE = 400
+const DEFAULT_RATE = 140;
 
 class Weapon {
 
@@ -29,7 +29,7 @@ class Weapon {
 
   fire(time) {
     if(time < this.nextFire)
-      return;
+      return false;
 
     const { center, rotation } = this.player.sprite.body;
 
@@ -61,6 +61,8 @@ class Weapon {
 
     // play sfx
     this.scene.audio.playSound('ship-laser');
+
+    return true;
   }
 
   checkHits(enemies) {

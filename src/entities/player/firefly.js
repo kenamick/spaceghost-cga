@@ -6,11 +6,18 @@ import { Weapon } from '../weapons/weapon';
 const ACCEL = 240; // px/sec
 const MAX_SPEED = 280;
 const ROTATION_SPEED = 250;
+const MAX_SHIELDS = 100;
+const MAX_ENERGY = 100;
 
 class FireFly {
 
   constructor(scene, controls, config) {
     this.scene = scene;
+
+    this.props = {
+      shields: MAX_SHIELDS,
+      energy: MAX_ENERGY,
+    };
 
     this.sprite = scene.physics.add.image(config.x, config.y,
       Globals.atlas2, 'playerShip1_blue.png');
@@ -28,7 +35,7 @@ class FireFly {
     this.controls = controls;
 
     this.weapon = new Weapon(scene, this, {
-      rate: 100, dual: true, dualRadius: 25
+      dual: true, dualRadius: 25
     });
 
     this.dropFoodInterval = 0; // ? not sure if this is needed
@@ -39,13 +46,24 @@ class FireFly {
   }
 
   bindEvents() {
-    this.sprite.on('hit-by-pacman', (pacman) => {
-      this.showShields(pacman);
-      // TODO hitpoints substract
-    });
-    this.sprite.on('hit-by-ghost', (ghost) => {
-      this.showShields(ghost);
-      // TODO hitpoints substract
+    const bumpShields = (enemy) => {
+      this.showShields(enemy);
+      // decrease shields
+      this.props.shields = Math.max(this.props.shields - 1, 0);
+      this.scene.events.emit('hud-ship-stats', this.props);
+    };
+    this.sprite.on('hit-by-pacman', bumpShields);
+    this.sprite.on('hit-by-ghost', bumpShields);
+    
+    // replenish shields & energy 
+    this.scene.time.addEvent({
+      delay: 50,
+      loop: true,
+      callback: () => {
+        this.props.shields = Math.min(this.props.shields + 0.125, MAX_SHIELDS);
+        this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
+        this.scene.events.emit('hud-ship-stats', this.props);
+      }
     });
   }
 
@@ -134,8 +152,10 @@ class FireFly {
       sprite.setAngularVelocity(0);
     }
 
-    if (controls.action1) {
-      weapon.fire(time);
+    if (controls.action1 && this.props.energy > 4) {
+      if (weapon.fire(time)) {
+        this.props.energy = Math.max(this.props.energy - 4, 0);
+      }
     }
     if (controls.action2) {
       if (!this.what) {
