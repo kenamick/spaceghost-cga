@@ -6,6 +6,7 @@ const DEFAULT_TRACK_INTERVAL = 350;
 const DETECT_DISTANCE = 350 * 350; // 150 px
 const TRACK_DISTANCE = 550 * 550; // 500 px
 const TRACK_STOP_COOLDOWN = 1250; // ms
+const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
   SMALL: { animSpeed: 400, size: 50, speed: 210, drift: 0.09 },
@@ -45,6 +46,37 @@ class Ghost {
     this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.8);
 
     this._state = GhostStates.patrol;
+
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.sprite.on('hit-by-bullet', (bullet) => {
+      // shields gfx
+      this.scene.events.emit('shields', {
+        x: bullet.x,
+        y: bullet.y,
+        angle: Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+          bullet.x, bullet.y) + Phaser.Math.TAU
+      });
+
+      if (!this.slowdown) {
+        this.setState(GhostStates.idle);
+        // swing in direction of bullet
+        this.sprite.body.setVelocity(
+          bullet.body.velocity.x * 0.1,
+          bullet.body.velocity.y * 0.1);
+
+        this.slowdown = this.scene.time.addEvent({
+          delay: HIT_STOP_COOLDOWN,
+          loop: false,
+          callback: () => {
+            this.slowdown = null;
+            this.setState(GhostStates.patrol);
+          }
+        });
+      }
+    });
   }
 
   createSprite() {

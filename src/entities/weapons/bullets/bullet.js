@@ -12,16 +12,22 @@ class Bullet extends Phaser.Physics.Arcade.Image {
     this.setActive(false);
     this.setVisible(false);
 
-    this.speed = 1000;
+    this.speed = 800;
     this.lifespan = 1000;
   }
 
   fire(x, y, angle) {
     this.currentLifespan = this.lifespan;
     this.enableBody(true, x, y, true, true);
+    
+    // TODO: sthg.'s not right here!
+    // The image angle gets changed, but not the physics body angle!
     this.setAngle(angle);
-    this.scene.physics.velocityFromAngle(
-      angle - 90, this.speed, this.body.velocity);
+    // decrease body size to counter physics body issue
+    this.body.setSize(15, 15);
+
+    this.scene.physics.velocityFromAngle(angle - 90, this.speed, 
+      this.body.velocity);
   }
 
   update(time, delta) {

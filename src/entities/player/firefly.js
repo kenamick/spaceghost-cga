@@ -130,8 +130,8 @@ class FireFly {
       sprite.setAngularVelocity(-ROTATION_SPEED);
     } else if (controls.right) {
       sprite.setAngularVelocity(ROTATION_SPEED);
-    // } else {
-      //sprite.setAngularVelocity(0);
+     } else {
+      sprite.setAngularVelocity(0);
     }
 
     if (controls.action1) {

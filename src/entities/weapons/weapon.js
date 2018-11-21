@@ -63,6 +63,16 @@ class Weapon {
     this.scene.audio.playSound('ship-laser');
   }
 
+  checkHits(enemies) {
+    this.scene.physics.overlap(this.bullets, enemies, (enemy, bullet) => {
+      if (this.bullets.countActive()) {
+        this.bullets.killAndHide(bullet);
+        // trigger enemy hit
+        enemy.emit('hit-by-bullet', bullet);
+      }
+    });
+  }
+
   update(time, delta) {
   }
 

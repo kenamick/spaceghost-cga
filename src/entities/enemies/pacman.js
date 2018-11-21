@@ -7,6 +7,7 @@ const DEFAULT_SPEED = 120; // px
 const DEFAULT_ANIM_SPEED = 200; // ms
 const GROWTH_FACTOR = 0.001;
 const WARP_OFFSET = 350; // min px, before warping past screen edge
+const HIT_STOP_COOLDOWN = 1500;
 
 const PacmanStates = {
   idle: 1,
@@ -53,6 +54,7 @@ class Pacman {
 
   bindEvents() {
     this.sprite.on('setState', (newState) => this.setState(newState));
+
     this.sprite.on('eatFood', () => {
       this._growthFactor += GROWTH_FACTOR;
       this.sprite.setDisplaySize(
@@ -61,6 +63,29 @@ class Pacman {
       );
       // this.sprite.scaleX += GROWTH_FACTOR;
       // this.sprite.scaleY += GROWTH_FACTOR;
+    });
+
+    this.sprite.on('hit-by-bullet', (bullet) => {
+      // shields gfx
+      this.scene.events.emit('shields', {
+        x: bullet.x,
+        y: bullet.y,
+        angle: Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+          bullet.x, bullet.y) + Phaser.Math.TAU
+      });
+
+      if (!this.slowdown) {
+        // swing in direction of bullet
+        this.sprite.body.setVelocity(
+          bullet.body.velocity.x * 0.1, 
+          bullet.body.velocity.y * 0.1);
+
+        this.slowdown = this.scene.time.addEvent({
+          delay: HIT_STOP_COOLDOWN,
+          loop: false,
+          callback: () => this.slowdown = null
+        });
+      }
     });
   }
 

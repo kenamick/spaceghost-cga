@@ -38,6 +38,9 @@ class Gfx {
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
       }
+      if (config.angle) {
+        anim.rotation = config.angle;
+      }
       anim.play('shields', true, 0);
       // TODO play sfx
     });
