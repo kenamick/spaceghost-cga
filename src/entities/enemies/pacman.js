@@ -2,10 +2,11 @@
 import Phaser from 'phaser';
 import Globals from '../../globals';
 
-const DEFAULT_SIZE = 50;
-const DEFAULT_SPEED = 120;
-const DEFAULT_ANIM_SPEED = 200;
-const GROWTH_FACTOR = 0.00009;
+const DEFAULT_SIZE = 50; // px
+const DEFAULT_SPEED = 120; // px
+const DEFAULT_ANIM_SPEED = 200; // ms
+const GROWTH_FACTOR = 0.001;
+const WARP_OFFSET = 350; // min px, before warping past screen edge
 
 const PacmanStates = {
   idle: 1,
@@ -39,8 +40,12 @@ class Pacman {
     }
 
     // bind a physics body to this render tex
-    this.scene.physics.add.existing(this.sprite);
+    this.sprite = this.scene.physics.add.existing(this.sprite);
 
+    // adjust collisions body
+    this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.9);
+
+    this._growthFactor = 0;
     this._state = PacmanStates.idle;
 
     this.bindEvents();
@@ -49,8 +54,13 @@ class Pacman {
   bindEvents() {
     this.sprite.on('setState', (newState) => this.setState(newState));
     this.sprite.on('eatFood', () => {
-      this.sprite.scaleX += GROWTH_FACTOR;
-      this.sprite.scaleY += GROWTH_FACTOR;
+      this._growthFactor += GROWTH_FACTOR;
+      this.sprite.setDisplaySize(
+        this.config.size + this._growthFactor,
+        this.config.size + this._growthFactor
+      );
+      // this.sprite.scaleX += GROWTH_FACTOR;
+      // this.sprite.scaleY += GROWTH_FACTOR;
     });
   }
 
@@ -141,6 +151,19 @@ class Pacman {
   }
 
   update(time, delta) {
+    // if (this._state === PacmanStates.idle) {
+    //   const { x, y } = this.sprite;
+    //   if (x < WARP_OFFSET) {
+    //     this.scene.physics.moveToObject(this.sprite, -WARP_OFFSET,
+    //       y, this.config.speed);
+    //   // } else if (x > this.scene.game.config.width - WARP_OFFSET) {
+    //   //   this.scene.physics.moveToObject(this.sprite, this.scene.game.config.width + WARP_OFFSET,
+    //   //     y, this.config.speed);
+    //   } else {
+    //     this.sprite.body.setVelocity(0, 0);
+    //   }
+    // }
+
     if (!this.config.noWrap) {
       this.scene.physics.world.wrap(this.sprite, this.config.size);
     }

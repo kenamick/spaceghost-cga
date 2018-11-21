@@ -39,7 +39,10 @@ class Ghost {
 
     //this.patrolState = this.createpatrolState(config.type);
     // bind a physics body to this render tex
-    this.scene.physics.add.existing(this.sprite);
+    this.sprite = this.scene.physics.add.existing(this.sprite);
+
+    // adjust collisions body
+    this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.8);
 
     this._state = GhostStates.patrol;
   }

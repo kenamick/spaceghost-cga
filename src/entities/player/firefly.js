@@ -15,12 +15,15 @@ class FireFly {
     this.sprite = scene.physics.add.image(config.x, config.y,
       Globals.atlas2, 'playerShip1_blue.png');
     this.sprite.texture.rotation = Phaser.Math.TAU;
-    this.sprite.setDepth(2);
+    this.sprite.setDepth(20);
 
     // this.sprite.setDamping(true);
     this.sprite.setDrag(ACCEL * 0.1);
     this.sprite.setAngularDrag(ROTATION_SPEED * 4);
     this.sprite.setMaxVelocity(MAX_SPEED);
+
+    // adjust collisions body
+    this.sprite.setSize(this.sprite.width * 0.75, this.sprite.height * 0.5);
 
     this.controls = controls;
 

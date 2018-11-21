@@ -120,15 +120,17 @@ class Level1 extends BaseScene {
       pacman.update(time, delta);
 
       this.physics.overlap(pacman.sprite, this.foods, (pacmanSprite, food) => {
-        this.foods.killAndHide(food);
-
-        // trigger pacman growth
-        pacmanSprite.emit('eatFood');
-
         if (this.foods.countActive()) {
-          pacmanSprite.emit('setState', PacmanStates.trackFood);
-        } else {
-          pacmanSprite.emit('setState', PacmanStates.idle);
+          this.foods.killAndHide(food);
+
+          // trigger pacman growth
+          pacmanSprite.emit('eatFood');
+
+          if (this.foods.countActive()) {
+            pacmanSprite.emit('setState', PacmanStates.trackFood);
+          } else {
+            pacmanSprite.emit('setState', PacmanStates.idle);
+          }
         }
       });
 
