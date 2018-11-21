@@ -96,7 +96,7 @@ class Level1 extends BaseScene {
 
     // track player ship
     for (const enemy of this.enemies) {
-      enemy.setState(GhostStates.idle, { target: this.player.gameSprite });
+      enemy.setState(GhostStates.patrol, { target: this.player.gameSprite });
     }
   }
 

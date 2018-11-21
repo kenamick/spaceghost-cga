@@ -2,23 +2,21 @@
 import { Math } from 'phaser';
 import Globals from '../../globals';
 
-const DEFAULT_TRACK_INTERVAL = 500;
+const DEFAULT_TRACK_INTERVAL = 350;
 const DETECT_DISTANCE = 350 * 350; // 150 px
 const TRACK_DISTANCE = 550 * 550; // 500 px
+const TRACK_STOP_COOLDOWN = 1250; // ms
 
 const GhostTypes = {
-  SMALL: { animSpeed: 400, size: 50, speed: 250 },
-  MEDIUM: { animSpeed: 650, size: 75, speed: 200 },
-  BIG: { animSpeed: 750, size: 100, speed: 180 }
+  SMALL: { animSpeed: 400, size: 50, speed: 210, drift: 0.09 },
+  MEDIUM: { animSpeed: 650, size: 75, speed: 180, drift: -0.05 },
+  BIG: { animSpeed: 750, size: 100, speed: 150, drift: 0.02 }
 };
 
 const GhostStates = {
   idle: 1,
-  follow: 2,
-  moveLeft: 3,
-  moveRight: 4,
-  moveUp: 5,
-  moveDown: 6
+  patrol: 2,
+  follow: 3
 };
 
 class Ghost {
@@ -39,11 +37,11 @@ class Ghost {
       this.sprite.flipX = true;
     }
 
-    //this.idleState = this.createIdleState(config.type);
+    //this.patrolState = this.createpatrolState(config.type);
     // bind a physics body to this render tex
     this.scene.physics.add.existing(this.sprite);
 
-    this._state = GhostStates.idle;
+    this._state = GhostStates.patrol;
   }
 
   createSprite() {
@@ -110,7 +108,7 @@ class Ghost {
     return rt;
   }
 
-  createIdleState(ghostType) {
+  createPatrolState(ghostType) {
     let cfg;
     switch (ghostType) {
       case GhostTypes.SMALL:
@@ -145,6 +143,17 @@ class Ghost {
     return state;
   }
 
+  stopPatroling() {
+    if (this.patrolState) {
+      this.patrolState.tween.pause();
+      this.patrolState.tween.stop();
+    }
+    if (this.patrolEvent) {
+      this.patrolEvent.destroy();
+      this.patrolEvent = null;
+    }
+  }
+
   get gameSprite() {
     return this.sprite;
   }
@@ -158,35 +167,32 @@ class Ghost {
 
     switch (this._state) {
       case GhostStates.follow:
-        console.log('follow')
-        if (this.idleState) {
-          this.idleState.tween.pause();
-          this.idleState.tween.stop();
-        }
+        this.stopPatroling();
         this.track(config.target);
       break;
 
       case GhostStates.idle:
-        console.log('IDLE')
-        // stop trackig
-        if (this.trackEvent) {
-          this.trackEvent.destroy();
-        }
-        // start patrol
-        //if (this.idleState.tween.isPaused()) {
-        this.idleState = this.createIdleState(this.config.type);  
-        // this.idleState.curve.x = this.sprite.x + this.sprite.width * 0.5;
-        // this.idleState.curve.y = this.sprite.y + this.sprite.height * 0.5;
-        //}
+        this.stopPatroling();
+        this.stopTracking();
+        this.sprite.body.setVelocity(0, 0);
       break;
+
+      case GhostStates.patrol:
+        this.stopTracking();
+        this.patrolState = this.createPatrolState(this.config.type);  
+      break;
+    }
+  }
+
+  stopTracking() {
+    if (this.trackEvent) {
+      this.trackEvent.destroy();
     }
   }
 
   track(target) {
     // clear old tracking event
-    if (this.trackEvent) {
-      this.trackEvent.destroy();
-    }
+    this.stopTracking();
 
     // adjust target vector
     this.scene.physics.moveToObject(this.sprite, target, this.config.type.speed);
@@ -202,12 +208,8 @@ class Ghost {
   }
 
   update(time, delta, playerShip) {
-    if (!this.config.noWrap) {
-      this.scene.physics.world.wrap(this.sprite, this.config.size);
-    }
-
     switch (this._state) {
-      case GhostStates.idle:
+      case GhostStates.patrol:
         if (playerShip) {
           // start following player if it's nearby
           const dist = Math.Distance.Squared(
@@ -219,9 +221,10 @@ class Ghost {
         }
 
         const vec = new Phaser.Math.Vector2();
-        this.idleState.path.getPoint(this.idleState.t, vec);
+        this.patrolState.path.getPoint(this.patrolState.t, vec);
         this.sprite.x = vec.x;
         this.sprite.y = vec.y;
+        this.patrolState.curve.x += this.config.type.drift;
       break;
 
       case GhostStates.follow:
@@ -231,10 +234,21 @@ class Ghost {
             playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);
           if (dist > TRACK_DISTANCE) {
             this.setState(GhostStates.idle);
+            // chasing cooldown and then patrol
+            this.patrolEvent = this.scene.time.addEvent({
+              delay: TRACK_STOP_COOLDOWN,
+              loop: false,
+              callback: () => this.setState(GhostStates.patrol)
+            });
           }
         }
       break;
     }
+
+    if (!this.config.noWrap) {
+      this.scene.physics.world.wrap(this.sprite, this.config.type.size);
+    }
+
   }
 
 }
