@@ -10,6 +10,8 @@ class Preloader extends BaseScene {
   }
 
   preload() {
+    this.createLoadingBar();
+
     this.load.bitmapFont(Globals.bitmapFont,
       require('../../assets/fonts/kenney_future_regular_24.png'),
       require('../../assets/xml/kenney_future_regular_24.xml'))
@@ -57,6 +59,21 @@ class Preloader extends BaseScene {
     }
 
     this.scene.start('MainMenu');
+  }
+
+  createLoadingBar() {
+    var progress = this.add.graphics();
+
+    this.load.on('progress', (value) => {
+      progress.clear();
+      progress.fillStyle(0xffffff, 1);
+      progress.fillRect(0, Globals.game.config.height * 0.5 - 10,
+        Globals.game.config.width * value, 20);
+    });
+
+    this.load.on('complete', () => {
+      progress.destroy();
+    });
   }
 
 }

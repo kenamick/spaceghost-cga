@@ -73,7 +73,7 @@ class MainMenu extends BaseScene {
 
     if (this.pacman) {
       this.pacman.update(time, delta);
-      if (this.pacman.gameSprite.x < Globals.game.config.width * 0.5) {
+      if (this.pacman.sprite.x < Globals.game.config.width * 0.5) {
         // enable wrap once past mid-screen
         this.pacman.setConfig('noWrap', false);
       }
