@@ -88,10 +88,6 @@ class Pacman {
     return rt;
   }
 
-  get gameSprite() {
-    return this.sprite;
-  }
-
   setConfig(key, value) {
     this.config[key] = value;
   }

@@ -154,10 +154,6 @@ class Ghost {
     }
   }
 
-  get gameSprite() {
-    return this.sprite;
-  }
-
   setConfig(key, value) {
     this.config[key] = value;
   }

@@ -107,12 +107,15 @@ class Level1 extends BaseScene {
 
     this.player.update(time, delta);
 
-    // --- ghosts AI
+    // --- ghosts AI ---
     for (const enemy of this.enemies) {
       enemy.update(time, delta, ship);
+
+      this.physics.overlap(enemy.sprite, ship,
+        (enemySprite, ship) => ship.emit('hit-by-ghost', enemySprite));
     }
 
-    // --- pacmans AI
+    // --- pacmans AI ---
     for (const pacman of this.pacmans) {
       pacman.update(time, delta);
 
@@ -154,7 +157,7 @@ class Level1 extends BaseScene {
 
     // tell pacman it's time to get movin
     this.pacmans.map(pacman => 
-      pacman.gameSprite.emit('setState', PacmanStates.trackFood));
+      pacman.sprite.emit('setState', PacmanStates.trackFood));
   }
 
 }

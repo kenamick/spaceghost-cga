@@ -37,19 +37,28 @@ class FireFly {
 
   bindEvents() {
     this.sprite.on('hit-by-pacman', (pacman) => {
-      this.shields.x = this.sprite.x;
-      this.shields.y = this.sprite.y;
-      this.shields.visible = true;
-
-      // adjust shield facing
-      const theta = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
-        pacman.x, pacman.y);
-      this.shields.rotation = theta + Phaser.Math.TAU;
-
+      this.showShields(pacman);
       // TODO hitpoints substract
-
-      this.shields.play('shields', true);
     });
+    this.sprite.on('hit-by-ghost', (ghost) => {
+      this.showShields(ghost);
+      // TODO hitpoints substract
+    });
+  }
+
+  showShields(enemy) {
+    this.shields.x = this.sprite.x;
+    this.shields.y = this.sprite.y;
+    this.shields.visible = true;
+
+    // adjust shield facing
+    const theta = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+      enemy.x, enemy.y);
+    this.shields.rotation = theta + Phaser.Math.TAU;
+
+    // TODO hitpoints substract
+
+    this.shields.play('shields', true);
   }
 
   createShieldsSprite() {
