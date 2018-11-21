@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Weapon } from '../weapons/weapon';
 
-const ACCEL = 200; // px/sec
+const ACCEL = 240; // px/sec
 const MAX_SPEED = 280;
 const ROTATION_SPEED = 250;
 
