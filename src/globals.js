@@ -37,6 +37,13 @@ const Globals = {
       eyes: 0xff0000,
     }
   },
+  depths: {
+    ship: 20,
+    ghosts: 22,
+    pacman: 24,
+    explosion: 1,
+    shields: 50,
+  },
   // development
   debug: checkStringBoolean(localStorage.getItem(`debug`)),
   debugPhysics: checkStringBoolean(localStorage.getItem(`debugPhysics`)),

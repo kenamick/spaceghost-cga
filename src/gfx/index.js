@@ -33,7 +33,7 @@ class Gfx {
 
       const sprite = this.scene.add.sprite(config.x, config.y, 
         EXPLOSIONS[name].atlas).play(name);
-      //sprite.setDepth(200);
+      sprite.setDepth(Globals.depths.explosion);
 
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
@@ -44,6 +44,7 @@ class Gfx {
 
     this.scene.events.on('shields', (config) => {
       const anim = this.scene.add.sprite(config.x, config.y, Globals.atlas2);
+      anim.setDepth(Globals.depths.shields);
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
       }

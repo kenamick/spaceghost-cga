@@ -44,6 +44,7 @@ class Pacman {
 
     // bind a physics body to this render tex
     this.sprite = this.scene.physics.add.existing(this.sprite);
+    this.sprite.setDepth(Globals.depths.pacman);
 
     // adjust collisions body
     this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.9);

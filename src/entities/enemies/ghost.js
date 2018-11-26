@@ -32,6 +32,7 @@ class Ghost {
     };
 
     this.sprite = this.createSprite();
+    this.sprite.setDepth(Globals.depths.ghost);
     this.sprite.x = config.x;
     this.sprite.y = config.y;
 

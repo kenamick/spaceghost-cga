@@ -22,7 +22,7 @@ class FireFly {
     this.sprite = scene.physics.add.image(config.x, config.y,
       Globals.atlas2, 'playerShip1_blue.png');
     this.sprite.texture.rotation = Phaser.Math.TAU;
-    this.sprite.setDepth(20);
+    this.sprite.setDepth(Globals.depths.ship);
 
     // this.sprite.setDamping(true);
     this.sprite.setDrag(ACCEL * 0.1);
