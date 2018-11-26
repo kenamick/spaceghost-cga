@@ -161,25 +161,30 @@ class Pacman {
     // this is a very naive approach to the nearest neighbor search
     // if anyone knows a better way change it please
     const { foods } = this.scene;
+    
     let nearestFood = foods.getFirstAlive();
-    let distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, nearestFood.x, nearestFood.y);
-    let bestDistance = distance;
-    for(let food of foods.getChildren()) {
-      if(food.active) {
-        distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, food.x, food.y);
-        if(distance < bestDistance) {
-          bestDistance = distance;
-          nearestFood = food;
+    if (nearestFood) {
+      let distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+        nearestFood.x, nearestFood.y);
+      let bestDistance = distance;
+      for(let food of foods.getChildren()) {
+        if(food.active) {
+          distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+            food.x, food.y);
+          if(distance < bestDistance) {
+            bestDistance = distance;
+            nearestFood = food;
+          }
         }
       }
+
+      this.scene.physics.moveToObject(this.sprite, nearestFood, this.config.speed);
+
+      // always face target food, good ol'atan2 ;-)
+      const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+        nearestFood.x, nearestFood.y);
+      this.sprite.rotation = angle;
     }
-
-    this.scene.physics.moveToObject(this.sprite, nearestFood, this.config.speed);
-
-    // always face target food, good ol'atan2 ;-)
-    const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
-      nearestFood.x, nearestFood.y);
-    this.sprite.rotation = angle;
   }
 
   update(time, delta) {
