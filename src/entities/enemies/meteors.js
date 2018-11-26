@@ -21,11 +21,14 @@ class Meteors {
       defaultKey: Globals.atlas2,
       defaultFrame: 'meteor1.png'
     });
+
+    this.scene.events.on('spawn-meteor-from', 
+      (type, obj) => this.spawnFrom(type, obj));
   }
 
   spawnFrom(type, obj) {
     let x, y, vx, vy;
-    const offset = 50;
+    const offset = 80;
     const cx = Globals.game.config.width * 0.33;
     const cy = Globals.game.config.height * 0.33;
     x = obj.x;

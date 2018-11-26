@@ -1,6 +1,7 @@
 // firefly.js - Player's glorious ship
 import { Math } from 'phaser';
 import Globals from '../../globals';
+import { MeteorTypes } from './meteors';
 
 const DEFAULT_TRACK_INTERVAL = 350;
 const DETECT_DISTANCE = 350 * 350; // 150 px
@@ -57,6 +58,9 @@ class Ghost {
       const { sprite } = this;
       // kill if ghost smaller than pacman  
       if (sprite.width + sprite.height <= size) {
+        // spawn meteor
+        this.scene.events.emit('spawn-meteor-from', MeteorTypes.BIG, this.sprite);
+        // kill ghost
         this.setState(GhostStates.dead);
         this.scene.events.emit('explosion', { x: sprite.x, y: sprite.y });
         this.sprite.destroy();
