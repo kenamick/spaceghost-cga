@@ -17,7 +17,8 @@ const GhostTypes = {
 const GhostStates = {
   idle: 1,
   patrol: 2,
-  follow: 3
+  follow: 3,
+  dead: 4
 };
 
 class Ghost {
@@ -51,6 +52,16 @@ class Ghost {
   }
 
   bindEvents() {
+    this.sprite.on('hit-by-pacman', (pacman, size) => {
+      const { sprite } = this;
+      // kill if ghost smaller than pacman  
+      if (sprite.width + sprite.height <= size) {
+        this.setState(GhostStates.dead);
+        this.scene.events.emit('explosion', { x: sprite.x, y: sprite.y });
+        this.sprite.destroy();
+      }
+    });
+
     this.sprite.on('hit-by-bullet', (bullet) => {
       // shields gfx
       this.scene.events.emit('shields', {
@@ -211,6 +222,12 @@ class Ghost {
       case GhostStates.patrol:
         this.stopTracking();
         this.patrolState = this.createPatrolState(this.config.type);  
+      break;
+
+      case GhostStates.dead:
+        this.stopPatroling();
+        this.stopTracking();
+        this.sprite.body.setVelocity(0, 0);
       break;
     }
   }

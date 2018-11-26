@@ -5,7 +5,8 @@ import Globals from '../../globals';
 const DEFAULT_SIZE = 50; // px
 const DEFAULT_SPEED = 120; // px
 const DEFAULT_ANIM_SPEED = 200; // ms
-const GROWTH_FACTOR = 0.001;
+const GROWTH_FACTOR = 0.01;
+// const GROWTH_FACTOR = 0.001;
 const WARP_OFFSET = 350; // min px, before warping past screen edge
 const HIT_STOP_COOLDOWN = 1500;
 
@@ -15,7 +16,8 @@ const PacmanStates = {
   moveLeft: 3,
   moveRight: 4,
   moveUp: 5,
-  moveDown: 6
+  moveDown: 6,
+  dead: 7,
 }
 
 class Pacman {
@@ -50,6 +52,10 @@ class Pacman {
     this._state = PacmanStates.idle;
 
     this.bindEvents();
+  }
+
+  get size() {
+    return this.config.size + this._growthFactor;
   }
 
   bindEvents() {

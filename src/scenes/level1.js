@@ -104,7 +104,7 @@ class Level1 extends BaseScene {
 
   update(time, delta) {
     const ship = this.player.gameSprite;
-    const enemySprites = [];
+    const pacmanSprites = [], ghostSprites = [];
 
     super.update(time, delta);
 
@@ -115,7 +115,7 @@ class Level1 extends BaseScene {
       this.physics.overlap(enemy.sprite, ship,
         (enemySprite, ship) => ship.emit('hit-by-ghost', enemySprite));
 
-      enemySprites.push(enemy.sprite);
+      ghostSprites.push(enemy.sprite);
     }
 
     // --- pacmans AI ---
@@ -138,14 +138,17 @@ class Level1 extends BaseScene {
       });
 
       this.physics.overlap(pacman.sprite, ship, 
-        (pacmanSprite, ship) => ship.emit('hit-by-pacman', pacmanSprite));
+        (pacman, ship) => ship.emit('hit-by-pacman', pacman));
 
-      enemySprites.push(pacman.sprite);
+      this.physics.overlap(pacman.sprite, ghostSprites,
+        (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, pacman.size * 2));
+
+      pacmanSprites.push(pacman.sprite);
     }
 
     // --- player ---
     this.player.update(time, delta);
-    this.player.weapon.checkHits(enemySprites);
+    this.player.weapon.checkHits([...pacmanSprites, ...ghostSprites]);
   }
 
   popFood(x, y) {

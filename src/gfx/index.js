@@ -1,4 +1,5 @@
 // gfx.js - common graphic effects
+import Phaser from 'phaser';
 import Globals from '../globals';
 
 const DURATIONS = {
@@ -24,8 +25,16 @@ class Gfx {
 
   bindEvents() {
     this.scene.events.on('explosion', (config) => {
-      this.scene.add.sprite(config.x, config.y, 
-        EXPLOSIONS[config.name].atlas).play(config.name);
+      let name = config.name;
+      if (!name) {
+        const names = Object.keys(EXPLOSIONS);
+        name = names[Phaser.Math.Between(0, names.length)];
+      }
+
+      const sprite = this.scene.add.sprite(config.x, config.y, 
+        EXPLOSIONS[name].atlas).play(name);
+      //sprite.setDepth(200);
+
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
       }
