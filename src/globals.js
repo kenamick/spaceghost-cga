@@ -38,11 +38,17 @@ const Globals = {
     }
   },
   depths: {
+    explosion: 1,
     ship: 20,
     ghosts: 22,
     pacman: 24,
-    explosion: 1,
+    meteor: 30,
     shields: 50,
+  },
+  damage: {
+    pacman: 0.2,
+    ghost: 0.2,
+    meteor: 0.5
   },
   // development
   debug: checkStringBoolean(localStorage.getItem(`debug`)),

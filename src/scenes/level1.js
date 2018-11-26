@@ -6,7 +6,8 @@ import Gfx from '../gfx';
 import * as KPPL from '../shaders/pipeline';
 import { FireFly, HUD,
   Pacman, PacmanStates,
-  Ghost, GhostTypes, GhostStates
+  Ghost, GhostTypes, GhostStates, 
+  Meteors, MeteorTypes,
 } from '../entities';
 import Controls from '../controls';
 
@@ -100,6 +101,8 @@ class Level1 extends BaseScene {
     for (const enemy of this.enemies) {
       enemy.setState(GhostStates.patrol, { target: this.player.gameSprite });
     }
+
+    this.meteors = new Meteors(this);
   }
 
   update(time, delta) {
@@ -112,11 +115,14 @@ class Level1 extends BaseScene {
     for (const enemy of this.enemies) {
       enemy.update(time, delta, ship);
 
-      this.physics.overlap(enemy.sprite, ship,
-        (enemySprite, ship) => ship.emit('hit-by-ghost', enemySprite));
+      this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) => 
+        ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
 
       ghostSprites.push(enemy.sprite);
     }
+
+    // --- meteors Manager ---
+    this.meteors.update(time, delta, ship);
 
     // --- pacmans AI ---
     for (const pacman of this.pacmans) {
@@ -138,7 +144,7 @@ class Level1 extends BaseScene {
       });
 
       this.physics.overlap(pacman.sprite, ship, 
-        (pacman, ship) => ship.emit('hit-by-pacman', pacman));
+        (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
 
       this.physics.overlap(pacman.sprite, ghostSprites,
         (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, pacman.size * 2));

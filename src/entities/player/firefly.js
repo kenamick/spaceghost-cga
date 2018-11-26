@@ -46,14 +46,15 @@ class FireFly {
   }
 
   bindEvents() {
-    const bumpShields = (enemy) => {
+    const bumpShields = (enemy, damage) => {
       this.showShields(enemy);
       // decrease shields
-      this.props.shields = Math.max(this.props.shields - 1, 0);
+      this.props.shields = Math.max(this.props.shields - damage, 0);
       this.scene.events.emit('hud-ship-stats', this.props);
     };
     this.sprite.on('hit-by-pacman', bumpShields);
     this.sprite.on('hit-by-ghost', bumpShields);
+    this.sprite.on('hit-by-meteor', bumpShields);
     
     // replenish shields & energy 
     this.scene.time.addEvent({

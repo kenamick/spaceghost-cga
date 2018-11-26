@@ -10,7 +10,7 @@
 },
 "laserBlue01.png":
 {
-	"frame": {"x":14,"y":0,"w":9,"h":54},
+	"frame": {"x":23,"y":0,"w":9,"h":54},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":9,"h":54},
@@ -18,15 +18,47 @@
 },
 "laserRed01.png":
 {
-	"frame": {"x":23,"y":0,"w":9,"h":54},
+	"frame": {"x":14,"y":0,"w":9,"h":54},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":9,"h":54},
 	"sourceSize": {"w":9,"h":54}
 },
+"meteor1.png":
+{
+	"frame": {"x":220,"y":0,"w":101,"h":84},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":101,"h":84},
+	"sourceSize": {"w":101,"h":84}
+},
+"meteor2.png":
+{
+	"frame": {"x":98,"y":84,"w":120,"h":98},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":120,"h":98},
+	"sourceSize": {"w":120,"h":98}
+},
+"meteor3.png":
+{
+	"frame": {"x":131,"y":0,"w":89,"h":82},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":89,"h":82},
+	"sourceSize": {"w":89,"h":82}
+},
+"meteor4.png":
+{
+	"frame": {"x":0,"y":84,"w":98,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":98,"h":96},
+	"sourceSize": {"w":98,"h":96}
+},
 "particle-red.png":
 {
-	"frame": {"x":0,"y":119,"w":128,"h":128},
+	"frame": {"x":143,"y":192,"w":128,"h":128},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":128,"h":128},
@@ -42,7 +74,7 @@
 },
 "shield1.png":
 {
-	"frame": {"x":131,"y":0,"w":133,"h":108},
+	"frame": {"x":218,"y":84,"w":133,"h":108},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":133,"h":108},
@@ -50,7 +82,7 @@
 },
 "shield2.png":
 {
-	"frame": {"x":264,"y":0,"w":143,"h":119},
+	"frame": {"x":0,"y":192,"w":143,"h":119},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":143,"h":119},
@@ -58,7 +90,7 @@
 },
 "shield3.png":
 {
-	"frame": {"x":128,"y":119,"w":144,"h":137},
+	"frame": {"x":271,"y":192,"w":144,"h":137},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":144,"h":137},
@@ -69,8 +101,8 @@
 	"version": "1.0",
 	"image": "atlas2.png",
 	"format": "RGBA8888",
-	"size": {"w":407,"h":256},
+	"size": {"w":415,"h":329},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:e2b892bbb87ea9890d4ecd0cca9d33d5:02fe80191f554285184f19c1b102367a:d2928af382b1462a4e1e9d203dd4c4a5$"
+	"smartupdate": "$TexturePacker:SmartUpdate:ffa8bd901ff63983121842f7ddff6c1b:b9c8a6841b9a1a521f8505b72fb5804c:d2928af382b1462a4e1e9d203dd4c4a5$"
 }
 }
