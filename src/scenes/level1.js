@@ -129,6 +129,7 @@ class Level1 extends BaseScene {
     }
 
     this.meteors = new Meteors(this);
+    this.meteors.spawn(MeteorTypes.BIG, 100, 400);
   }
 
   update(time, delta) {
@@ -184,7 +185,8 @@ class Level1 extends BaseScene {
 
     // --- player ---
     this.player.update(time, delta);
-    this.player.weapon.checkHits([...pacmanSprites, ...ghostSprites]);
+    this.player.weapon.checkHits([...pacmanSprites, ...ghostSprites],
+      this.meteors.meteors);
   }
 
   popFood(x, y) {

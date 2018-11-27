@@ -65,12 +65,19 @@ class Weapon {
     return true;
   }
 
-  checkHits(enemies) {
+  checkHits(enemies, meteors) {
     this.scene.physics.overlap(this.bullets, enemies, (enemy, bullet) => {
       if (this.bullets.countActive()) {
         this.bullets.killAndHide(bullet);
         // trigger enemy hit
         enemy.emit('hit-by-bullet', bullet);
+      }
+    });
+    this.scene.physics.overlap(this.bullets, meteors, (bullet, meteor) => {
+      if (this.bullets.countActive()) {
+        this.bullets.killAndHide(bullet);
+        // trigger enemy hit
+        meteor.emit('hit-by-bullet', bullet);
       }
     });
   }

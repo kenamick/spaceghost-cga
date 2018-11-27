@@ -38,12 +38,12 @@ const Globals = {
     }
   },
   depths: {
-    explosion: 1,
+    explosion: 10,
     ship: 20,
     ghosts: 22,
     pacman: 24,
-    meteor: 30,
     shields: 50,
+    smallExplosion: 90,
   },
   damage: {
     pacman: 0.2,

@@ -3,9 +3,9 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 
 const MeteorTypes = {
-  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100 },
-  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60 },
-  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40 }
+  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 10 },
+  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 25 },
+  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 50 }
 };
 
 class Meteors {
@@ -43,6 +43,11 @@ class Meteors {
     const meteor = this.meteors.get();
     if (meteor) {
       meteor.type = type;
+      meteor.hp = type.hp;
+      meteor.vx = vx;
+      meteor.vy = vy;
+      this.bindEvents(meteor);
+
       meteor.setDepth(Globals.depths.meteor);
       meteor.enableBody(true, x, y, true, true);
       // set collision surface bit smaller
@@ -54,7 +59,27 @@ class Meteors {
   }
 
   bindEvents(meteor) {
-
+    meteor.on('hit-by-bullet', (bullet) => {
+      meteor.hp -= 1;
+      if (meteor.hp <= 0) {
+        this.meteors.killAndHide(meteor);
+        // spawn another?
+        if (meteor.type === MeteorTypes.BIG) {
+          this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, meteor.vx, meteor.vy);
+          this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
+        } else if (meteor.type === MeteorTypes.MEDIUM) {
+          this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, meteor.vy);
+          this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
+          this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, meteor.vy);
+          this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, -meteor.vy);
+        }
+      } else {
+        // hit explosions
+        this.scene.events.emit('explosion', {
+          x: meteor.x, y: meteor.y, scale: 0.2
+        });
+      }
+    });
   }
 
   update(time, delta, ship) {
