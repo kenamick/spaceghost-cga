@@ -28,18 +28,24 @@ class Gfx {
       let name = config.name;
       if (!name) {
         const names = Object.keys(EXPLOSIONS);
-        name = names[Phaser.Math.Between(0, names.length)];
+        name = names[Phaser.Math.Between(0, names.length - 1)];
       }
 
       const sprite = this.scene.add.sprite(config.x, config.y, 
         EXPLOSIONS[name].atlas).play(name);
       sprite.setDepth(Globals.depths.explosion);
 
+      if (config.scale) {
+        sprite.setDisplaySize(sprite.width * 0.25, sprite.height * 0.25);
+        sprite.setDepth(Globals.depths.smallExplosion);
+      }
+
       if (config.cb) {
         anim.on('animationcomplete', config.cb)
       }
       // play sfx
-      this.audio.playSound('explosions');
+      this.audio.playSound('explosions', 
+        { delay: Phaser.Math.Between(0, 1) });
     });
 
     this.scene.events.on('shields', (config) => {
