@@ -29,6 +29,7 @@ class Level1 extends BaseScene {
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
+    this.gameover = false;
     this.audio = new Audio(this);
 
     // load animations and fx
@@ -37,6 +38,7 @@ class Level1 extends BaseScene {
     this.addPlayerShip();
     this.addPacmans();
     this.addEnemies();
+    this.bindEvents();
 
     // play music
     //this.audio.playMusic('music-game', { loop: true });
@@ -44,6 +46,30 @@ class Level1 extends BaseScene {
 
     // always last
     super.create();
+  }
+
+  bindEvents() {
+    this.events.on('gameover', () => {
+      // show game over text
+      const bitmap = this.add.bitmapText(
+        Globals.game.config.width * 0.5 - 180,
+        Globals.game.config.height * 0.5 - 16 * 8,
+        Globals.bitmapFont, 'G A M E   O V E R', 32);
+      bitmap.alpha = 0;
+      this.tweens.add({
+        targets: [bitmap],
+        alpha: 1,
+        duration: 1500,
+        ease: 'Easing.Bounce.Out',
+        onComplete: () => {
+          // fade out & switch to menu
+          this.cameras.main.fadeOut(3000);
+          this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            this.scene.start('MainMenu');
+          });
+        }
+      });
+    });
   }
 
   addPlayerShip() {
@@ -64,8 +90,8 @@ class Level1 extends BaseScene {
   addPacmans() {
     this.pacmans = [
       new Pacman(this, {
-        x: this.player.gameSprite.x, 
-        y: this.player.gameSprite.y + 100 // Globals.game.config.height - 50
+        x: this.player.sprite.x, 
+        y: this.player.sprite.y + 100 // Globals.game.config.height - 50
       })
     ];
   }
@@ -99,24 +125,26 @@ class Level1 extends BaseScene {
 
     // track player ship
     for (const enemy of this.enemies) {
-      enemy.setState(GhostStates.patrol, { target: this.player.gameSprite });
+      enemy.setState(GhostStates.patrol, { target: this.player.sprite });
     }
 
     this.meteors = new Meteors(this);
   }
 
   update(time, delta) {
-    const ship = this.player.gameSprite;
+    const ship = this.player.sprite;
     const pacmanSprites = [], ghostSprites = [];
 
     super.update(time, delta);
 
     // --- ghosts AI ---
     for (const enemy of this.enemies) {
-      enemy.update(time, delta, ship);
+      if (ship.active) {
+        enemy.update(time, delta, ship);
 
-      this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) => 
-        ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
+        this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) => 
+          ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
+      }
 
       ghostSprites.push(enemy.sprite);
     }
@@ -143,8 +171,10 @@ class Level1 extends BaseScene {
         }
       });
 
-      this.physics.overlap(pacman.sprite, ship, 
-        (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
+      if (ship.active) {
+        this.physics.overlap(pacman.sprite, ship, 
+          (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
+      }
 
       this.physics.overlap(pacman.sprite, ghostSprites,
         (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, pacman.size * 2));

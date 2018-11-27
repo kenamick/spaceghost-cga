@@ -1,6 +1,7 @@
 // mainmenu.js - game menu
 import BaseScene from './base-scene';
 import Globals from '../globals';
+import * as KPPL from '../shaders/pipeline';
 import Audio from '../audio';
 import Phaser from 'phaser';
 import Controls from '../controls';
@@ -20,12 +21,14 @@ class MainMenu extends BaseScene {
   }
 
   create() {
+    KPPL.setPipeline('noise');
     super.enableShaders();
     
     const { width, height } = Globals.game.config;
 
-    const backg = this.add.tileSprite(0, 0,
-      width * 2, height * 2, 'bkg-blue');
+    // background
+    const backg = this.add.tileSprite(0, 0, width * 2, height * 2, 'bkg-blue');
+    backg.setDepth(0);
 
     this.addPacman();
     this.addMenu();
@@ -65,7 +68,7 @@ class MainMenu extends BaseScene {
         } else if (this.controls.action1) {
           // select
           this.spinCursor(() => {
-            this.scene.start(this.menu.options[cursor.pos].scene)
+            this.scene.start(this.menu.options[cursor.pos].scene);
           });
         }
       }

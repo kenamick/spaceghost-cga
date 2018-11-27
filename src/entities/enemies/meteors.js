@@ -70,8 +70,10 @@ class Meteors {
       }
     }
 
-    this.scene.physics.overlap(ship, children, (ship, meteor) => 
-      ship.emit('hit-by-meteor', meteor, Globals.damage.meteor));
+    if (ship.active) {
+      this.scene.physics.overlap(ship, children, (ship, meteor) => 
+        ship.emit('hit-by-meteor', meteor, Globals.damage.meteor));
+    }
   }
 
 }

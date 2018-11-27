@@ -49,7 +49,17 @@ class FireFly {
     const bumpShields = (enemy, damage) => {
       this.showShields(enemy);
       // decrease shields
-      this.props.shields = Math.max(this.props.shields - damage, 0);
+      this.props.shields -= damage;
+      if (this.props.shields < 0) {
+        this.props.shields = 0;
+        // kill ship and all its event handlers
+        this.scene.events.emit('explosion', { x: this.sprite.x, y: this.sprite.y });
+        this.sprite.destroy();
+        this.emitter.stop();
+        this.replenishTimer.destroy();
+        // notify game scene
+        this.scene.events.emit('gameover');
+      }
       this.scene.events.emit('hud-ship-stats', this.props);
     };
     this.sprite.on('hit-by-pacman', bumpShields);
@@ -57,7 +67,7 @@ class FireFly {
     this.sprite.on('hit-by-meteor', bumpShields);
     
     // replenish shields & energy 
-    this.scene.time.addEvent({
+    this.replenishTimer = this.scene.time.addEvent({
       delay: 50,
       loop: true,
       callback: () => {
@@ -121,13 +131,14 @@ class FireFly {
     });
 
     emitter.startFollow(ship);
-  }
-
-  get gameSprite() {
-    return this.sprite;
+    this.emitter = emitter;
   }
 
   update(time, delta) {
+    if (!this.sprite.active) {
+      return;
+    }
+
     const { controls, scene, sprite, weapon } = this;
 
     if (controls.up) {
