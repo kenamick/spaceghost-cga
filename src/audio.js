@@ -76,14 +76,14 @@ class Audio {
 
     if (config) {
       if (config.idx) {
-        this.scene.sound.play(`${name}${config.idx}`);
+        this.scene.sound.play(`${name}${config.idx}`, config);
       } else if (config.random) {
-        const idx = Math.RandomDataGenerator.between(0, this.sounds[name].length - 1);
-        this.scene.sound.play(`${name}${idx}`);
+        const idx = Math.Between(0, this.sounds[name].length - 1);
+        this.scene.sound.play(`${name}${idx}`, config);
       }
     }
 
-    this.scene.sound.play(`${name}1`);
+    this.scene.sound.play(`${name}1`, config);
     // this.sounds[name][0].play();
   }
 
