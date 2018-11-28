@@ -58,6 +58,8 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            this.events.off();
+            this.scene.remove(this.thisScene);
             this.scene.start('MainMenu');
           });
         }
@@ -65,6 +67,9 @@ class BaseLevel extends BaseScene {
     });
 
     this.events.on('level-won', () => {
+      if (this.gameover) {
+        return;
+      }
       // show game over text
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 220,
@@ -80,7 +85,9 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-            this.scene.start(this.nextScene);
+            this.events.off();
+            this.scene.remove(this.thisScene);
+            this.scene.start(this.nextScene.name, this.nextScene);
           });
         }
       });
@@ -185,7 +192,8 @@ class BaseLevel extends BaseScene {
     }
 
     // ---- game win check
-    if (ghostSprites.length === 0 && this.meteors.meteors.countActive() === 0) {
+    if (ship.active && ghostSprites.length === 0 && 
+      this.meteors.meteors.countActive() === 0 && !this.gameover) {
       this.levelWon = true;
       this.events.emit('level-won');
     }

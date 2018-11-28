@@ -24,7 +24,11 @@ class Level1 extends BaseLevel {
   }
 
   setup() {
-    this.nextScene = 'Level2';
+    this.thisScene = 'Level1';
+    this.nextScene = { 
+      name: 'LoadLevel', 
+      next: 'Level2', text: 'L E V E L  2' 
+    };
 
     const xpos = this.player.sprite.x - GhostTypes.MEDIUM.size * 0.5;
 
@@ -32,14 +36,8 @@ class Level1 extends BaseLevel {
       new Ghost(this, {
         x: xpos,
         y: 100,
-        type: GhostTypes.MEDIUM,
+        type: GhostTypes.BIG,
         palette: Globals.palette.ghost1,
-      }),
-      new Ghost(this, {
-        x: xpos, 
-        y: Globals.game.config.height - 100,
-        type: GhostTypes.MEDIUM,
-        palette: Globals.palette.ghost4
       })
     ];
 

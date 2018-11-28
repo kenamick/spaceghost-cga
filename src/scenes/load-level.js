@@ -12,7 +12,7 @@ class LoadLevel extends BaseScene {
   }
 
   init(data) {
-    if (data.level) {
+    if (data.next) {
       this.config = data;
     } else {
       this.config = { next: 'Level1', text: 'L E V E L  1' };

@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 import { Weapon } from '../weapons/weapon';
 
-const ACCEL = 240; // px/sec
-const MAX_SPEED = 280;
+const ACCEL = 180; // px/sec
+const MAX_SPEED = 240;
 const ROTATION_SPEED = 250;
 const MAX_SHIELDS = 100;
 const MAX_ENERGY = 100;
@@ -71,8 +71,8 @@ class FireFly {
       delay: 50,
       loop: true,
       callback: () => {
-        this.props.shields = Math.min(this.props.shields + 0.125, MAX_SHIELDS);
-        this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
+        this.props.shields = Math.min(this.props.shields + 0.09375, MAX_SHIELDS);
+        //this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
         this.scene.events.emit('hud-ship-stats', this.props);
       }
     });
@@ -183,9 +183,9 @@ class FireFly {
     }
 
     weapon.update(time, delta);
-    scene.physics.world.wrap(sprite, sprite.width * 0.5);
+    scene.physics.world.wrap(sprite, sprite.width * 0.25);
   }
 
 }
 
-export { FireFly };
+export { FireFly, MAX_SPEED };

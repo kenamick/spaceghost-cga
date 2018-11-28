@@ -2,6 +2,7 @@
 import { Math } from 'phaser';
 import Globals from '../../globals';
 import { MeteorTypes } from './meteors';
+import * as FireFly from '../player/firefly';
 
 const DEFAULT_TRACK_INTERVAL = 350;
 const DETECT_DISTANCE = 550 * 550; // 150 px
@@ -10,9 +11,9 @@ const TRACK_STOP_COOLDOWN = 1250; // ms
 const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
-  SMALL: { animSpeed: 400, size: 50, speed: 120, drift: 0.09 },
-  MEDIUM: { animSpeed: 650, size: 75, speed: 100, drift: -0.05 },
-  BIG: { animSpeed: 750, size: 100, speed: 80, drift: 0.02 }
+  SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED, drift: 0.09 },
+  MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.85, drift: -0.05 },
+  BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.70, drift: 0.02 }
 };
 
 const GhostStates = {
@@ -109,14 +110,14 @@ class Ghost {
         this.scene.events.emit('spawn-ghost', {
             type: GhostTypes.SMALL,
             palette: this.config.palette,
-            x: this.sprite.x - this.sprite.width * 0.5,
-            y: this.sprite.y - this.sprite.height * 0.5
+            x: this.sprite.x - this.sprite.width,
+            y: this.sprite.y - this.sprite.height
         });
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.SMALL,
           palette: this.config.palette,
-          x: this.sprite.x + this.sprite.width * 0.5,
-          y: this.sprite.y + this.sprite.height * 0.5,
+          x: this.sprite.x + this.sprite.width,
+          y: this.sprite.y + this.sprite.height,
           fromT: 1, // rotation params
           toT: 0
         });
@@ -124,14 +125,14 @@ class Ghost {
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.MEDIUM,
           palette: this.config.palette,
-          x: this.sprite.x + this.sprite.width * 0.5,
-          y: this.sprite.y + this.sprite.height * 0.5
+          x: this.sprite.x + this.sprite.width,
+          y: this.sprite.y + this.sprite.height
         });
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.MEDIUM,
           palette: this.config.palette,
-          x: this.sprite.x - this.sprite.width * 0.5,
-          y: this.sprite.y - this.sprite.height * 0.5,
+          x: this.sprite.x - this.sprite.width,
+          y: this.sprite.y - this.sprite.height,
           fromT: 1, // rotation params
           toT: 0
         });
@@ -311,27 +312,75 @@ class Ghost {
 
       case GhostStates.follow:
         if (playerShip) {
-          this.scene.physics.moveToObject(this.sprite, playerShip, 
-            this.config.type.speed);
+          const width = Globals.game.config.width;
+          const height = Globals.game.config.width;
 
-          // stop following player if it's too far
           const dist = Math.Distance.Squared(
             playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);
-          if (dist > TRACK_DISTANCE) {
-            this.setState(GhostStates.idle);
-            // chasing cooldown and then patrol
-            this.patrolEvent = this.scene.time.addEvent({
-              delay: TRACK_STOP_COOLDOWN,
-              loop: false,
-              callback: () => this.setState(GhostStates.patrol)
-            });
+
+          let targetX = playerShip.x;
+          let targetY = playerShip.y;
+
+          if (playerShip.body.speed < FireFly.MAX_SPEED * 0.85) {
+            // try to be smart by warping through the screen edges
+            // but only if the ship is moving slower than 75% of its max speed
+            if (this.sprite.x < width * 0.5) {
+              const d_edge_me = Math.Distance.Squared(0, playerShip.y, 
+                this.sprite.x, this.sprite.y);
+              const d_edge_ship = Math.Distance.Squared(playerShip.x, playerShip.y, 
+                width, this.sprite.y);
+              if (d_edge_me + d_edge_ship < dist) {
+                targetX = -(this.sprite.width * 2);
+              }
+            } else {
+              const d_edge_me = Math.Distance.Squared(width, playerShip.y, 
+                this.sprite.x, this.sprite.y);
+              const d_edge_ship = Math.Distance.Squared(playerShip.x, playerShip.y, 
+                0, this.sprite.y);
+              if (d_edge_me + d_edge_ship < dist) {
+                targetX = width + this.sprite.width * 2;
+              }
+            }
+
+            if (this.sprite.y < height * 0.5) {
+              const d_edge_me = Math.Distance.Squared(playerShip.x, 0,
+                this.sprite.x, this.sprite.y);
+              const d_edge_ship = Math.Distance.Squared(playerShip.x, playerShip.y,
+                this.sprite.x, height);
+              if (d_edge_me + d_edge_ship < dist) {
+                targetY = -(this.sprite.height * 2);
+              }
+            } else {
+              const d_edge_me = Math.Distance.Squared(playerShip.x, height,
+                this.sprite.x, this.sprite.y);
+              const d_edge_ship = Math.Distance.Squared(playerShip.x, playerShip.y,
+                this.sprite.x, height);
+              if (d_edge_me + d_edge_ship < dist) {
+                targetY = height + this.sprite.height * 2;
+              }
+            }
           }
+
+          this.scene.physics.moveTo(this.sprite, targetX, targetY, this.config.type.speed);
+
+          // stop following player if it's too far
+          // const dist = Math.Distance.Squared(
+          //   playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);
+          // if (dist > TRACK_DISTANCE) {
+          //   this.setState(GhostStates.idle);
+          //   // chasing cooldown and then patrol
+          //   this.patrolEvent = this.scene.time.addEvent({
+          //     delay: TRACK_STOP_COOLDOWN,
+          //     loop: false,
+          //     callback: () => this.setState(GhostStates.patrol)
+          //   });
+          // }
         }
       break;
     }
 
     if (!this.config.noWrap) {
-      this.scene.physics.world.wrap(this.sprite, this.config.type.size);
+      this.scene.physics.world.wrap(this.sprite, this.config.type.size * 0.7);
     }
 
   }

@@ -69,7 +69,7 @@ class MainMenu extends BaseScene {
           // select
           this.spinCursor(() => {
             const entry = this.menu.options[cursor.pos];
-            this.scene.start(entry.scene.name, { text: entry.scene.text });
+            this.scene.start(entry.scene.name, entry.scene);
           });
         }
       }
