@@ -1,23 +1,20 @@
-// level1.js - game play
-import BaseScene from './base-scene';
-import Globals from '../globals';
-import Audio from '../audio';
-import Gfx from '../gfx';
-import * as KPPL from '../shaders/pipeline';
-import { FireFly, HUD,
+// base-level.js - basis gameplay elements
+import BaseScene from '../base-scene';
+import Globals from '../../globals';
+import Audio from '../../audio';
+import Gfx from '../../gfx';
+import * as KPPL from '../../shaders/pipeline';
+import {
+  FireFly, HUD,
   Pacman, PacmanStates,
-  Ghost, GhostTypes, GhostStates, 
+  Ghost, GhostTypes, GhostStates,
   Meteors, MeteorTypes,
-} from '../entities';
-import Controls from '../controls';
+} from '../../entities';
+import Controls from '../../controls';
 
-const PACMAN_RASPAWN_TIME = 3000; 
+const PACMAN_RASPAWN_TIME = 3000;
 
-class Level1 extends BaseScene {
-
-  constructor() {
-    super('Level1');
-  }
+class BaseLevel extends BaseScene {
 
   create() {
     // pre-init
@@ -27,7 +24,7 @@ class Level1 extends BaseScene {
     // background
     this.add.tileSprite(0, 0,
       Globals.game.config.width * 2, Globals.game.config.height * 2, 'bkg-purple');
-    
+
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
@@ -38,14 +35,7 @@ class Level1 extends BaseScene {
     this.gfx = new Gfx(this, this.audio);
 
     this.addPlayerShip();
-    this.addEnemies();
     this.bindEvents();
-
-    // play music
-    //this.audio.playMusic('music-game', { loop: true });
-    //this.audio.setMusicVol('music-game', 0.5);
-
-    this.events.emit('spawn-pacman');
 
     // always last
     super.create();
@@ -76,7 +66,7 @@ class Level1 extends BaseScene {
 
     this.events.on('ignite-pacman', () => {
       if (this.pacman.sprite.active) {
-        this.pacman.sprite.emit('explode', this.enemies, this.meteors.meteors, 
+        this.pacman.sprite.emit('explode', this.enemies, this.meteors.meteors,
           this.player.sprite);
         // spawn a new pacman after a while
         this.time.addEvent({
@@ -121,48 +111,12 @@ class Level1 extends BaseScene {
     });
 
     this.player = new FireFly(this, new Controls(this), {
-      x: this.cameras.main.centerX, 
-      y: this.cameras.main.centerY 
+      x: this.cameras.main.centerX,
+      y: this.cameras.main.centerY
     });
     this.player.sprite.on('popFood', this.popFood, this);
 
-    this.hud = new HUD(this, {player: this.player});
-  }
-
-  addEnemies() {
-    const offset = -100;
-    const topLeft = { x: -offset, y: -offset };
-    const bottomLeft = { x: -offset, y: Globals.game.config.height + offset};
-    const topRight = { x: Globals.game.config.width + offset, y: -offset};
-    const bottomRight = {x: Globals.game.config.width + offset, 
-      y: Globals.game.config.height + offset};
-
-    this.enemies = [
-      new Ghost(this, {
-        x: Globals.game.config.width * 0.5, y: topLeft.y, type: GhostTypes.SMALL,
-        palette: Globals.palette.ghost1
-      }),
-      new Ghost(this, {
-        x: bottomLeft.x, y: bottomLeft.y, type: GhostTypes.MEDIUM,
-        palette: Globals.palette.ghost4
-      }),
-      new Ghost(this, {
-        x: topRight.x, y: topRight.y, type: GhostTypes.BIG,
-        palette: Globals.palette.ghost3
-      }),
-      new Ghost(this, {
-        x: bottomRight.x, y: bottomRight.y, type: GhostTypes.SMALL,
-        palette: Globals.palette.ghost4
-      })
-    ];
-
-    // track player ship
-    for (const enemy of this.enemies) {
-      enemy.setState(GhostStates.patrol, { target: this.player.sprite });
-    }
-
-    this.meteors = new Meteors(this);
-    this.meteors.spawn(MeteorTypes.BIG, 100, 400);
+    this.hud = new HUD(this, { player: this.player });
   }
 
   update(time, delta) {
@@ -204,7 +158,7 @@ class Level1 extends BaseScene {
       this.physics.overlap(ghostSprites, ship, (enemySprite, ship) =>
         ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
 
-      this.physics.overlap(this.pacman.sprite, ship, 
+      this.physics.overlap(this.pacman.sprite, ship,
         (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
     }
 
@@ -219,7 +173,7 @@ class Level1 extends BaseScene {
 
   popFood(x, y) {
     const food = this.foods.get();
-    if(!food)
+    if (!food)
       return;
 
     // get "tile" position of (x, y) coordinate
@@ -243,4 +197,4 @@ class Level1 extends BaseScene {
 
 }
 
-export { Level1 };
+export { BaseLevel };
