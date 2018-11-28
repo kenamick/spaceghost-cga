@@ -52,8 +52,8 @@ class Gfx {
         }
       });
       // play sfx
-      this.audio.playSound('explosions', 
-        { delay: Phaser.Math.Between(0, 1) });
+      this.audio.playSound('explosions');
+        // { delay: Phaser.Math.Between(0, 1) });
     });
 
     this.scene.events.on('shields', (config) => {

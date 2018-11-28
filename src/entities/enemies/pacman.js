@@ -14,11 +14,10 @@ const PACMAN_RASPAWN_TIME = 3000;
 const PacmanStates = {
   idle: 1,
   trackFood: 2,
-  moveLeft: 3,
-  moveRight: 4,
-  moveUp: 5,
-  moveDown: 6,
-  dead: 7,
+  trackShip: 3,
+  moveLeft: 4,
+  moveRight: 5,
+  dead: 6,
 }
 
 class Pacman {
@@ -193,19 +192,23 @@ class Pacman {
 
     this._state = value;
 
+    let speed = this.config.speed;
+    if (config) {
+      speed = config.speed;
+    }
+
     switch (this._state) {
       case PacmanStates.moveLeft:
-        this.sprite.body.setVelocity(-config.speed, 0);
+        this.sprite.body.setVelocity(-speed, 0);
       default:
 
       case PacmanStates.moveRight:
-        this.sprite.body.setVelocity(config.speed, 0);
+        this.sprite.body.setVelocity(speed, 0);
       break;
 
       case PacmanStates.trackFood:
         this.track();
       break;
-      // TODO other states
 
       case PacmanStates.idle:
         this.sprite.body.setVelocity(0, 0);
@@ -220,12 +223,12 @@ class Pacman {
     
     let nearestFood = foods.getFirstAlive();
     if (nearestFood) {
-      let distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+      let distance = Phaser.Math.Distance.Squared(this.sprite.x, this.sprite.y, 
         nearestFood.x, nearestFood.y);
       let bestDistance = distance;
       for(let food of foods.getChildren()) {
         if(food.active) {
-          distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+          distance = Phaser.Math.Distance.Squared(this.sprite.x, this.sprite.y, 
             food.x, food.y);
           if(distance < bestDistance) {
             bestDistance = distance;
@@ -235,18 +238,30 @@ class Pacman {
       }
 
       this.scene.physics.moveToObject(this.sprite, nearestFood, this.config.speed);
-
-      // always face target food, good ol'atan2 ;-)
-      const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
-        nearestFood.x, nearestFood.y);
-      this.sprite.rotation = angle;
+      this.facePos(nearestFood.x, nearestFood.y);
     }
   }
 
-  update(time, delta) {
+  facePos(x, y) {
+    // good ol'atan2 ;-)
+    const angle = Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y, x, y);
+    this.sprite.rotation = angle;
+  }
+
+  update(time, delta, ship) {
     if (!this.sprite.active) {
       return;
     }
+
+    switch (this._state) {
+      case PacmanStates.trackShip:
+        if (ship.active) {
+          this.facePos(ship.x, ship.y);
+          this.scene.physics.moveToObject(this.sprite, ship, this.config.speed);
+        }
+      break;
+    }
+
     // if (this._state === PacmanStates.idle) {
     //   const { x, y } = this.sprite;
     //   if (x < WARP_OFFSET) {

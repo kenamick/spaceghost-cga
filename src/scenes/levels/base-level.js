@@ -159,7 +159,7 @@ class BaseLevel extends BaseScene {
     this.meteors.update(time, delta, ship);
 
     // --- pacmans AI ---
-    this.pacman.update(time, delta);
+    this.pacman.update(time, delta, ship);
 
     this.physics.overlap(this.pacman.sprite, this.foods, (pacmanSprite, food) => {
       if (this.foods.countActive()) {
@@ -171,7 +171,7 @@ class BaseLevel extends BaseScene {
         if (this.foods.countActive()) {
           pacmanSprite.emit('setState', PacmanStates.trackFood);
         } else {
-          pacmanSprite.emit('setState', PacmanStates.idle);
+          pacmanSprite.emit('setState', PacmanStates.trackShip);
         }
       }
     });
