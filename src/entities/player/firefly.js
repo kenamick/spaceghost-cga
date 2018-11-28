@@ -76,6 +76,12 @@ class FireFly {
         this.scene.events.emit('hud-ship-stats', this.props);
       }
     });
+
+    this.sprite.on('hit-by-explosion', (enemy, factor) => {
+      // almost destroy ship
+      const damage = Math.min(factor * 0.5, MAX_SHIELDS - 2);
+      bumpShields(enemy, damage);
+    });
   }
 
   showShields(enemy) {
@@ -164,19 +170,13 @@ class FireFly {
       sprite.setAngularVelocity(0);
     }
 
-    if (controls.action1 && this.props.energy > 4) {
-      if (weapon.fire(time)) {
-        this.props.energy = Math.max(this.props.energy - 4, 0);
-      }
-    }
-    if (controls.action2) {
-      if (!this.what) {
-        // this.scene.events.emit('explosion', { x: 100, y: 200, name: 'explosion-1' });
-        this.scene.events.emit('shields', { x: 100, y: 200, name: 'shields' });
-        this.what = true;
-      } else {
-        this.what = false;
-      }
+    // if (controls.action1 && this.props.energy > 4) {
+    //   if (weapon.fire(time)) {
+    //     this.props.energy = Math.max(this.props.energy - 4, 0);
+    //   }
+    // }
+    if (controls.action1) {
+      scene.events.emit('ignite-pacman');
     }
 
     weapon.update(time, delta);

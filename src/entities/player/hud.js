@@ -27,10 +27,10 @@ class HUD {
     shieldsBar.fillRect(x, 0, 
       maxWidth * (props.shields / 100), height);
 
-    energyBar.clear();
-    energyBar.fillStyle(0xffffff, 1);
-    energyBar.fillRect(x, height + 4,
-      maxWidth * (props.energy / 100), height);
+    // energyBar.clear();
+    // energyBar.fillStyle(0xffffff, 1);
+    // energyBar.fillRect(x, height + 4,
+    //   maxWidth * (props.energy / 100), height);
   }
 
 

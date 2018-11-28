@@ -11,6 +11,8 @@ import { FireFly, HUD,
 } from '../entities';
 import Controls from '../controls';
 
+const PACMAN_RASPAWN_TIME = 3000; 
+
 class Level1 extends BaseScene {
 
   constructor() {
@@ -36,13 +38,14 @@ class Level1 extends BaseScene {
     this.gfx = new Gfx(this, this.audio);
 
     this.addPlayerShip();
-    this.addPacmans();
     this.addEnemies();
     this.bindEvents();
 
     // play music
     //this.audio.playMusic('music-game', { loop: true });
     //this.audio.setMusicVol('music-game', 0.5);
+
+    this.events.emit('spawn-pacman');
 
     // always last
     super.create();
@@ -70,6 +73,45 @@ class Level1 extends BaseScene {
         }
       });
     });
+
+    this.events.on('ignite-pacman', () => {
+      if (this.pacman.sprite.active) {
+        this.pacman.sprite.emit('explode', this.enemies, this.meteors.meteors, 
+          this.player.sprite);
+        // spawn a new pacman after a while
+        this.time.addEvent({
+          delay: PACMAN_RASPAWN_TIME,
+          callback: () => this.events.emit('spawn-pacman')
+        });
+      }
+    });
+
+    this.events.on('spawn-pacman', () => {
+      this.pacman = new Pacman(this, {
+        x: this.player.sprite.x,
+        y: this.player.sprite.y + 100 // Globals.game.config.height - 50
+      });
+    });
+
+    this.events.on('spawn-ghost', (config) => {
+      console.log('new ghosts')
+      const ghost = new Ghost(this, {
+        palette: Globals.palette.ghost1,
+        ...config
+      });
+
+      let found = false;
+      // for (let i = 0; i < this.enemies.length; i++) {
+      //   if (!this.enemies[i].sprite.active) {
+      //     this.enemies[i] = ghost;
+      //     found = true;
+      //     break;
+      //   }
+      // }
+      if (!found) {
+        this.enemies.push(ghost);
+      }
+    });
   }
 
   addPlayerShip() {
@@ -87,15 +129,6 @@ class Level1 extends BaseScene {
     this.hud = new HUD(this, {player: this.player});
   }
 
-  addPacmans() {
-    this.pacmans = [
-      new Pacman(this, {
-        x: this.player.sprite.x, 
-        y: this.player.sprite.y + 100 // Globals.game.config.height - 50
-      })
-    ];
-  }
-
   addEnemies() {
     const offset = -100;
     const topLeft = { x: -offset, y: -offset };
@@ -106,7 +139,7 @@ class Level1 extends BaseScene {
 
     this.enemies = [
       new Ghost(this, {
-        x: topLeft.x, y: topLeft.y, type: GhostTypes.SMALL,
+        x: Globals.game.config.width * 0.5, y: topLeft.y, type: GhostTypes.SMALL,
         palette: Globals.palette.ghost1
       }),
       new Ghost(this, {
@@ -134,7 +167,7 @@ class Level1 extends BaseScene {
 
   update(time, delta) {
     const ship = this.player.sprite;
-    const pacmanSprites = [], ghostSprites = [];
+    const ghostSprites = [];
 
     super.update(time, delta);
 
@@ -142,11 +175,7 @@ class Level1 extends BaseScene {
     for (const enemy of this.enemies) {
       if (ship.active) {
         enemy.update(time, delta, ship);
-
-        this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) => 
-          ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
       }
-
       ghostSprites.push(enemy.sprite);
     }
 
@@ -154,39 +183,38 @@ class Level1 extends BaseScene {
     this.meteors.update(time, delta, ship);
 
     // --- pacmans AI ---
-    for (const pacman of this.pacmans) {
-      pacman.update(time, delta);
+    this.pacman.update(time, delta);
 
-      this.physics.overlap(pacman.sprite, this.foods, (pacmanSprite, food) => {
+    this.physics.overlap(this.pacman.sprite, this.foods, (pacmanSprite, food) => {
+      if (this.foods.countActive()) {
+        this.foods.killAndHide(food);
+
+        // trigger pacman growth
+        pacmanSprite.emit('eatFood');
+
         if (this.foods.countActive()) {
-          this.foods.killAndHide(food);
-
-          // trigger pacman growth
-          pacmanSprite.emit('eatFood');
-
-          if (this.foods.countActive()) {
-            pacmanSprite.emit('setState', PacmanStates.trackFood);
-          } else {
-            pacmanSprite.emit('setState', PacmanStates.idle);
-          }
+          pacmanSprite.emit('setState', PacmanStates.trackFood);
+        } else {
+          pacmanSprite.emit('setState', PacmanStates.idle);
         }
-      });
-
-      if (ship.active) {
-        this.physics.overlap(pacman.sprite, ship, 
-          (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
       }
+    });
 
-      this.physics.overlap(pacman.sprite, ghostSprites,
-        (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, pacman.size * 2));
+    if (ship.active) {
+      this.physics.overlap(ghostSprites, ship, (enemySprite, ship) =>
+        ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
 
-      pacmanSprites.push(pacman.sprite);
+      this.physics.overlap(this.pacman.sprite, ship, 
+        (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
     }
+
+    // this.physics.overlap(this.pacman.sprite, ghostSprites,
+    //   (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, this.pacman.config.size * 2));
 
     // --- player ---
     this.player.update(time, delta);
-    this.player.weapon.checkHits([...pacmanSprites, ...ghostSprites],
-      this.meteors.meteors);
+    // this.player.weapon.checkHits([...ghostSprites, this.pacman.sprite],
+    //   this.meteors.meteors);
   }
 
   popFood(x, y) {
@@ -210,8 +238,7 @@ class Level1 extends BaseScene {
     });
 
     // tell pacman it's time to get movin
-    this.pacmans.map(pacman => 
-      pacman.sprite.emit('setState', PacmanStates.trackFood));
+    this.pacman.sprite.emit('setState', PacmanStates.trackFood);
   }
 
 }

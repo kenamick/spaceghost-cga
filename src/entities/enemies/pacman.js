@@ -94,6 +94,35 @@ class Pacman {
         });
       }
     });
+
+    this.sprite.on('explode', (ghosts, meteors, ship) => {
+      // big explosion
+      this.scene.events.emit('explosion', {
+        x: this.sprite.x, y: this.sprite.y, scaleSize: this._growthFactor
+      });
+      this.sprite.destroy();
+      this.tween.stop();
+      // destroy all enemies in proximity
+      const hitFn = (entity) => {
+        if (entity.active) {
+          const dist = Phaser.Math.Distance.Squared(this.sprite.x, this.sprite.y,
+            entity.x, entity.y);
+
+          let range = this.config.size * 1.5 + this._growthFactor * 1.5;
+          console.log('DIST', range);
+          range *= range;
+
+          if (dist < range) {
+          //if (dist > 1) {
+            entity.emit('hit-by-explosion', this.sprite, 
+              this.config.size + this._growthFactor);
+          }
+        }
+      };
+      ghosts.map(ghost => hitFn(ghost.sprite));
+      meteors.getChildren().map(meteor => hitFn(meteor));
+      hitFn(ship);
+    });
   }
 
   createSprite() {
@@ -103,7 +132,7 @@ class Pacman {
       this.config.size);
     const graphics = this.scene.add.graphics().setVisible(false);
 
-    this.scene.tweens.addCounter({
+    this.tween = this.scene.tweens.addCounter({
       from: 0,
       to: 30,
       duration: animSpeed,
@@ -135,6 +164,10 @@ class Pacman {
   }
 
   setState(value, config) {
+    if (!this.sprite.active) {
+      return;
+    }
+
     this._state = value;
 
     switch (this._state) {
@@ -188,6 +221,9 @@ class Pacman {
   }
 
   update(time, delta) {
+    if (!this.sprite.active) {
+      return;
+    }
     // if (this._state === PacmanStates.idle) {
     //   const { x, y } = this.sprite;
     //   if (x < WARP_OFFSET) {

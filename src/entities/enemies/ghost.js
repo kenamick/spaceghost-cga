@@ -10,9 +10,9 @@ const TRACK_STOP_COOLDOWN = 1250; // ms
 const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
-  SMALL: { animSpeed: 400, size: 50, speed: 210, drift: 0.09 },
-  MEDIUM: { animSpeed: 650, size: 75, speed: 180, drift: -0.05 },
-  BIG: { animSpeed: 750, size: 100, speed: 150, drift: 0.02 }
+  SMALL: { animSpeed: 400, size: 50, speed: 120, drift: 0.09 },
+  MEDIUM: { animSpeed: 650, size: 75, speed: 100, drift: -0.05 },
+  BIG: { animSpeed: 750, size: 100, speed: 80, drift: 0.02 }
 };
 
 const GhostStates = {
@@ -29,6 +29,8 @@ class Ghost {
 
     this.config = {
       type: GhostTypes.SMALL,
+      fromT: 0,
+      toT: 1,
       ...config
     };
 
@@ -48,7 +50,7 @@ class Ghost {
     // adjust collisions body
     this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.8);
 
-    this._state = GhostStates.patrol;
+    this.setState(GhostStates.patrol);
 
     this.bindEvents();
   }
@@ -67,29 +69,66 @@ class Ghost {
       }
     });
 
-    this.sprite.on('hit-by-bullet', (bullet) => {
-      // shields gfx
-      this.scene.events.emit('shields', {
-        x: bullet.x,
-        y: bullet.y,
-        angle: Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
-          bullet.x, bullet.y) + Phaser.Math.TAU
-      });
+    // this.sprite.on('hit-by-bullet', (bullet) => {
+    //   // shields gfx
+    //   this.scene.events.emit('shields', {
+    //     x: bullet.x,
+    //     y: bullet.y,
+    //     angle: Phaser.Math.Angle.Between(this.sprite.x, this.sprite.y,
+    //       bullet.x, bullet.y) + Phaser.Math.TAU
+    //   });
 
-      if (!this.slowdown) {
-        this.setState(GhostStates.idle);
-        // swing in direction of bullet
-        this.sprite.body.setVelocity(
-          bullet.body.velocity.x * 0.1,
-          bullet.body.velocity.y * 0.1);
+    //   if (!this.slowdown) {
+    //     this.setState(GhostStates.idle);
+    //     // swing in direction of bullet
+    //     this.sprite.body.setVelocity(
+    //       bullet.body.velocity.x * 0.1,
+    //       bullet.body.velocity.y * 0.1);
 
-        this.slowdown = this.scene.time.addEvent({
-          delay: HIT_STOP_COOLDOWN,
-          loop: false,
-          callback: () => {
-            this.slowdown = null;
-            this.setState(GhostStates.patrol);
-          }
+    //     this.slowdown = this.scene.time.addEvent({
+    //       delay: HIT_STOP_COOLDOWN,
+    //       loop: false,
+    //       callback: () => {
+    //         this.slowdown = null;
+    //         this.setState(GhostStates.patrol);
+    //       }
+    //     });
+    //   }
+    // });
+
+    this.sprite.on('hit-by-explosion', () => {
+      // destroy and spawn smaller ghosts
+      this.scene.events.emit('explosion', { x: this.sprite.x, y: this.sprite.y });
+      this.setState(GhostStates.dead);
+      this.sprite.destroy();
+      this.tween.stop();
+      // spawn new ghost
+      let config;
+      if (this.config.type === GhostTypes.MEDIUM) {
+        this.scene.events.emit('spawn-ghost', {
+            type: GhostTypes.SMALL,
+            x: this.sprite.x - this.sprite.width * 0.5,
+            y: this.sprite.y - this.sprite.height * 0.5
+        });
+        this.scene.events.emit('spawn-ghost', {
+          type: GhostTypes.SMALL,
+          x: this.sprite.x + this.sprite.width * 0.5,
+          y: this.sprite.y + this.sprite.height * 0.5,
+          fromT: 1, // rotation params
+          toT: 0
+        });
+      } else if (this.config.type === GhostTypes.BIG) {
+        this.scene.events.emit('spawn-ghost', {
+          type: GhostTypes.MEDIUM,
+          x: this.sprite.x + this.sprite.width * 0.5,
+          y: this.sprite.y + this.sprite.height * 0.5
+        });
+        this.scene.events.emit('spawn-ghost', {
+          type: GhostTypes.MEDIUM,
+          x: this.sprite.x - this.sprite.width * 0.5,
+          y: this.sprite.y - this.sprite.height * 0.5,
+          fromT: 1, // rotation params
+          toT: 0
         });
       }
     });
@@ -104,7 +143,7 @@ class Ghost {
     const rt = this.scene.add.renderTexture(0, 0, size, size);
     const graphics = this.scene.add.graphics().setVisible(false);
 
-    this.scene.tweens.addCounter({
+    this.tween = this.scene.tweens.addCounter({
       from: 0,
       to: 10,
       duration: animSpeed,
@@ -174,7 +213,7 @@ class Ghost {
     }
 
     const state = {
-      t: 0,
+      t: this.config.fromT,
       path: new Phaser.Curves.Path(),
       // this needs more work to derive the proper path coordinates
       // from sprite's position and curve radius
@@ -187,7 +226,7 @@ class Ghost {
 
     state.tween = this.scene.tweens.add({
       targets: state,
-      t: 1,
+      t: this.config.toT,
       repeat: -1,
       ...cfg
     });
@@ -210,57 +249,42 @@ class Ghost {
   }
 
   setState(value, config) {
+    if (!this.sprite.active) {
+      return;
+    }
+
     this._state = value;
 
     switch (this._state) {
       case GhostStates.follow:
         this.stopPatroling();
-        this.track(config.target);
       break;
 
       case GhostStates.idle:
         this.stopPatroling();
-        this.stopTracking();
         this.sprite.body.setVelocity(0, 0);
       break;
 
       case GhostStates.patrol:
-        this.stopTracking();
         this.patrolState = this.createPatrolState(this.config.type);  
       break;
 
       case GhostStates.dead:
         this.stopPatroling();
-        this.stopTracking();
         this.sprite.body.setVelocity(0, 0);
       break;
     }
   }
 
-  stopTracking() {
-    if (this.trackEvent) {
-      this.trackEvent.destroy();
-    }
-  }
-
-  track(target) {
-    // clear old tracking event
-    this.stopTracking();
-
-    // adjust target vector
-    this.scene.physics.moveToObject(this.sprite, target, this.config.type.speed);
-
-    // re-adjust target vector every N ms.
-    this.trackEvent = this.scene.time.addEvent({
-      delay: DEFAULT_TRACK_INTERVAL,
-      loop: true,
-      callback: () => {
-        this.scene.physics.moveToObject(this.sprite, target, this.config.type.speed);
-      }
-    });
+  get state() {
+    return this._state;
   }
 
   update(time, delta, playerShip) {
+    if (!this.sprite.active) {
+      return;
+    }
+
     switch (this._state) {
       case GhostStates.patrol:
         if (playerShip) {
@@ -282,6 +306,9 @@ class Ghost {
 
       case GhostStates.follow:
         if (playerShip) {
+          this.scene.physics.moveToObject(this.sprite, playerShip, 
+            this.config.type.speed);
+
           // stop following player if it's too far
           const dist = Math.Distance.Squared(
             playerShip.x, playerShip.y, this.sprite.x, this.sprite.y);

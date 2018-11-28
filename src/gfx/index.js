@@ -36,13 +36,21 @@ class Gfx {
       sprite.setDepth(Globals.depths.explosion);
 
       if (config.scale) {
-        sprite.setDisplaySize(sprite.width * 0.25, sprite.height * 0.25);
+        sprite.setDisplaySize(sprite.width * config.scale, 
+          sprite.height * config.scale);
+        sprite.setDepth(Globals.depths.smallExplosion);
+      } else if (config.scaleSize) {
+        sprite.setDisplaySize(sprite.width + config.scaleSize,
+          sprite.height + config.scaleSize);
         sprite.setDepth(Globals.depths.smallExplosion);
       }
 
-      if (config.cb) {
-        anim.on('animationcomplete', config.cb)
-      }
+      sprite.on('animationcomplete', () => {
+        sprite.destroy();
+        if (config.cb) {
+          config.cb()
+        }
+      });
       // play sfx
       this.audio.playSound('explosions', 
         { delay: Phaser.Math.Between(0, 1) });
@@ -57,6 +65,7 @@ class Gfx {
       if (config.angle) {
         anim.rotation = config.angle;
       }
+      anim.on('animationcomplete', () => anim.destroy());
       anim.play('shields', true, 0);
       // TODO play sfx
     });
