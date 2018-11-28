@@ -39,8 +39,10 @@ const Globals = {
   },
   depths: {
     explosion: 10,
+    food: 11,
+    meteor: 12,
     ship: 20,
-    ghosts: 22,
+    ghost: 22,
     pacman: 24,
     shields: 50,
     smallExplosion: 90,

@@ -202,6 +202,8 @@ class Level1 extends BaseScene {
     posX = posX * food.width + food.width / 2;
     posY = posY * food.height + food.height / 2;
 
+    food.setDepth(Globals.depths.food);
+
     food.enableBody(true, posX, posY, true, true);
     this.physics.overlap(food, this.foods, () => {
       food.disableBody(true, true);
