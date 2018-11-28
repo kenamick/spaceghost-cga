@@ -4,8 +4,8 @@ import Globals from '../../globals';
 import { MeteorTypes } from './meteors';
 
 const DEFAULT_TRACK_INTERVAL = 350;
-const DETECT_DISTANCE = 350 * 350; // 150 px
-const TRACK_DISTANCE = 550 * 550; // 500 px
+const DETECT_DISTANCE = 550 * 550; // 150 px
+const TRACK_DISTANCE = 450 * 450; // 500 px
 const TRACK_STOP_COOLDOWN = 1250; // ms
 const HIT_STOP_COOLDOWN = 1200;
 
@@ -31,6 +31,7 @@ class Ghost {
       type: GhostTypes.SMALL,
       fromT: 0,
       toT: 1,
+      startState: GhostStates.patrol,
       ...config
     };
 
@@ -50,7 +51,7 @@ class Ghost {
     // adjust collisions body
     this.sprite.body.setSize(this.sprite.width * 0.9, this.sprite.height * 0.8);
 
-    this.setState(GhostStates.patrol);
+    this.setState(this.config.startState);
 
     this.bindEvents();
   }
@@ -107,11 +108,13 @@ class Ghost {
       if (this.config.type === GhostTypes.MEDIUM) {
         this.scene.events.emit('spawn-ghost', {
             type: GhostTypes.SMALL,
+            palette: this.config.palette,
             x: this.sprite.x - this.sprite.width * 0.5,
             y: this.sprite.y - this.sprite.height * 0.5
         });
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.SMALL,
+          palette: this.config.palette,
           x: this.sprite.x + this.sprite.width * 0.5,
           y: this.sprite.y + this.sprite.height * 0.5,
           fromT: 1, // rotation params
@@ -120,11 +123,13 @@ class Ghost {
       } else if (this.config.type === GhostTypes.BIG) {
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.MEDIUM,
+          palette: this.config.palette,
           x: this.sprite.x + this.sprite.width * 0.5,
           y: this.sprite.y + this.sprite.height * 0.5
         });
         this.scene.events.emit('spawn-ghost', {
           type: GhostTypes.MEDIUM,
+          palette: this.config.palette,
           x: this.sprite.x - this.sprite.width * 0.5,
           y: this.sprite.y - this.sprite.height * 0.5,
           fromT: 1, // rotation params

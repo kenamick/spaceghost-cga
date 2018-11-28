@@ -8,10 +8,10 @@ import Controls from '../controls';
 import { Pacman, PacmanStates } from '../entities/enemies';
 
 const Menus = [
-  { text: 'PLAY', scene: 'Level1' },
-  { text: 'HOW TO PLAY', scene: 'Howtoplay' },
+  { text: 'PLAY', scene: { name: 'LoadLevel', next: 'Level1', text: 'L E V E L  1' } },
+  { text: 'HOW TO PLAY', scene: { name: 'Howtoplay' } },
   //{ text: 'HISCORES', scene: 'Hiscores' },
-  { text: 'CREDITS', scene: 'Credits' }
+  { text: 'CREDITS', scene: { name: 'Credits' } }
 ];
 
 class MainMenu extends BaseScene {
@@ -68,7 +68,8 @@ class MainMenu extends BaseScene {
         } else if (this.controls.action1) {
           // select
           this.spinCursor(() => {
-            this.scene.start(this.menu.options[cursor.pos].scene);
+            const entry = this.menu.options[cursor.pos];
+            this.scene.start(entry.scene.name, { text: entry.scene.text });
           });
         }
       }

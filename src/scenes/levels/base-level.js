@@ -35,6 +35,8 @@ class BaseLevel extends BaseScene {
     this.addPlayerShip();
     this.bindEvents();
 
+    this.meteors = new Meteors(this);
+
     // always last
     super.create();
   }
@@ -62,6 +64,28 @@ class BaseLevel extends BaseScene {
       });
     });
 
+    this.events.on('level-won', () => {
+      // show game over text
+      const bitmap = this.add.bitmapText(
+        Globals.game.config.width * 0.5 - 220,
+        Globals.game.config.height * 0.5 - 16 * 8,
+        Globals.bitmapFont, 'L E V E L   C L E A R E D', 32);
+      bitmap.alpha = 0;
+      this.tweens.add({
+        targets: [bitmap],
+        alpha: 1,
+        duration: 3000,
+        ease: 'Easing.Bounce.Out',
+        onComplete: () => {
+          // fade out & switch to menu
+          this.cameras.main.fadeOut(3000);
+          this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            this.scene.start(this.nextScene);
+          });
+        }
+      });
+    });
+
     this.events.on('ignite-pacman', () => {
       if (this.pacman.sprite.active) {
         this.pacman.sprite.emit('ignite', this.enemies, this.meteors.meteors,
@@ -77,20 +101,19 @@ class BaseLevel extends BaseScene {
     });
 
     this.events.on('spawn-ghost', (config) => {
-      console.log('new ghosts')
       const ghost = new Ghost(this, {
         palette: Globals.palette.ghost1,
         ...config
       });
 
       let found = false;
-      // for (let i = 0; i < this.enemies.length; i++) {
-      //   if (!this.enemies[i].sprite.active) {
-      //     this.enemies[i] = ghost;
-      //     found = true;
-      //     break;
-      //   }
-      // }
+      for (let i = 0; i < this.enemies.length; i++) {
+        if (!this.enemies[i].sprite.active) {
+          this.enemies[i] = ghost;
+          found = true;
+          break;
+        }
+      }
       if (!found) {
         this.enemies.push(ghost);
       }
@@ -113,17 +136,23 @@ class BaseLevel extends BaseScene {
   }
 
   update(time, delta) {
+    if (this.levelWon) {
+      return;
+    }
+
     const ship = this.player.sprite;
     const ghostSprites = [];
 
     super.update(time, delta);
 
     // --- ghosts AI ---
-    for (const enemy of this.enemies) {
-      if (ship.active) {
-        enemy.update(time, delta, ship);
+    if (ship.active) {
+      for (const enemy of this.enemies) {
+        if (enemy.sprite.active) {
+          enemy.update(time, delta, ship);
+          ghostSprites.push(enemy.sprite);
+        }
       }
-      ghostSprites.push(enemy.sprite);
     }
 
     // --- meteors Manager ---
@@ -153,6 +182,12 @@ class BaseLevel extends BaseScene {
 
       this.physics.overlap(this.pacman.sprite, ship,
         (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
+    }
+
+    // ---- game win check
+    if (ghostSprites.length === 0 && this.meteors.meteors.countActive() === 0) {
+      this.levelWon = true;
+      this.events.emit('level-won');
     }
 
     // this.physics.overlap(this.pacman.sprite, ghostSprites,

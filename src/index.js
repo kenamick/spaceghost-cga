@@ -1,12 +1,7 @@
 import Phaser, { Game, Math } from 'phaser';
 import Globals from './globals';
 import * as KPPL from './shaders/pipeline';
-
-import {
-  Preloader,
-  MainMenu,
-  Level1
-} from './scenes';
+import * as Scenes from './scenes';
 
 const resize = () => {
   const game = Globals.game;
@@ -47,7 +42,9 @@ window.onload = function () {
       gamepad: true,
       keyboard: true
     },
-    scene: [Preloader, MainMenu, Level1]
+    scene: [Scenes.Preloader, Scenes.MainMenu, Scenes.LoadLevel, 
+      Scenes.Level1, Scenes.Level2
+    ]
   };
 
   const game = new Game(config);

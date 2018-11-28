@@ -178,6 +178,9 @@ class FireFly {
     if (controls.action1) {
       scene.events.emit('ignite-pacman');
     }
+    if (controls.action2)  {
+      scene.events.emit('level-won');
+    }
 
     weapon.update(time, delta);
     scene.physics.world.wrap(sprite, sprite.width * 0.5);
