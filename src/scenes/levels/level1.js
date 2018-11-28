@@ -41,21 +41,21 @@ class Level1 extends BaseLevel {
 
     this.enemies = [
       new Ghost(this, {
-        x: Globals.game.config.width * 0.5, y: topLeft.y, type: GhostTypes.SMALL,
+        x: Globals.game.config.width * 0.5, y: topLeft.y, type: GhostTypes.MEDIUM,
         palette: Globals.palette.ghost1
       }),
-      new Ghost(this, {
-        x: bottomLeft.x, y: bottomLeft.y, type: GhostTypes.MEDIUM,
-        palette: Globals.palette.ghost4
-      }),
-      new Ghost(this, {
-        x: topRight.x, y: topRight.y, type: GhostTypes.BIG,
-        palette: Globals.palette.ghost3
-      }),
-      new Ghost(this, {
-        x: bottomRight.x, y: bottomRight.y, type: GhostTypes.SMALL,
-        palette: Globals.palette.ghost4
-      })
+      // new Ghost(this, {
+      //   x: bottomLeft.x, y: bottomLeft.y, type: GhostTypes.MEDIUM,
+      //   palette: Globals.palette.ghost4
+      // }),
+      // new Ghost(this, {
+      //   x: topRight.x, y: topRight.y, type: GhostTypes.BIG,
+      //   palette: Globals.palette.ghost3
+      // }),
+      // new Ghost(this, {
+      //   x: bottomRight.x, y: bottomRight.y, type: GhostTypes.SMALL,
+      //   palette: Globals.palette.ghost4
+      // })
     ];
 
     // track player ship

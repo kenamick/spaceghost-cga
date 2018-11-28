@@ -5,10 +5,11 @@ import Globals from '../../globals';
 const DEFAULT_SIZE = 50; // px
 const DEFAULT_SPEED = 120; // px
 const DEFAULT_ANIM_SPEED = 200; // ms
-const GROWTH_FACTOR = 0.01;
+const GROWTH_FACTOR = 0.02;
 // const GROWTH_FACTOR = 0.001;
 const WARP_OFFSET = 350; // min px, before warping past screen edge
 const HIT_STOP_COOLDOWN = 1500;
+const PACMAN_RASPAWN_TIME = 3000;
 
 const PacmanStates = {
   idle: 1,
@@ -95,6 +96,23 @@ class Pacman {
       }
     });
 
+    this.sprite.on('ignite', (ghosts, meteors, ship) => {
+      if (!this.explodeTween) {
+        this.explodeTween = this.scene.tweens.addCounter({
+          from: 100,
+          to: 0,
+          duration: 1000,
+          onUpdate: (tween) => this.scene.events.emit('hud-ship-stats', { 
+            timer: tween.getValue() }),
+          onComplete: () => {
+            this.explodeTween = null;
+            this.scene.events.emit('hud-ship-stats', { noTimer: true }),
+            this.sprite.emit('explode', ghosts, meteors, ship);
+          }
+        });
+      }
+    });
+
     this.sprite.on('explode', (ghosts, meteors, ship) => {
       // big explosion
       this.scene.events.emit('explosion', {
@@ -122,6 +140,11 @@ class Pacman {
       ghosts.map(ghost => hitFn(ghost.sprite));
       meteors.getChildren().map(meteor => hitFn(meteor));
       hitFn(ship);
+      // spawn another pacman
+      this.scene.time.addEvent({
+        delay: PACMAN_RASPAWN_TIME,
+        callback: () => this.scene.events.emit('spawn-pacman')
+      });
     });
   }
 

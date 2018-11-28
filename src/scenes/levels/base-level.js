@@ -12,8 +12,6 @@ import {
 } from '../../entities';
 import Controls from '../../controls';
 
-const PACMAN_RASPAWN_TIME = 3000;
-
 class BaseLevel extends BaseScene {
 
   create() {
@@ -66,13 +64,8 @@ class BaseLevel extends BaseScene {
 
     this.events.on('ignite-pacman', () => {
       if (this.pacman.sprite.active) {
-        this.pacman.sprite.emit('explode', this.enemies, this.meteors.meteors,
+        this.pacman.sprite.emit('ignite', this.enemies, this.meteors.meteors,
           this.player.sprite);
-        // spawn a new pacman after a while
-        this.time.addEvent({
-          delay: PACMAN_RASPAWN_TIME,
-          callback: () => this.events.emit('spawn-pacman')
-        });
       }
     });
 
