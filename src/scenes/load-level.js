@@ -4,6 +4,7 @@ import Globals from '../globals';
 import Audio from '../audio';
 import Controls from '../controls';
 import * as KPPL from '../shaders/pipeline';
+import * as Scenes from './index';
 
 class LoadLevel extends BaseScene {
 
@@ -48,6 +49,8 @@ class LoadLevel extends BaseScene {
     if (this.controls && (this.controls.action1 || this.controls.action2)) {
       this.cameras.main.fadeOut(1000);
       this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+        // load scene here, because any old refs were removed
+        this.scene.add(this.config.next, Scenes[this.config.next]);
         this.scene.start(this.config.next);
       });
     }

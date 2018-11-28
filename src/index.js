@@ -42,9 +42,7 @@ window.onload = function () {
       gamepad: true,
       keyboard: true
     },
-    scene: [Scenes.Preloader, Scenes.MainMenu, Scenes.LoadLevel, 
-      Scenes.Level1, Scenes.Level2
-    ]
+    scene: [Scenes.Preloader, Scenes.MainMenu, Scenes.LoadLevel]
   };
 
   const game = new Game(config);

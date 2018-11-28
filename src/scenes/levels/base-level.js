@@ -58,8 +58,10 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            // cleanup scene events and objects
             this.events.off();
             this.scene.remove(this.thisScene);
+            // go to menu
             this.scene.start('MainMenu');
           });
         }
@@ -85,8 +87,10 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            // cleanup scene events and objects
             this.events.off();
             this.scene.remove(this.thisScene);
+            // go to next level
             this.scene.start(this.nextScene.name, this.nextScene);
           });
         }
