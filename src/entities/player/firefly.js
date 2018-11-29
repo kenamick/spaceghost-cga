@@ -52,6 +52,7 @@ class FireFly {
       this.props.shields -= damage;
       if (this.props.shields < 0) {
         this.props.shields = 0;
+        this.scene.events.emit('hud-ship-stats', this.props);
         // kill ship and all its event handlers
         this.scene.events.emit('explosion', { x: this.sprite.x, y: this.sprite.y });
         this.sprite.destroy();
@@ -59,8 +60,9 @@ class FireFly {
         this.replenishTimer.destroy();
         // notify game scene
         this.scene.events.emit('gameover');
+      } else {
+        this.scene.events.emit('hud-ship-stats', this.props);
       }
-      this.scene.events.emit('hud-ship-stats', this.props);
     };
     this.sprite.on('hit-by-pacman', bumpShields);
     this.sprite.on('hit-by-ghost', bumpShields);
@@ -119,10 +121,12 @@ class FireFly {
           ship.rotation - Phaser.Math.TAU - Math.PI) * ship.height * 0.6
       },
       lifespan: {
-        onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, 300) * 2000
+        //onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, ACCEL) * 2000
+        onEmit: () => Phaser.Math.Percent(ship.body.acceleration.lengthSq(), 
+          0, ACCEL) * 2000
       },
       alpha: {
-        onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, 300)
+        onEmit: () => Phaser.Math.Percent(ship.body.speed, 0, MAX_SPEED)
       },
       angle: {
         onEmit: () => {
@@ -157,8 +161,30 @@ class FireFly {
         this.dropFoodInterval = 0;
       }
       this.dropFoodInterval += 1;
-
+      // stop thrusters volume fade out
+      if (this.thrustFadeTween) {
+        this.thrustFadeTween.stop();
+        this.thrustFadeTween = false;
+      }
+      // play sfx
+      this.audio.setSoundVol('ship-thrust', 1);
+      this.audio.playSound('ship-thrust', { modal: true, loop: true });
     } else {
+      // no more accel => stop thrusters sound
+      if (!this.thrustFadeTween && this.sprite.body.acceleration.lengthSq() > 0) {
+        this.thrustFadeTween = this.scene.tweens.addCounter({
+          from: 1,
+          to: 0,
+          duration: 800,
+          onUpdate: (tween) => {
+            console.log(tween.getValue())
+            this.audio.setSoundVol('ship-thrust', tween.getValue())
+          },
+          onComplete: () => {
+            this.thrustFadeTween = false;
+          }
+        });
+      }
       sprite.setAcceleration(0);
     }
 

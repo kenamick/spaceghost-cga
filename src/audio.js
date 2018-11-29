@@ -31,6 +31,11 @@ const ASSETS = {
   },
   'pacman-eats': {
     files: ['tkp_pacman_eats_1.ogg']
+  },
+  'ship-thrust': {
+    files: ['tkp_ship_thrust_1.ogg'],
+    // loops issue
+    // http://www.html5gamedevs.com/topic/19711-seamless-audio-loops-in-phaser/
   }
 };
 
@@ -100,6 +105,16 @@ class Audio {
 
     this.scene.sound.play(`${name}1`, config);
     // this.sounds[name][0].play();
+  }
+
+  setSoundVol(name, vol) {
+    if (!this._soundsOn) {
+      return;
+    }
+
+    if (name) {
+      this.sounds[name][0].setVolume(vol);
+    }
   }
 
   playMusic(name, config) {

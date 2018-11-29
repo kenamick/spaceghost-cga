@@ -57,6 +57,7 @@ npm run build
 
 CC0 license sound effects by:
 
+  * [CocoaBeachProductions](https://freesound.org/people/CocoaBeachProductions/sounds/258357/)
   * [RutgerMuller](https://freesound.org/people/RutgerMuller/sounds/190501/)
   * [plasterbrain](https://freesound.org/people/plasterbrain/sounds/266163/)
   * [Soundscapes55](https://freesound.org/people/Soundscapes55/sounds/435998/)
