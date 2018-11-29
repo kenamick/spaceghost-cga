@@ -6,7 +6,7 @@ import Gfx from '../gfx';
 import * as KPPL from '../shaders/pipeline';
 import { FireFly, HUD,
   Pacman, PacmanStates,
-  Ghost, GhostTypes, GhostStates, 
+  Ghost, GhostTypes, GhostStates,
   Meteors, MeteorTypes,
 } from '../entities';
 import Controls from '../controls';
@@ -25,7 +25,7 @@ class Level1 extends BaseScene {
     // background
     this.add.tileSprite(0, 0,
       Globals.game.config.width * 2, Globals.game.config.height * 2, 'bkg-purple');
-    
+
     this.cameras.main.setBounds(0, 0,
       Globals.game.config.width, Globals.game.config.height);
 
@@ -79,8 +79,8 @@ class Level1 extends BaseScene {
     });
 
     this.player = new FireFly(this, new Controls(this), {
-      x: this.cameras.main.centerX, 
-      y: this.cameras.main.centerY 
+      x: this.cameras.main.centerX,
+      y: this.cameras.main.centerY
     });
     this.player.sprite.on('popFood', this.popFood, this);
 
@@ -90,7 +90,7 @@ class Level1 extends BaseScene {
   addPacmans() {
     this.pacmans = [
       new Pacman(this, {
-        x: this.player.sprite.x, 
+        x: this.player.sprite.x,
         y: this.player.sprite.y + 100 // Globals.game.config.height - 50
       })
     ];
@@ -101,7 +101,7 @@ class Level1 extends BaseScene {
     const topLeft = { x: -offset, y: -offset };
     const bottomLeft = { x: -offset, y: Globals.game.config.height + offset};
     const topRight = { x: Globals.game.config.width + offset, y: -offset};
-    const bottomRight = {x: Globals.game.config.width + offset, 
+    const bottomRight = {x: Globals.game.config.width + offset,
       y: Globals.game.config.height + offset};
 
     this.enemies = [
@@ -143,7 +143,7 @@ class Level1 extends BaseScene {
       if (ship.active) {
         enemy.update(time, delta, ship);
 
-        this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) => 
+        this.physics.overlap(enemy.sprite, ship, (enemySprite, ship) =>
           ship.emit('hit-by-ghost', enemySprite, Globals.damage.ghost));
       }
 
@@ -173,7 +173,7 @@ class Level1 extends BaseScene {
       });
 
       if (ship.active) {
-        this.physics.overlap(pacman.sprite, ship, 
+        this.physics.overlap(pacman.sprite, ship,
           (pacman, ship) => ship.emit('hit-by-pacman', pacman, Globals.damage.pacman));
       }
 
@@ -210,7 +210,7 @@ class Level1 extends BaseScene {
     });
 
     // tell pacman it's time to get movin
-    this.pacmans.map(pacman => 
+    this.pacmans.map(pacman =>
       pacman.sprite.emit('setState', PacmanStates.trackFood));
   }
 

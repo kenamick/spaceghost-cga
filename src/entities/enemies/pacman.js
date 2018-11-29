@@ -83,14 +83,18 @@ class Pacman {
 
       if (!this.slowdown) {
         // swing in direction of bullet
+        const {x, y} = this.sprite.body.velocity;
         this.sprite.body.setVelocity(
-          bullet.body.velocity.x * 0.1, 
+          bullet.body.velocity.x * 0.1,
           bullet.body.velocity.y * 0.1);
 
         this.slowdown = this.scene.time.addEvent({
           delay: HIT_STOP_COOLDOWN,
           loop: false,
-          callback: () => this.slowdown = null
+            callback: () => {
+                this.slowdown = null;
+                this.sprite.body.setVelocity(x, y);
+            }
         });
       }
     });
@@ -99,7 +103,7 @@ class Pacman {
   createSprite() {
     const { color, animSpeed } = this.config;
 
-    const rt = this.scene.add.renderTexture(0, 0, this.config.size, 
+    const rt = this.scene.add.renderTexture(0, 0, this.config.size,
       this.config.size);
     const graphics = this.scene.add.graphics().setVisible(false);
 
@@ -161,15 +165,15 @@ class Pacman {
     // this is a very naive approach to the nearest neighbor search
     // if anyone knows a better way change it please
     const { foods } = this.scene;
-    
+
     let nearestFood = foods.getFirstAlive();
     if (nearestFood) {
-      let distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+      let distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y,
         nearestFood.x, nearestFood.y);
       let bestDistance = distance;
       for(let food of foods.getChildren()) {
         if(food.active) {
-          distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, 
+          distance = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y,
             food.x, food.y);
           if(distance < bestDistance) {
             bestDistance = distance;
