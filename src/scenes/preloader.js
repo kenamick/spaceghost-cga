@@ -2,6 +2,7 @@
 import BaseScene from './base-scene';
 import Globals from '../globals';
 import Audio from '../audio';
+import * as Scenes from './index';
 
 class Preloader extends BaseScene {
 
@@ -15,9 +16,9 @@ class Preloader extends BaseScene {
     this.load.bitmapFont(Globals.bitmapFont,
       require('../../assets/fonts/kenney_future_regular_24.png'),
       require('../../assets/xml/kenney_future_regular_24.xml'))
-    this.load.atlasXML(Globals.atlas1, 
-      require('../../assets/atlas-kenney/sheet.png'),
-      require('../../assets/xml/sheet.xml'));
+    // this.load.atlasXML(Globals.atlas1, 
+    //   require('../../assets/atlas-kenney/sheet.png'),
+    //   require('../../assets/xml/sheet.xml'));
     this.load.atlas(Globals.atlas2,
       require('../../assets/atlas-kenney/atlas2.png'),
       require('../../assets/xml/atlas2.json'));
@@ -54,6 +55,8 @@ class Preloader extends BaseScene {
   create() {
     // debug - start a game scene directly
     if (Globals.debug && Globals.scene) {
+      // load scene here, because any old refs were removed
+      this.scene.add(Globals.scene, Scenes[Globals.scene]);
       this.scene.start(Globals.scene);
       return;
     }
