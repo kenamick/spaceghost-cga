@@ -125,12 +125,13 @@ class Pacman {
           const dist = Phaser.Math.Distance.Squared(this.sprite.x, this.sprite.y,
             entity.x, entity.y);
 
-          let range = this.config.size * 1.5 + this._growthFactor * 1.5;
+          // pacman explosion range
+          let range = this.config.size * 2 + this._growthFactor * 1.5;
           // console.log('DIST', range);
           range *= range;
 
           if (dist < range) {
-          // if (dist > 1) {
+          //if (dist > 1) {
             entity.emit('hit-by-explosion', this.sprite, 
               this.config.size + this._growthFactor);
           }

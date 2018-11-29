@@ -55,8 +55,10 @@ class Preloader extends BaseScene {
   create() {
     // debug - start a game scene directly
     if (Globals.debug && Globals.scene) {
-      // load scene here, because any old refs were removed
-      this.scene.add(Globals.scene, Scenes[Globals.scene]);
+      if (Globals.scene !== 'LoadLevel') {
+        // load scene here, because any old refs were removed
+        this.scene.add(Globals.scene, Scenes[Globals.scene]);
+      }
       this.scene.start(Globals.scene);
       return;
     }

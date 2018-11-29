@@ -25,9 +25,13 @@ class Level2 extends BaseLevel {
   }
 
   setup() {
+    // this.nextScene = {
+    //   name: 'LoadLevel',
+    //   next: 'Level3', text: 'L E V E L  3'
+    // };
     this.nextScene = {
-      name: 'LoadLevel',
-      next: 'Level3', text: 'L E V E L  3'
+      name: 'LoadLevel', next: 'MainMenu', text: 'C O N G R A T U L A T I O N S',
+      endgame: true
     };
 
     const xpos = this.player.sprite.x - GhostTypes.MEDIUM.size * 0.5;

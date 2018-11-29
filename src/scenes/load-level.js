@@ -17,6 +17,12 @@ class LoadLevel extends BaseScene {
       this.config = data;
     } else {
       this.config = { next: 'Level1', text: 'L E V E L  1' };
+      // test
+      // this.config = {
+      //   endgame: true,
+      //   name: 'EndGame',
+      //   next: 'MainMenu', text: 'C O N G R A T U L A T I O N S'
+      // };
     }
   }
 
@@ -33,10 +39,19 @@ class LoadLevel extends BaseScene {
 
     const cx = width * 0.5;
     const cy = height * 0.5;
+    let titleX = cx - 190;
 
-    this.addTitle(cx - 190, cy - 150, this.config.text, 48, () => {
+    if (this.config.endgame) {
+      titleX = cx - 450;
+    }
+
+    this.addTitle(titleX, cy - 150, this.config.text, 48, () => {
       this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24); 
       this.controls = this.controls = new Controls(this, true);
+
+      if (this.config.endgame) {
+        this.addText(cx - 240, cy + 50, 'The galaxy is safe ...for now!', 20); 
+      }
     });
 
     // always last
@@ -49,8 +64,10 @@ class LoadLevel extends BaseScene {
     if (this.controls && (this.controls.action1 || this.controls.action2)) {
       this.cameras.main.fadeOut(1000);
       this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-        // load scene here, because any old refs were removed
-        this.scene.add(this.config.next, Scenes[this.config.next]);
+        if (this.config.next !== 'MainMenu') {
+          // load scene here, because any old refs were removed
+          this.scene.add(this.config.next, Scenes[this.config.next]);
+        }
         this.scene.start(this.config.next);
       });
     }
