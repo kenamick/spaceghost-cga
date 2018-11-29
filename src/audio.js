@@ -25,6 +25,9 @@ const ASSETS = {
   },
   'shields': {
     files: ['tkp_shields_1.ogg', 'tkp_shields_2.ogg', 'tkp_shields_3.ogg']
+  },
+  'ignite': {
+    files: ['tkp_pacignite_1.ogg']
   }
 };
 

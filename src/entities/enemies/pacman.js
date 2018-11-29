@@ -22,8 +22,9 @@ const PacmanStates = {
 
 class Pacman {
 
-  constructor(scene, config) {
+  constructor(scene, audio, config) {
     this.scene = scene;
+    this.audio = audio;
 
     this.config = {
       color: Globals.palette.pacman.body,
@@ -97,6 +98,7 @@ class Pacman {
 
     this.sprite.on('ignite', (ghosts, meteors, ship) => {
       if (!this.explodeTween) {
+        this.audio.playSound('ignite');
         this.explodeTween = this.scene.tweens.addCounter({
           from: 100,
           to: 0,

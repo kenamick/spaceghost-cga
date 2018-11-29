@@ -105,7 +105,7 @@ class BaseLevel extends BaseScene {
     });
 
     this.events.on('spawn-pacman', () => {
-      this.pacman = new Pacman(this, {
+      this.pacman = new Pacman(this, this.audio, {
         x: this.player.sprite.x,
         y: this.player.sprite.y + 100 // Globals.game.config.height - 50
       });
