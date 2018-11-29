@@ -119,6 +119,7 @@ class Pacman {
       this.scene.events.emit('explosion', {
         x: this.sprite.x, y: this.sprite.y, scaleSize: this._growthFactor
       });
+      this.setState(PacmanStates.dead);
       this.sprite.destroy();
       this.tween.stop();
       // destroy all enemies in proximity
@@ -213,8 +214,16 @@ class Pacman {
         this.track();
       break;
 
+      // case PacmanStates.trackShip:
+      //   this.audio.stop('pacman-eats');
+      // break;
+
       case PacmanStates.idle:
         this.sprite.body.setVelocity(0, 0);
+      break;
+
+      case PacmanStates.dead:
+        this.audio.stop('pacman-eats');
       break;
     }
   }
@@ -242,6 +251,8 @@ class Pacman {
 
       this.scene.physics.moveToObject(this.sprite, nearestFood, this.config.speed);
       this.facePos(nearestFood.x, nearestFood.y);
+      // play sfx
+      this.audio.playSound('pacman-eats', { modal: true });
     }
   }
 

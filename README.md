@@ -57,6 +57,7 @@ npm run build
 
 CC0 license sound effects by:
 
+  * [RutgerMuller](https://freesound.org/people/RutgerMuller/sounds/190501/)
   * [plasterbrain](https://freesound.org/people/plasterbrain/sounds/266163/)
   * [Soundscapes55](https://freesound.org/people/Soundscapes55/sounds/435998/)
   * [newagesoup](https://freesound.org/people/newagesoup/sounds/427993/)

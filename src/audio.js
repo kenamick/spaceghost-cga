@@ -28,6 +28,9 @@ const ASSETS = {
   },
   'ignite': {
     files: ['tkp_pacignite_1.ogg']
+  },
+  'pacman-eats': {
+    files: ['tkp_pacman_eats_1.ogg']
   }
 };
 
@@ -81,7 +84,13 @@ class Audio {
     }
 
     if (config) {
-      if (config.idx) {
+      if (config.modal) {
+        let snd = this.sounds[name][0];
+        if (!snd.isPlaying) {
+          this.sounds[name][0].play(config);
+        }
+        return;
+      } else if (config.idx) {
         this.scene.sound.play(`${name}${config.idx}`, config);
       } else if (config.random) {
         const idx = Math.Between(1, this.sounds[name].length);
@@ -105,9 +114,9 @@ class Audio {
   }
 
   stop(name = null) {
-    if (!this._musicOn) {
-      return;
-    }
+    // if (!this._musicOn) {
+    //   return;
+    // }
 
     if (name) {
       this.sounds[name][0].stop();
