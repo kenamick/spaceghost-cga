@@ -1,6 +1,23 @@
-# game-off-2018
+# Space Ghost CGA
 
-A something ...
+:video_game: [game-off-2018](https://itch.io/jam/game-off-2018) challenge entry. 
+
+[**Play now**](https://kenamick.itch.io/game-off-2018)
+
+Space Ghost CGA is a crazy mix of *Pacman*, *Asteroids* and *Bomberman* in space.
+Are you tough enough to handle this? We think you're not. :speak_no_evil:
+
+# Supported Browsers
+
+  * Google Chrome - 70+ (:star: **highly recommended**)
+  * Firefox - 63+
+
+# Controls
+
+  * :see_no_evil: `Arrow Keys` or `WaSD` keys to move.
+  * :hear_no_evil: Press `X`, `O` or `SPACE` to initiate a Pacman explosion. (That's right. Pacman explodes in this game.)
+
+# Development
 
 ## Installation
 
@@ -8,7 +25,7 @@ A something ...
 npm i
 ```
 
-## Development
+## Running
 
 ```sh
 npm start
@@ -22,20 +39,21 @@ Default address is <http://localhost:3001>
 npm run build
 ```
 
-## Open Source Tools
+# Open Source Tools
 
   * [Phaser](https://phaser.io/)
   * [Visual Studio Code](https://code.visualstudio.com/)
   * [TexturePacker](https://www.codeandweb.com/texturepacker)
+  * [GIMP](https://www.gimp.org/downloads/)
   * [Audacity](https://www.audacityteam.org/)
 
-## Assets Credits
+# Assets Credits
 
-### Graphics
+## Graphics
 
   * [Kenney Game Assets #1](https://kenney.itch.io/kenney-game-assets-1)
 
-### Sfx & Music
+## Sfx & Music
 
 CC0 license sound effects by:
 
