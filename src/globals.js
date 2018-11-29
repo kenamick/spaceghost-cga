@@ -11,7 +11,7 @@ window.location.search.slice(1).split('&').map((option) => {
 const Globals = {
   // misc
   bitmapFont: 'standard',
-  atlas1: 'atlas-k',
+  // atlas1: 'atlas-k',
   atlas2: 'atlas2',
   atlas_px: 'atlas-px',
   atlas_regular: 'atlas-reg',

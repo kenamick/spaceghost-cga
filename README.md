@@ -26,6 +26,7 @@ npm run build
 
   * [Phaser](https://phaser.io/)
   * [Visual Studio Code](https://code.visualstudio.com/)
+  * [TexturePacker](https://www.codeandweb.com/texturepacker)
   * [Audacity](https://www.audacityteam.org/)
 
 ## Assets Credits
@@ -38,6 +39,7 @@ npm run build
 
 CC0 license sound effects by:
 
+  * [Soundscapes55](https://freesound.org/people/Soundscapes55/sounds/435998/)
   * [newagesoup](https://freesound.org/people/newagesoup/sounds/427993/)
   * [waveplay_old](https://freesound.org/people/waveplay_old/sounds/218043/)
   * [CadereSounds](https://freesound.org/people/CadereSounds/sounds/221594/)

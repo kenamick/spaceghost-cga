@@ -22,6 +22,9 @@ const ASSETS = {
   },
   'explosions': {
     files: ['tkp_explosion_1_2.ogg', 'tkp_explosion_1_5.ogg']
+  },
+  'shields': {
+    files: ['tkp_shields_1.ogg', 'tkp_shields_2.ogg', 'tkp_shields_3.ogg']
   }
 };
 
@@ -78,7 +81,7 @@ class Audio {
       if (config.idx) {
         this.scene.sound.play(`${name}${config.idx}`, config);
       } else if (config.random) {
-        const idx = Math.Between(0, this.sounds[name].length - 1);
+        const idx = Math.Between(1, this.sounds[name].length);
         this.scene.sound.play(`${name}${idx}`, config);
       }
     }
