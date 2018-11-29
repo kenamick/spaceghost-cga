@@ -6,6 +6,7 @@ const DEFAULT_SIZE = 50; // px
 const DEFAULT_SPEED = 120; // px
 const DEFAULT_ANIM_SPEED = 200; // ms
 const GROWTH_FACTOR = 0.01;
+const MAX_SIZE = 300;
 // const GROWTH_FACTOR = 0.001;
 const WARP_OFFSET = 350; // min px, before warping past screen edge
 const HIT_STOP_COOLDOWN = 1500;
@@ -65,8 +66,8 @@ class Pacman {
     this.sprite.on('eatFood', () => {
       this._growthFactor += GROWTH_FACTOR;
       this.sprite.setDisplaySize(
-        this.config.size + this._growthFactor,
-        this.config.size + this._growthFactor
+        Math.min(this.config.size + this._growthFactor, MAX_SIZE),
+        Math.min(this.config.size + this._growthFactor, MAX_SIZE)
       );
       // this.sprite.scaleX += GROWTH_FACTOR;
       // this.sprite.scaleY += GROWTH_FACTOR;
