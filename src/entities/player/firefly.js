@@ -11,8 +11,10 @@ const MAX_ENERGY = 100;
 
 class FireFly {
 
-  constructor(scene, controls, config) {
+  constructor(scene, controls, audio, config) {
     this.scene = scene;
+    this.audio = audio;
+    this.controls = controls;
 
     this.props = {
       shields: MAX_SHIELDS,
@@ -31,8 +33,6 @@ class FireFly {
 
     // adjust collisions body
     this.sprite.setSize(this.sprite.width * 0.75, this.sprite.height * 0.5);
-
-    this.controls = controls;
 
     this.weapon = new Weapon(scene, this, {
       dual: true, dualRadius: 25
@@ -94,9 +94,9 @@ class FireFly {
       enemy.x, enemy.y);
     this.shields.rotation = theta + Phaser.Math.TAU;
 
-    // TODO hitpoints substract
-
     this.shields.play('shields', true);
+    // play sfx
+    this.audio.playSound('shields', { random: true });
   }
 
   createShieldsSprite() {

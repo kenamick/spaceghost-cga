@@ -137,7 +137,7 @@ class BaseLevel extends BaseScene {
       defaultFrame: 'food-simple.png'
     });
 
-    this.player = new FireFly(this, new Controls(this), {
+    this.player = new FireFly(this, new Controls(this), this.audio, {
       x: this.cameras.main.centerX,
       y: this.cameras.main.centerY
     });

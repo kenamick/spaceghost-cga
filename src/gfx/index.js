@@ -52,7 +52,7 @@ class Gfx {
         }
       });
       // play sfx
-      this.audio.playSound('explosions');
+      this.audio.playSound('explosions', { random: true });
         // { delay: Phaser.Math.Between(0, 1) });
     });
 
@@ -67,7 +67,8 @@ class Gfx {
       }
       anim.on('animationcomplete', () => anim.destroy());
       anim.play('shields', true, 0);
-      // TODO play sfx
+      // play sfx
+      this.audio.playSound('shields', { random: true });
     });
   }
 
