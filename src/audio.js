@@ -12,10 +12,10 @@ const ASSETS = {
     files: ['tkp_menu_tap.ogg']
   },
   'music-menu': {
-    files: ['tkp_menu_bkg.ogg']
+    files: ['muzik_cutmywings.ogg']
   },
-  'music-game': {
-    files: ['tkp_game_bkg.ogg']
+  'music-game1': {
+    files: ['muzik_starwalker.ogg']
   },
   'ship-laser': {
     files: ['tkp_laser_1.ogg']
@@ -38,6 +38,8 @@ const ASSETS = {
     // http://www.html5gamedevs.com/topic/19711-seamless-audio-loops-in-phaser/
   }
 };
+
+let _currentMusic = null;
 
 class Audio {
 
@@ -66,10 +68,10 @@ class Audio {
       }
     });
 
-    this._soundsOn = false;// Globals.noSounds == false;
+    this._soundsOn = Globals.noSounds == false;
     this._musicOn = Globals.noMusic == false;
 
-    this._currentMusic = null;
+    // _currentMusic = null;
   }
 
   _canPlay(audio) {
@@ -117,14 +119,26 @@ class Audio {
     }
   }
 
+  isMusicPlaying(name) {
+    if (!this._musicOn) {
+      return;
+    }
+
+    if (name) {
+      return this.sounds[name][0].isPlaying;
+    } else {
+      return _currentMusic.isPlaying;
+    }
+  }
+
   playMusic(name, config) {
     if (!this._musicOn) {
       return;
     }
 
-    this._currentMusic = this.sounds[name][0];
+    _currentMusic = this.sounds[name][0];
     if (config && config.loop) {
-      this._currentMusic.play({ loop: config.loop });
+      _currentMusic.play({ loop: config.loop });
     }
   }
 
@@ -136,8 +150,8 @@ class Audio {
     if (name) {
       this.sounds[name][0].stop();
     } else {
-      this._currentMusic.stop();
-      this.scene.stopAll();
+      _currentMusic.stop();
+      this.scene.sound.stopAll();
     }
   }
 
@@ -147,7 +161,7 @@ class Audio {
       return;
     }
 
-    //this._currentMusic.volume = 0;
+    //_currentMusic.volume = 0;
 
     let duration = DEFAULT_FADE_INOUT
     let maxVol = 1
@@ -158,11 +172,11 @@ class Audio {
     }
 
     this.scene.tweens.add({
-      targets: this._currentMusic,
+      targets: _currentMusic,
       volume: maxVol,
       ease: 'Linear',
       duration: duration,
-      onComplete: cb
+      onComplete: () => cb && cb()
     });
   }
 
@@ -178,7 +192,7 @@ class Audio {
     }
 
     this.scene.tweens.add({
-      targets: this._currentMusic,
+      targets: _currentMusic,
       volume: 0,
       ease: 'Linear',
       duration: duration,

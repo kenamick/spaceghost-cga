@@ -1,16 +1,13 @@
-// howtoplay.js - 
+// credits.js - credits screen
 import BaseScene from './base-scene';
 import Globals from '../globals';
 import * as KPPL from '../shaders/pipeline';
-import Audio from '../audio';
-import Phaser from 'phaser';
 import Controls from '../controls';
-import { Pacman, PacmanStates } from '../entities/enemies';
 
-class HowToPlay extends BaseScene {
+class Credits extends BaseScene {
 
   constructor() {
-    super('HowToPlay');
+    super('Credits');
   }
 
   create() {
@@ -25,29 +22,39 @@ class HowToPlay extends BaseScene {
     const backg = this.add.tileSprite(0, 0, width * 2, height * 2, 'bkg-blue');
     backg.setDepth(0);
 
-    this.addTitle(50, 10, 'H O W   T O   P L A Y', 46, () => {
+    this.addTitle(50, 10, 'C R E D I T S', 46, () => {
       this.controls = new Controls(this, true);
 
       let xpos = 50, ypos = 200, offset = 30, fontSize = 18;
 
-      // TODO
-      this.addText(xpos, ypos, 'Use the  arrow keys  or  WAsD  to move.', fontSize);
+      this.addText(xpos, ypos, 'Game Design & Programming', fontSize);
       ypos += offset * 2;
-      this.addText(xpos, ypos, 
-        'Press  X  or  SPACE  to detonate a pacman explosion.', fontSize);
-      ypos += offset * 3;
-      this.addText(xpos, ypos, 'HINTS', fontSize);
-      ypos += offset * 2;
-      this.addText(xpos, ypos, 'Pacman\'s explosion destroys enemies. It can also damage your shields.', fontSize);
-      ypos += offset * 2;
-      this.addText(xpos, ypos, 'The Pacman grows bigger and bigger when eats food. Explosion range increases as well.', fontSize);
-      ypos += offset * 2;
-      this.addText(xpos, ypos, 'Your ship gets destroyed when its shields are depleted.', fontSize);
-      ypos += offset * 2;
-      this.addText(xpos, ypos, 'On some levels you\'ll shoot lasers instead of detonating Pacman.', fontSize);
+      this.addText(xpos + 25, ypos, 'Petar  Petrov', fontSize);
+      ypos += offset;
+      this.addText(xpos + 25, ypos, 'Carlos Braga', fontSize);
+      ypos += offset;
+      this.addText(xpos + 25, ypos, 'Alexey Vishnyakov', fontSize);
 
+      ypos += offset * 3;
+
+      this.addText(xpos, ypos, 'Graphics', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos + 25, ypos, 'Kenney\'s game assets  (kenney.nl)', fontSize);
+
+      ypos += offset * 3;
+
+      this.addText(xpos, ypos, 'Sound Effects', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos + 25, ypos, 'freesound.org', fontSize);
+
+      ypos += offset * 3;
+
+      this.addText(xpos, ypos, 'Music', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos + 25, ypos, 'Petar  Petrov  (soundcloud.com/pro-xex)', fontSize);
+     
       this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24);
-      
+
       this.controls = this.controls = new Controls(this, true);
     });
 
@@ -93,4 +100,4 @@ class HowToPlay extends BaseScene {
 
 }
 
-export { HowToPlay };
+export { Credits };

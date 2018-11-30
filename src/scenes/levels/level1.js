@@ -12,10 +12,6 @@ class Level1 extends BaseLevel {
   create() {
     super.create();
     this.setup();
-
-    // play music
-    //this.audio.playMusic('music-game', { loop: true });
-    //this.audio.setMusicVol('music-game', 0.5);
   }
 
   setup() {

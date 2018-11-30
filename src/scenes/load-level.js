@@ -14,12 +14,11 @@ class LoadLevel extends BaseScene {
 
   init(data) {
       // test
-      data = {
-        endgame: true,
-        name: 'EndGame',
-        next: 'MainMenu'
-      };
-
+      // data = {
+      //   endgame: true,
+      //   name: 'EndGame',
+      //   next: 'MainMenu'
+      // };
     if (data.next) {
       this.config = data;
       if (data.endgame) {
@@ -58,6 +57,8 @@ class LoadLevel extends BaseScene {
       }
     });
 
+    this.audio = new Audio(this);
+
     // always last
     super.create();
   }
@@ -66,13 +67,20 @@ class LoadLevel extends BaseScene {
     super.update(time, delta);
 
     if (this.controls && (this.controls.action1 || this.controls.action2)) {
-      this.cameras.main.fadeOut(1000);
-      this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-        if (this.config.next !== 'MainMenu') {
-          // load scene here, because any old refs were removed
-          this.scene.add(this.config.next, Scenes[this.config.next]);
-        }
-        this.scene.start(this.config.next);
+      this.audio.fadeOut(() => {
+        // stop all sfx
+        this.audio.stop();
+        // camera out
+        this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+          if (this.config.next !== 'MainMenu') {
+            // load scene here, because any old refs were removed
+            this.scene.add(this.config.next, Scenes[this.config.next]);
+            this.scene.start(this.config.next);
+          } else {
+            this.scene.start(this.config.next);
+          }
+        });
+        this.cameras.main.fadeOut(1000);
       });
     }
   }

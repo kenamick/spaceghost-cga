@@ -23,7 +23,7 @@ class MainMenu extends BaseScene {
   create() {
     KPPL.setPipeline('noise');
     super.enableShaders();
-    
+
     const { width, height } = Globals.game.config;
 
     // background
@@ -36,11 +36,15 @@ class MainMenu extends BaseScene {
       this.controls = new Controls(this, true);
     });
 
-    // sfx
-    this.audio = new Audio(this);
-    this.audio.setMusicVol('music-menu', 0);
-    this.audio.playMusic('music-menu', { loop: true });
-    this.audio.fadeIn(null, { maxVol: 0.9 });
+    if (!this.inited) {
+      // sfx
+      this.audio = new Audio(this);
+      this.audio.setMusicVol('music-menu', 0);
+      this.audio.playMusic('music-menu', { loop: true });
+      this.audio.fadeIn(null, { maxVol: 0.9 });
+
+      this.inited = true;
+    }
 
     // always last
     super.create();
@@ -170,7 +174,7 @@ class MainMenu extends BaseScene {
     this.audio.playSound('menu-select');
   }
 
-  spinCursor(cb) {
+  spinCursor(cb, stopMusic = false) {
     const { cursor } = this.menu;
     cursor.spinning = true;
     this.tweens.add({
@@ -178,7 +182,7 @@ class MainMenu extends BaseScene {
       rotation: 2 * Math.PI + Math.PI / 2,
       duration: 1500,
       ease: 'Power1',
-      onComplete: this.audio.fadeOut(cb)
+      onComplete: () => stopMusic ? this.audio.fadeOut(cb) : cb()
     });
 
     // play sfx
