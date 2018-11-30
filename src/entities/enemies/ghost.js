@@ -12,8 +12,8 @@ const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
   SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED * 0.95, drift: 0.09 },
-  MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.77, drift: -0.05 },
-  BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.67, drift: 0.02 }
+  MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.75, drift: -0.05 },
+  BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.65, drift: 0.02 }
 };
 
 const GhostStates = {
@@ -59,18 +59,18 @@ class Ghost {
   }
 
   bindEvents() {
-    this.sprite.on('hit-by-pacman', (pacman, size) => {
-      const { sprite } = this;
-      // kill if ghost smaller than pacman  
-      if (sprite.width + sprite.height <= size) {
-        // spawn meteor
-        this.scene.events.emit('spawn-meteor-from', MeteorTypes.BIG, this.sprite);
-        // kill ghost
-        this.setState(GhostStates.dead);
-        this.scene.events.emit('explosion', { x: sprite.x, y: sprite.y });
-        this.sprite.destroy();
-      }
-    });
+    // this.sprite.on('hit-by-pacman', (pacman, size) => {
+    //   const { sprite } = this;
+    //   // kill if ghost smaller than pacman  
+    //   if (sprite.width + sprite.height <= size) {
+    //     // spawn meteor
+    //     this.scene.events.emit('spawn-meteor-from', MeteorTypes.BIG, this.sprite);
+    //     // kill ghost
+    //     this.setState(GhostStates.dead);
+    //     this.scene.events.emit('explosion', { x: sprite.x, y: sprite.y });
+    //     this.sprite.destroy();
+    //   }
+    // });
 
     // this.sprite.on('hit-by-bullet', (bullet) => {
     //   // shields gfx
