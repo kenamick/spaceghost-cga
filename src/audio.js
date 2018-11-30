@@ -66,7 +66,7 @@ class Audio {
       }
     });
 
-    this._soundsOn = Globals.noSounds == false;
+    this._soundsOn = false;// Globals.noSounds == false;
     this._musicOn = Globals.noMusic == false;
 
     this._currentMusic = null;

@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 
 const MeteorTypes = {
-  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 10 },
-  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 25 },
+  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 7 },
+  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 20 },
   BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 50 }
 };
 
@@ -19,7 +19,7 @@ class Meteors {
 
     this.meteors = scene.physics.add.group({
       defaultKey: Globals.atlas2,
-      defaultFrame: 'meteor1.png'
+      defaultFrame: Globals.palette.meteor1
     });
 
     this.scene.events.on('spawn-meteor-from', 
@@ -39,9 +39,11 @@ class Meteors {
     this.spawn(type, x, y, vx, vy);
   }
 
-  spawn(type, x, y, vx = 1, vy = 1) {
+  spawn(type, x, y, vx = 1, vy = 1, frame = Globals.palette.meteor1) {
     const meteor = this.meteors.get();
     if (meteor) {
+      meteor.frameName = frame;
+      meteor.setFrame(frame);
       meteor.setOrigin(0.5);
       meteor.type = type;
       meteor.hp = type.hp;
@@ -60,44 +62,38 @@ class Meteors {
   }
 
   bindEvents(meteor) {
-    // meteor.on('hit-by-bullet', () => {
-    //   meteor.hp -= 1;
-    //   if (meteor.hp <= 0) {
-    //     this.meteors.killAndHide(meteor);
-    //     // spawn another?
-    //     if (meteor.type === MeteorTypes.BIG) {
-    //       this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, meteor.vx, meteor.vy);
-    //       this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
-    //     } else if (meteor.type === MeteorTypes.MEDIUM) {
-    //       this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, meteor.vy);
-    //       this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
-    //       this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, meteor.vy);
-    //       this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, -meteor.vy);
-    //     }
-    //   } else {
-    //     // hit explosions
-    //     this.scene.events.emit('explosion', {
-    //       x: meteor.x, y: meteor.y, scale: 0.2
-    //     });
-    //   }
-    // });
-    meteor.on('hit-by-explosion', () => {
-      // hit explosions
-      this.scene.events.emit('explosion', {
-        x: meteor.x, y: meteor.y, scale: 0.2
-      });
-      this.meteors.killAndHide(meteor);
-      // spawn another?
-      if (meteor.type === MeteorTypes.BIG) {
-        this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, meteor.vx, meteor.vy);
-        this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
-      } else if (meteor.type === MeteorTypes.MEDIUM) {
-        this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, meteor.vy);
-        this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, -meteor.vy);
-        this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, meteor.vy);
-        this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, -meteor.vy);
+    meteor.on('hit-by-bullet', () => {
+      meteor.hp -= 1;
+      if (meteor.hp <= 0) {
+        this.doExplode(meteor);
+      } else {
+        // hit explosions
+        const rx = Phaser.Math.Between(-4, 4);
+        const ry = Phaser.Math.Between(-4, 4);
+        this.scene.events.emit('explosion', {
+          x: meteor.x - rx, y: meteor.y - ry, scale: 0.2
+        });
       }
     });
+    meteor.on('hit-by-explosion', () => doExplode(meteor));
+  }
+
+  doExplode(meteor) {
+    // hit explosions
+    this.scene.events.emit('explosion', {
+      x: meteor.x, y: meteor.y, scale: 0.2
+    });
+    this.meteors.killAndHide(meteor);
+    // spawn another?
+    if (meteor.type === MeteorTypes.BIG) {
+      this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, -meteor.vx, -meteor.vy, meteor.frameName);
+    } else if (meteor.type === MeteorTypes.MEDIUM) {
+      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, -meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, -meteor.vy, meteor.frameName);
+    }
   }
 
   update(time, delta, ship) {
@@ -115,6 +111,8 @@ class Meteors {
 
     if (ship.active) {
       this.scene.physics.overlap(ship, children, (ship, meteor) => 
+        ship.emit('hit-by-meteor', meteor, Globals.damage.meteor));
+      this.scene.physics.overlap(ship, children, (ship, meteor) =>
         ship.emit('hit-by-meteor', meteor, Globals.damage.meteor));
     }
   }

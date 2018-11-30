@@ -35,7 +35,11 @@ const Globals = {
     ghost4: {
       body: 0xffb847,
       eyes: 0xff0000,
-    }
+    },
+    meteor1: 'meteor1.png',
+    meteor2: 'meteor2.png',
+    meteor3: 'meteor3.png',
+    meteor4: 'meteor4.png',
   },
   depths: {
     explosion: 10,

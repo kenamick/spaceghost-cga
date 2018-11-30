@@ -13,16 +13,20 @@ class LoadLevel extends BaseScene {
   }
 
   init(data) {
+      // test
+      data = {
+        endgame: true,
+        name: 'EndGame',
+        next: 'MainMenu'
+      };
+
     if (data.next) {
       this.config = data;
+      if (data.endgame) {
+        this.config.text = 'W E L L   D O N E'
+      }
     } else {
       this.config = { next: 'Level1', text: 'L E V E L  1' };
-      // test
-      // this.config = {
-      //   endgame: true,
-      //   name: 'EndGame',
-      //   next: 'MainMenu', text: 'C O N G R A T U L A T I O N S'
-      // };
     }
   }
 
@@ -42,7 +46,7 @@ class LoadLevel extends BaseScene {
     let titleX = cx - 190;
 
     if (this.config.endgame) {
-      titleX = cx - 450;
+      titleX = cx - 250;
     }
 
     this.addTitle(titleX, cy - 150, this.config.text, 48, () => {

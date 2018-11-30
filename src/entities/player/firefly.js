@@ -74,7 +74,7 @@ class FireFly {
       loop: true,
       callback: () => {
         this.props.shields = Math.min(this.props.shields + 0.09375, MAX_SHIELDS);
-        //this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
+        this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
         this.scene.events.emit('hud-ship-stats', this.props);
       }
     });
@@ -144,7 +144,7 @@ class FireFly {
     this.emitter = emitter;
   }
 
-  update(time, delta) {
+  update(time, delta, canShoot) {
     if (!this.sprite.active) {
       return;
     }
@@ -195,15 +195,19 @@ class FireFly {
       sprite.setAngularVelocity(0);
     }
 
-    // if (controls.action1 && this.props.energy > 4) {
-    //   if (weapon.fire(time)) {
-    //     this.props.energy = Math.max(this.props.energy - 4, 0);
-    //   }
-    // }
-    if (controls.action1) {
-      scene.events.emit('ignite-pacman');
+    if (canShoot) {
+      if (controls.action1 && this.props.energy > 4) {
+        if (weapon.fire(time)) {
+          this.props.energy = Math.max(this.props.energy - 4, 0);
+        }
+      }
+    } else {
+      if (controls.action1) {
+        scene.events.emit('ignite-pacman');
+      }
     }
-    if (controls.action2)  {
+
+    if (Globals.debug && controls.action2)  {
       scene.events.emit('level-won');
     }
 

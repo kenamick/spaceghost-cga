@@ -1,7 +1,6 @@
 // level3.js - game play
 import { BaseLevel } from './base-level';
 import Globals from '../../globals';
-import * as KPPL from '../../shaders/pipeline';
 import { Ghost, GhostTypes, MeteorTypes } from '../../entities';
 
 class Level3 extends BaseLevel {
@@ -16,13 +15,11 @@ class Level3 extends BaseLevel {
   }
 
   setup() {
-    this.thisScene = 'Level2';
+    this.thisScene = 'Level3';
     this.nextScene = {
       name: 'LoadLevel',
-      next: 'Level3', text: 'L E V E L  3'
+      next: 'Level4', text: 'L E V E L  4'
     };
-
-    const xpos = this.player.sprite.x - GhostTypes.MEDIUM.size * 0.5;
 
     this.enemies = [
       new Ghost(this, {

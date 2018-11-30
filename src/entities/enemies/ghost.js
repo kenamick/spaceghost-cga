@@ -11,7 +11,7 @@ const TRACK_STOP_COOLDOWN = 1250; // ms
 const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
-  SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED * 0.95, drift: 0.09 },
+  SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED * 0.90, drift: 0.09 },
   MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.75, drift: -0.05 },
   BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.65, drift: 0.02 }
 };
@@ -363,6 +363,8 @@ class Ghost {
           }
 
           this.scene.physics.moveTo(this.sprite, targetX, targetY, this.config.type.speed);
+          // this.scene.physics.accelerateTo(this.sprite, targetX, targetY, 
+          //   this.config.type.speed, this.config.type.speed*0.5, this.config.type.speed*0.5);
 
           // stop following player if it's too far
           // const dist = Math.Distance.Squared(

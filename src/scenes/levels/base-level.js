@@ -143,7 +143,10 @@ class BaseLevel extends BaseScene {
     });
     this.player.sprite.on('popFood', this.popFood, this);
 
-    this.hud = new HUD(this, { player: this.player });
+    this.hud = new HUD(this, { 
+      player: this.player,
+      showEnergy: this.canShoot
+    });
   }
 
   update(time, delta) {
@@ -208,9 +211,9 @@ class BaseLevel extends BaseScene {
     //   (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, this.pacman.config.size * 2));
 
     // --- player ---
-    this.player.update(time, delta);
-    // this.player.weapon.checkHits([...ghostSprites, this.pacman.sprite],
-    //   this.meteors.meteors);
+    this.player.update(time, delta, this.canShoot);
+    this.player.weapon.checkHits([...ghostSprites, this.pacman.sprite], 
+      this.meteors.meteors);
   }
 
   popFood(x, y) {
