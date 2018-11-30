@@ -9,7 +9,7 @@ import { Pacman, PacmanStates } from '../entities/enemies';
 
 const Menus = [
   { text: 'PLAY', scene: { name: 'LoadLevel', next: 'Level1', text: 'L E V E L  1' } },
-  { text: 'HOW TO PLAY', scene: { name: 'Howtoplay' } },
+  { text: 'HOW TO PLAY', scene: { name: 'HowToPlay' } },
   //{ text: 'HISCORES', scene: 'Hiscores' },
   { text: 'CREDITS', scene: { name: 'Credits' } }
 ];

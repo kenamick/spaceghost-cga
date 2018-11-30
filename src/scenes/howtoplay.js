@@ -1,61 +1,54 @@
-// interlude.js - loads all game assets
+// mainmenu.js - game menu
 import BaseScene from './base-scene';
 import Globals from '../globals';
-import Audio from '../audio';
-import Controls from '../controls';
 import * as KPPL from '../shaders/pipeline';
-import * as Scenes from './index';
+import Audio from '../audio';
+import Phaser from 'phaser';
+import Controls from '../controls';
+import { Pacman, PacmanStates } from '../entities/enemies';
 
-class LoadLevel extends BaseScene {
+class HowToPlay extends BaseScene {
 
   constructor() {
-    super('LoadLevel');
-  }
-
-  init(data) {
-      // test
-      data = {
-        endgame: true,
-        name: 'EndGame',
-        next: 'MainMenu'
-      };
-
-    if (data.next) {
-      this.config = data;
-      if (data.endgame) {
-        this.config.text = 'W E L L   D O N E'
-      }
-    } else {
-      this.config = { next: 'Level1', text: 'L E V E L  1' };
-    }
+    super('HowToPlay');
   }
 
   create() {
-    // pre-init
     KPPL.setPipeline('noise');
     super.enableShaders();
 
     const { width, height } = Globals.game.config;
+    const cx = width * 0.5;
+    const cy = height * 0.5;
 
     // background
     const backg = this.add.tileSprite(0, 0, width * 2, height * 2, 'bkg-blue');
     backg.setDepth(0);
 
-    const cx = width * 0.5;
-    const cy = height * 0.5;
-    let titleX = cx - 190;
+    this.addTitle(50, 10, 'H O W   T O   P L A Y', 46, () => {
+      this.controls = new Controls(this, true);
 
-    if (this.config.endgame) {
-      titleX = cx - 250;
-    }
+      let xpos = 50, ypos = 200, offset = 30, fontSize = 18;
 
-    this.addTitle(titleX, cy - 150, this.config.text, 48, () => {
+      // TODO
+      this.addText(xpos, ypos, 'Use the  arrow keys  or  WAsD  to move.', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos, ypos, 
+        'Press  X  or  SPACE  to detonate a pacman explosion.', fontSize);
+      ypos += offset * 3;
+      this.addText(xpos, ypos, 'HINTS', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos, ypos, 'Pacman\'s explosion destroys enemies. It can also damage your shields.', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos, ypos, 'The Pacman grows bigger and bigger when eats food. Explosion range increases as well.', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos, ypos, 'Your ship gets destroyed when its shields are depleted.', fontSize);
+      ypos += offset * 2;
+      this.addText(xpos, ypos, 'On some levels you\'ll shoot lasers instead of detonating Pacman.', fontSize);
+
       this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24);
+      
       this.controls = this.controls = new Controls(this, true);
-
-      if (this.config.endgame) {
-        this.addText(cx - 240, cy + 50, 'The galaxy is safe ...for now!', 20);
-      }
     });
 
     // always last
@@ -66,14 +59,7 @@ class LoadLevel extends BaseScene {
     super.update(time, delta);
 
     if (this.controls && (this.controls.action1 || this.controls.action2)) {
-      this.cameras.main.fadeOut(1000);
-      this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-        if (this.config.next !== 'MainMenu') {
-          // load scene here, because any old refs were removed
-          this.scene.add(this.config.next, Scenes[this.config.next]);
-        }
-        this.scene.start(this.config.next);
-      });
+      this.scene.start('MainMenu');
     }
   }
 
@@ -88,7 +74,7 @@ class LoadLevel extends BaseScene {
     this.tweens.add({
       targets: [bitmap],
       alpha: 1,
-      duration: 800,
+      duration: 500,
       ease: 'Easing.Bounce.Out',
       onComplete: cb
     });
@@ -107,4 +93,4 @@ class LoadLevel extends BaseScene {
 
 }
 
-export { LoadLevel };
+export { HowToPlay };
