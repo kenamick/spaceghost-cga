@@ -115,6 +115,10 @@ class Pacman {
     });
 
     this.sprite.on('explode', (ghosts, meteors, ship) => {
+      // clear explosion range line
+      if (this.rangeGraphics) {
+        this.rangeGraphics.clear();
+      }
       // big explosion
       this.scene.events.emit('explosion', {
         x: this.sprite.x, y: this.sprite.y, scaleSize: this._growthFactor
@@ -123,26 +127,13 @@ class Pacman {
       this.sprite.destroy();
       this.tween.stop();
       // destroy all enemies in proximity
-      const hitFn = (entity) => {
-        if (entity.active) {
-          const dist = Phaser.Math.Distance.Squared(this.sprite.x, this.sprite.y,
-            entity.x, entity.y);
-
-          // pacman explosion range
-          let range = this.config.size * 2 + this._growthFactor * 1.5;
-          // console.log('DIST', range);
-          range *= range;
-
-          if (dist < range) {
-          //if (dist > 1) {
-            entity.emit('hit-by-explosion', this.sprite, 
-              this.config.size + this._growthFactor);
-          }
-        }
+      const explodeFn = (entity) => {
+        entity.emit('hit-by-explosion',
+          this.sprite, this.config.size + this._growthFactor)
       };
-      ghosts.map(ghost => hitFn(ghost.sprite));
-      meteors.getChildren().map(meteor => hitFn(meteor));
-      hitFn(ship);
+      ghosts.map(ghost => this.hitCheck(ghost.sprite, explodeFn));
+      meteors.getChildren().map(meteor => this.hitCheck(meteor, explodeFn));
+      this.hitCheck(ship, explodeFn);
       // spawn another pacman
       this.scene.time.addEvent({
         delay: PACMAN_RASPAWN_TIME,
@@ -262,32 +253,61 @@ class Pacman {
     this.sprite.rotation = angle;
   }
 
-  update(time, delta, ship) {
+  hitCheck(entity, cb) {
+    if (entity.active) {
+      const dist = Phaser.Math.Distance.Squared(
+        this.sprite.x, this.sprite.y, entity.x, entity.y);
+
+      // pacman explosion range
+      let range = this.config.size * 2 + this._growthFactor * 1.5;
+      // console.log('DIST', range);
+      range *= range;
+
+      if (dist < range) {
+        cb(entity, this.sprite);
+      }
+    }
+  }
+
+  drawLine(from, to) {
+    if (!this.rangeGraphics) {
+      this.rangeGraphics = this.scene.add.graphics().setVisible(true);
+    }
+    const line = new Phaser.Geom.Line(from.x, from.y, to.x, to.y);
+    // this.rangeGraphics.clear();
+    this.rangeGraphics.lineStyle(4, 0xff00ff);
+    this.rangeGraphics.strokeLineShape(line);
+    this.rangeGraphics.setDepth(100);    
+  }
+
+  drawExplosionRange(entities) {
+    if (this.rangeGraphics) {
+      this.rangeGraphics.clear();
+    }
+    this.hitCheck(entities.ship, (entity, pacman) => this.drawLine(pacman, entity));
+    entities.ghosts.map(ghost => this.hitCheck(ghost, 
+      (entity, pacman) => this.drawLine(pacman, entity)));
+    entities.meteors.getChildren().map(meteor => this.hitCheck(meteor, 
+      (entity, pacman) => this.drawLine(pacman, entity)));
+  }
+
+  update(time, delta, entities) {
     if (!this.sprite.active) {
       return;
     }
 
+    if (entities) {
+      this.drawExplosionRange(entities);
+    }
+
     switch (this._state) {
       case PacmanStates.trackShip:
-        if (ship.active) {
-          this.facePos(ship.x, ship.y);
-          this.scene.physics.moveToObject(this.sprite, ship, this.config.speed);
+        if (entities.ship.active) {
+          this.facePos(entities.ship.x, entities.ship.y);
+          this.scene.physics.moveToObject(this.sprite, entities.ship, this.config.speed);
         }
       break;
     }
-
-    // if (this._state === PacmanStates.idle) {
-    //   const { x, y } = this.sprite;
-    //   if (x < WARP_OFFSET) {
-    //     this.scene.physics.moveToObject(this.sprite, -WARP_OFFSET,
-    //       y, this.config.speed);
-    //   // } else if (x > this.scene.game.config.width - WARP_OFFSET) {
-    //   //   this.scene.physics.moveToObject(this.sprite, this.scene.game.config.width + WARP_OFFSET,
-    //   //     y, this.config.speed);
-    //   } else {
-    //     this.sprite.body.setVelocity(0, 0);
-    //   }
-    // }
 
     if (!this.config.noWrap) {
       this.scene.physics.world.wrap(this.sprite, this.config.size);

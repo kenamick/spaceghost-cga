@@ -177,7 +177,6 @@ class FireFly {
           to: 0,
           duration: 800,
           onUpdate: (tween) => {
-            console.log(tween.getValue())
             this.audio.setSoundVol('ship-thrust', tween.getValue())
           },
           onComplete: () => {

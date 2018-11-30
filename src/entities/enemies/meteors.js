@@ -42,6 +42,7 @@ class Meteors {
   spawn(type, x, y, vx = 1, vy = 1) {
     const meteor = this.meteors.get();
     if (meteor) {
+      meteor.setOrigin(0.5);
       meteor.type = type;
       meteor.hp = type.hp;
       meteor.vx = vx;

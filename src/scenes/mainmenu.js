@@ -86,7 +86,7 @@ class MainMenu extends BaseScene {
 
   addPacman() {
     const size = Globals.game.config.height * 0.75;
-    this.pacman = new Pacman(this, {
+    this.pacman = new Pacman(this, this.audio, {
       x: Globals.game.config.width + 50, //+ size * 0.9,
       y: Globals.game.config.height * 0.5,
       size,

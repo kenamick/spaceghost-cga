@@ -40,6 +40,7 @@ class Ghost {
     this.sprite.setDepth(Globals.depths.ghost);
     this.sprite.x = config.x;
     this.sprite.y = config.y;
+    this.sprite.setOrigin(0.5);
 
     if (config.facing === 'left') {
       this.sprite.flipX = true;
