@@ -67,8 +67,8 @@ class FireFly {
     this.sprite.on('hit-by-pacman', bumpShields);
     this.sprite.on('hit-by-ghost', bumpShields);
     this.sprite.on('hit-by-meteor', bumpShields);
-    
-    // replenish shields & energy 
+
+    // replenish shields & energy
     this.replenishTimer = this.scene.time.addEvent({
       delay: 50,
       loop: true,
@@ -157,7 +157,7 @@ class FireFly {
 
       // pop food every 2 movement ticks
       if (this.dropFoodInterval >= 2) {
-        this.sprite.emit('popFood', this.sprite.x, this.sprite.y);
+        sprite.emit('popFood', sprite.x, sprite.y);
         this.dropFoodInterval = 0;
       }
       this.dropFoodInterval += 1;
