@@ -36,12 +36,13 @@ class Controls {
       action1: [
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O),
-        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
       ],
       action2: [
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y),
         game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P),
-        game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+        // game.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
       ]
     };
 
