@@ -84,7 +84,7 @@ class BaseLevel extends BaseScene {
       }
       // show game over text
       const bitmap = this.add.bitmapText(
-        Globals.game.config.width * 0.5 - 220,
+        Globals.game.config.width * 0.5 - 280,
         Globals.game.config.height * 0.5 - 16 * 8,
         Globals.bitmapFont, 'L E V E L   C L E A R E D', 32);
       bitmap.alpha = 0;
