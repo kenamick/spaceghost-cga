@@ -42,7 +42,7 @@ class MainMenu extends BaseScene {
       this.audio = new Audio(this);
       this.audio.setMusicVol('music-menu', 0);
       this.audio.playMusic('music-menu', { loop: true });
-      this.audio.fadeIn(null, { maxVol: 0.9 });
+      this.audio.fadeIn(null, { maxVol: 0.8 });
 
       this.inited = true;
     }

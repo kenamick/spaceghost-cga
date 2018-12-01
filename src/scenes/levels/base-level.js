@@ -41,7 +41,7 @@ class BaseLevel extends BaseScene {
     if (!this.musicTrack) {
       this.musicTrack = 'music-game1';
     }
-    this.audio.setMusicVol(this.musicTrack, 1);
+    this.audio.setMusicVol(this.musicTrack, 0.7);
     this.audio.playMusic(this.musicTrack, { loop: true });
     // this.audio.fadeIn(null, { maxVol: 0.9 });
 
