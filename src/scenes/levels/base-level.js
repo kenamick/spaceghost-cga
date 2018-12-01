@@ -66,6 +66,8 @@ class BaseLevel extends BaseScene {
             // cleanup scene events and objects
             this.events.off();
             this.scene.remove(this.thisScene);
+            // kill all sound
+            this.audio.stop();
             // go to menu
             this.scene.start('MainMenu');
           });

@@ -5,7 +5,7 @@
 [**Play now**](https://kenamick.itch.io/game-off-2018)
 
 Space Ghost CGA is a crazy mix of *Pacman*, *Asteroids* and *Bomberman* in space.
-Are you tough enough to handle this? We think you're not. :speak_no_evil:
+Are you tough enough to handle this? We think you're not. :smiling_imp:
 
 ## Supported Browsers
 
@@ -14,7 +14,7 @@ Are you tough enough to handle this? We think you're not. :speak_no_evil:
 
 ## Controls
 
-  * :see_no_evil: `Arrow Keys` or `WaSD` keys to move.
+  * :see_no_evil: `Arrow Keys` or `WAsD` keys to move.
   * :hear_no_evil: Press `X`, `O` or `SPACE` to detonate Pacman. (That's right. Pacman explodes in this game.)
 
 ## Development
