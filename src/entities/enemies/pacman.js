@@ -263,7 +263,7 @@ class Pacman {
         this.sprite.x, this.sprite.y, entity.x, entity.y);
 
       // pacman explosion range
-      let range = this.config.size * 2 + this._growthFactor * 2;
+      let range = this.config.size * 2 + this._growthFactor * 2.2;
       // console.log('DIST', range);
       range *= range;
 
