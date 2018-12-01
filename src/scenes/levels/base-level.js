@@ -38,8 +38,11 @@ class BaseLevel extends BaseScene {
     this.meteors = new Meteors(this, this.audio);
 
     // play music
-    this.audio.setMusicVol('music-game1', 1);
-    this.audio.playMusic('music-game1', { loop: true });
+    if (!this.musicTrack) {
+      this.musicTrack = 'music-game1';
+    }
+    this.audio.setMusicVol(this.musicTrack, 1);
+    this.audio.playMusic(this.musicTrack, { loop: true });
     // this.audio.fadeIn(null, { maxVol: 0.9 });
 
     // always last

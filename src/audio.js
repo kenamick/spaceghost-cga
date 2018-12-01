@@ -17,6 +17,9 @@ const ASSETS = {
   'music-game1': {
     files: ['muzik_starwalker.ogg']
   },
+  'music-game2': {
+    files: ['muzik_inspace.ogg']
+  },
   'ship-laser': {
     files: ['tkp_laser_1.ogg']
   },

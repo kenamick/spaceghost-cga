@@ -11,6 +11,7 @@ class Level4 extends BaseLevel {
 
   create() {
     this.canShoot = true;
+    this.musicTrack = 'music-game2';
     super.create();
     this.setup();
   }
