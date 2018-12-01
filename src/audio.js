@@ -92,21 +92,30 @@ class Audio {
 
     if (config) {
       if (config.modal) {
-        let snd = this.sounds[name][0];
-        if (!snd.isPlaying) {
-          this.sounds[name][0].play(config);
+
+        let idx = 0;
+        if (config.idx) {
+          idx = config.idx;
+        } else if (config.random) {
+          idx = Math.Between(0, this.sounds[name].length - 1);
         }
+
+        let snd = this.sounds[name][idx];
+        if (!snd.isPlaying) {
+          this.sounds[name][idx].play(config);
+        }
+
         return;
+
       } else if (config.idx) {
         this.scene.sound.play(`${name}${config.idx}`, config);
       } else if (config.random) {
         const idx = Math.Between(1, this.sounds[name].length);
         this.scene.sound.play(`${name}${idx}`, config);
       }
+    } else {
+      this.scene.sound.play(`${name}1`, config);
     }
-
-    this.scene.sound.play(`${name}1`, config);
-    // this.sounds[name][0].play();
   }
 
   setSoundVol(name, vol) {

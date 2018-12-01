@@ -35,7 +35,7 @@ class BaseLevel extends BaseScene {
     this.addPlayerShip();
     this.bindEvents();
 
-    this.meteors = new Meteors(this);
+    this.meteors = new Meteors(this, this.audio);
 
     // play music
     this.audio.setMusicVol('music-game1', 1);

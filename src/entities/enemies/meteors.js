@@ -10,8 +10,9 @@ const MeteorTypes = {
 
 class Meteors {
 
-  constructor(scene, config) {
+  constructor(scene, audio, config) {
     this.scene = scene;
+    this.audio = audio;
 
     this.config = {
       ...config
@@ -71,8 +72,10 @@ class Meteors {
         const rx = Phaser.Math.Between(-4, 4);
         const ry = Phaser.Math.Between(-4, 4);
         this.scene.events.emit('explosion', {
-          x: meteor.x - rx, y: meteor.y - ry, scale: 0.2
+          x: meteor.x - rx, y: meteor.y - ry, scale: 0.2, noSfx: true
         });
+        // play sfx
+        this.audio.playSound('explosions', { modal: true, random: true });
       }
     });
     meteor.on('hit-by-explosion', () => this.doExplode(meteor));
