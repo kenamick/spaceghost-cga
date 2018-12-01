@@ -10,6 +10,7 @@ class Level5 extends BaseLevel {
   }
 
   create() {
+    this.musicTrack = 'music-game2';
     super.create();
     this.setup();
   }
