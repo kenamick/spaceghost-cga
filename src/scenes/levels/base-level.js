@@ -52,7 +52,6 @@ class BaseLevel extends BaseScene {
   bindEvents() {
     this.events.on('gameover', () => {
       // show game over text
-      this.player.stopSfx();
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 180,
         Globals.game.config.height * 0.5 - 16 * 8,
@@ -64,6 +63,8 @@ class BaseLevel extends BaseScene {
         duration: 1500,
         ease: 'Easing.Bounce.Out',
         onComplete: () => {
+          // fix player ship sounds bug
+          this.player.stopSfx();
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
@@ -83,7 +84,6 @@ class BaseLevel extends BaseScene {
       if (this.gameover) {
         return;
       }
-      this.player.stopSfx();
       // show game over text
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 280,
@@ -99,6 +99,8 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
+            // fix player ship sounds bug
+            this.player.stopSfx();
             // cleanup scene events and objects
             this.events.off();
             this.scene.remove(this.thisScene);
