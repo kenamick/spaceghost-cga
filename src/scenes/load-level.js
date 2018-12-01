@@ -49,7 +49,7 @@ class LoadLevel extends BaseScene {
     }
 
     this.addTitle(titleX, cy - 150, this.config.text, 48, () => {
-      this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24);
+      this.addText(cx - 330, height - 150, 'Press  SPACE  key  to  continue ...', 24);
       this.controls = this.controls = new Controls(this, true);
 
       if (this.config.endgame) {

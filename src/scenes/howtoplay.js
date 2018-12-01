@@ -40,13 +40,13 @@ class HowToPlay extends BaseScene {
       ypos += offset * 2;
       this.addText(xpos, ypos, 'Pacman\'s explosion destroys enemies. It can also damage your shields.', fontSize);
       ypos += offset * 2;
-      this.addText(xpos, ypos, 'The Pacman grows bigger and bigger when eats food. Explosion range increases as well.', fontSize);
+      this.addText(xpos, ypos, 'The Pacman grows bigger as it eats food. Explosion range increases as well.', fontSize);
       ypos += offset * 2;
-      this.addText(xpos, ypos, 'Your ship gets destroyed when its shields are depleted.', fontSize);
+      this.addText(xpos, ypos, 'Your ship gets destroyed when its shields get depleted.', fontSize);
       ypos += offset * 2;
       this.addText(xpos, ypos, 'On some levels you\'ll shoot lasers instead of detonating Pacman.', fontSize);
 
-      this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24);
+      this.addText(cx - 330, height - 150, 'Press  SPACE  key  to  continue ...', 24);
       
       this.controls = this.controls = new Controls(this, true);
     });

@@ -6,6 +6,7 @@ import Audio from '../audio';
 import Phaser from 'phaser';
 import Controls from '../controls';
 import { Pacman, PacmanStates } from '../entities/enemies';
+import pkg from '../../package.json';
 
 const Menus = [
   { text: 'PLAY', scene: { name: 'LoadLevel', next: 'Level1', text: 'L E V E L  1' } },
@@ -45,6 +46,9 @@ class MainMenu extends BaseScene {
 
       this.inited = true;
     }
+
+    this.addText(this.game.config.width - 35, 
+      this.game.config.height - 20, pkg.version, 10);
 
     // always last
     super.create();

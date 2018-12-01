@@ -53,7 +53,7 @@ class Credits extends BaseScene {
       ypos += offset * 2;
       this.addText(xpos + 25, ypos, 'Petar  Petrov  (soundcloud.com/pro-xex)', fontSize);
      
-      this.addText(cx - 330, height - 150, 'Press  attack  key  to  continue ...', 24);
+      this.addText(cx - 330, height - 150, 'Press  SPACE  key  to  continue ...', 24);
 
       this.controls = this.controls = new Controls(this, true);
     });
