@@ -79,10 +79,14 @@ class Meteors {
   }
 
   doExplode(meteor) {
-    // hit explosions
-    this.scene.events.emit('explosion', {
-      x: meteor.x, y: meteor.y, scale: 0.2
+    // shake screen
+    if (meteor.type === MeteorTypes.BIG) {
+      this.scene.cameras.main.shake(500 * meteor.type.size);
+    }
+    this.scene.events.emit('explosion', { 
+      x: meteor.x, y: meteor.y, scale: meteor.type.size 
     });
+    // destroy sprite
     this.meteors.killAndHide(meteor);
     // spawn another?
     if (meteor.type === MeteorTypes.BIG) {

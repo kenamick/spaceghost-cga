@@ -124,7 +124,7 @@ class Pacman {
       this.scene.events.emit('explosion', {
         x: this.sprite.x, y: this.sprite.y, scaleSize: this._growthFactor
       });
-      // shke screen
+      // shake screen
       this.scene.cameras.main.shake(500 + this._growthFactor);
       // kill pacman sprite
       this.setState(PacmanStates.dead);
