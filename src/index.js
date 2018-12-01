@@ -29,7 +29,7 @@ window.onload = function () {
     type: Phaser.WEBGL,
     width: 1920,
     height: 1080,
-    antialias: false,
+    // antialias: false,
     physics: {
       default: 'arcade',
       arcade: {
