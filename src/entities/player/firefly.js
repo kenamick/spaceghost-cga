@@ -144,6 +144,10 @@ class FireFly {
     this.emitter = emitter;
   }
 
+  stopSfx() {
+    this.audio.stop('ship-thrust');
+  }
+
   update(time, delta, canShoot) {
     if (!this.sprite.active) {
       return;

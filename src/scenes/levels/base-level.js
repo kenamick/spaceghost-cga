@@ -52,6 +52,7 @@ class BaseLevel extends BaseScene {
   bindEvents() {
     this.events.on('gameover', () => {
       // show game over text
+      this.player.stopSfx();
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 180,
         Globals.game.config.height * 0.5 - 16 * 8,
@@ -82,6 +83,7 @@ class BaseLevel extends BaseScene {
       if (this.gameover) {
         return;
       }
+      this.player.stopSfx();
       // show game over text
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 280,
