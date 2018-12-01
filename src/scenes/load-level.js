@@ -66,7 +66,9 @@ class LoadLevel extends BaseScene {
   update(time, delta) {
     super.update(time, delta);
 
-    if (this.controls && (this.controls.action1 || this.controls.action2)) {
+    if (!this.fading && this.controls && (this.controls.action1 || this.controls.action2)) {
+      this.fading = true;
+
       this.audio.fadeOut(() => {
         // stop all sfx
         this.audio.stop();
@@ -81,7 +83,7 @@ class LoadLevel extends BaseScene {
           }
         });
         this.cameras.main.fadeOut(1000);
-      });
+      }, 500);
     }
   }
 
