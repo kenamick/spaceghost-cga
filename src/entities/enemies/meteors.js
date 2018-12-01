@@ -75,7 +75,7 @@ class Meteors {
         });
       }
     });
-    meteor.on('hit-by-explosion', () => doExplode(meteor));
+    meteor.on('hit-by-explosion', () => this.doExplode(meteor));
   }
 
   doExplode(meteor) {

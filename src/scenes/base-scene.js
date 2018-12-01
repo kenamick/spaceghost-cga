@@ -19,7 +19,7 @@ class BaseScene extends Phaser.Scene {
   }
 
   showFps() {
-    if (Globals.debug || Globals.showFps) {
+    if ((Globals.debug && !(false === Globals.showFPS)) || Globals.showFPS === true) {
       this.fps = {
         count: 0,
         lastUpdateTime: 0,
