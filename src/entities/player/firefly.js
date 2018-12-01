@@ -74,7 +74,7 @@ class FireFly {
       loop: true,
       callback: () => {
         this.props.shields = Math.min(this.props.shields + 0.09375, MAX_SHIELDS);
-        this.props.energy = Math.min(this.props.energy + 0.375, MAX_ENERGY);
+        this.props.energy = Math.min(this.props.energy + 0.4, MAX_ENERGY);
         this.scene.events.emit('hud-ship-stats', this.props);
       }
     });
