@@ -168,7 +168,7 @@ class Audio {
 
     if (config) {
       duration = config.duration || duration;
-      maxVol = config.maxVol || maxVol
+      maxVol = config.maxVol || maxVol;
     }
 
     this.scene.tweens.add({

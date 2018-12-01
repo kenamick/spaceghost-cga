@@ -184,15 +184,17 @@ class BaseLevel extends BaseScene {
 
     this.physics.overlap(this.pacman.sprite, this.foods, (pacmanSprite, food) => {
       if (this.foods.countActive()) {
-        this.foods.killAndHide(food);
+        if (food.active) {
+          this.foods.killAndHide(food);
 
-        // trigger pacman growth
-        pacmanSprite.emit('eatFood');
+          // trigger pacman growth
+          pacmanSprite.emit('eatFood');
 
-        if (this.foods.countActive()) {
-          pacmanSprite.emit('setState', PacmanStates.trackFood);
-        } else {
-          pacmanSprite.emit('setState', PacmanStates.trackShip);
+          if (this.foods.countActive()) {
+            pacmanSprite.emit('setState', PacmanStates.trackFood);
+          } else {
+            pacmanSprite.emit('setState', PacmanStates.trackShip);
+          }
         }
       }
     });
