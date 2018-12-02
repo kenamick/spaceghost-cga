@@ -4,8 +4,8 @@ import Globals from '../../globals';
 
 const MeteorTypes = {
   SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 7 },
-  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 20 },
-  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 50 }
+  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 15 },
+  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 30 }
 };
 
 class Meteors {

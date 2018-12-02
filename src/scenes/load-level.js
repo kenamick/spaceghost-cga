@@ -66,7 +66,6 @@ class LoadLevel extends BaseScene {
   update(time, delta) {
     super.update(time, delta);
 
-    console.log('FADING', this.fading)
     if (this.controls && (this.controls.action1 || this.controls.action2)) {
       if (!this.fading) {
         this.audio.fadeOut(() => {
