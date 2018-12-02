@@ -9,8 +9,11 @@ class HUD {
     this.config = config;
 
     this.shieldsBar = this.scene.add.graphics();
+    this.shieldsBar.setDepth(100);
     this.energyBar = this.scene.add.graphics();
+    this.energyBar.setDepth(100);
     this.timerBar = this.scene.add.graphics();
+    this.timerBar.setDepth(100);
 
     scene.events.on('hud-ship-stats', (props) => this.repaint(props));
 

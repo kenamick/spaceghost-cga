@@ -162,7 +162,7 @@ class Audio {
     if (name) {
       this.sounds[name][0].stop();
     } else {
-      _currentMusic.stop();
+      _currentMusic && _currentMusic.stop();
       this.scene.sound.stopAll();
     }
   }
@@ -193,7 +193,7 @@ class Audio {
   }
 
   fadeOut(cb, config) {
-    if (!this._musicOn) {
+    if (!this._musicOn || !_currentMusic) {
       cb && cb();
       return;
     }
