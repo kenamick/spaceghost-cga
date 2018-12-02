@@ -295,6 +295,10 @@ class Pacman {
       (entity, pacman) => this.drawLine(pacman, entity)));
   }
 
+  stopSfx() {
+    this.audio.stop('pacman-eats');
+  }
+
   update(time, delta, entities) {
     if (!this.sprite.active) {
       return;

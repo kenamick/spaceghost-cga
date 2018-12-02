@@ -63,8 +63,9 @@ class BaseLevel extends BaseScene {
         duration: 1500,
         ease: 'Easing.Bounce.Out',
         onComplete: () => {
-          // fix player ship sounds bug
+          // fix player ship and pacman sounds bug
           this.player.stopSfx();
+          this.pacman.stopSfx();
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
@@ -84,6 +85,9 @@ class BaseLevel extends BaseScene {
       if (this.gameover) {
         return;
       }
+      // fix pacman sounds bug
+      this.pacman.setState(PacmanStates.dead);
+
       // show game over text
       const bitmap = this.add.bitmapText(
         Globals.game.config.width * 0.5 - 280,
@@ -99,8 +103,9 @@ class BaseLevel extends BaseScene {
           // fade out & switch to menu
           this.cameras.main.fadeOut(3000);
           this.cameras.main.once('camerafadeoutcomplete', (camera) => {
-            // fix player ship sounds bug
+            // fix player ship and pacman sounds bug
             this.player.stopSfx();
+            this.pacman.stopSfx();
             // cleanup scene events and objects
             this.events.off();
             this.scene.remove(this.thisScene);
@@ -153,7 +158,7 @@ class BaseLevel extends BaseScene {
 
     this.player = new FireFly(this, new Controls(this), this.audio, {
       x: this.cameras.main.centerX,
-      y: this.cameras.main.centerY
+      y: this.playerY || this.cameras.main.centerY
     });
     this.player.sprite.on('popFood', this.popFood, this);
 

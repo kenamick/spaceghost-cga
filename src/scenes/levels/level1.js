@@ -1,7 +1,7 @@
 // level1.js - game play
 import { BaseLevel } from './base-level';
 import Globals from '../../globals';
-import { Ghost, GhostTypes } from '../../entities';
+import { Ghost, GhostTypes, GhostStates } from '../../entities';
 
 class Level1 extends BaseLevel {
 
@@ -10,6 +10,7 @@ class Level1 extends BaseLevel {
   }
 
   create() {
+    this.playerY = this.cameras.main.centerY + 200;
     super.create();
     this.setup();
   }
@@ -27,6 +28,7 @@ class Level1 extends BaseLevel {
         y: 100,
         type: GhostTypes.BIG,
         palette: Globals.palette.ghost1,
+        startState: GhostStates.patrol
       })
     ];
 
