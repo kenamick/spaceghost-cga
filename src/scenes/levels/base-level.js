@@ -227,6 +227,10 @@ class BaseLevel extends BaseScene {
       this.levelWon = true;
       this.events.emit('level-won');
     }
+    // player can shoot the asteroids once all ghosts are dead
+    if (ghostSprites.length === 0) {
+      this.canShoot = true;
+    }
 
     // this.physics.overlap(this.pacman.sprite, ghostSprites,
     //   (sprite, ghost) => ghost.emit('hit-by-pacman', sprite, this.pacman.config.size * 2));

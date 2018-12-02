@@ -56,6 +56,10 @@ class LoadLevel extends BaseScene {
         this.addText(cx - 240, cy + 50, 'The galaxy is safe ...for now!', 20);
       } else if (this.config.next === 'Level3') {
         this.addText(cx - 430, cy + 50, 'Explosion time over! Shoot all the asteroids.', 20);
+      } else if (this.config.next === 'Level4') {
+        this.addText(cx - 370, cy + 50, 'Once the ghosts are dead, you can shoot.', 20);
+      } else if (this.config.next === 'Level5') {
+        this.addText(cx - 450, cy + 50, 'And again, once the ghosts are dead, you can shoot.', 20);
       }
     });
 
