@@ -23,13 +23,13 @@ class Level2 extends BaseLevel {
 
     this.enemies = [
       new Ghost(this, {
-        x: this.player.sprite.x - 50,
-        y: 100,
+        x: this.player.sprite.x - 350,
+        y: 50,
         type: GhostTypes.MEDIUM,
         palette: Globals.palette.ghost1,
       }),
       new Ghost(this, {
-        x: this.player.sprite.x + 50,
+        x: this.player.sprite.x + 350,
         y: Globals.game.config.height - 100,
         type: GhostTypes.MEDIUM,
         palette: Globals.palette.ghost3,

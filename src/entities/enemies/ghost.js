@@ -11,9 +11,9 @@ const TRACK_STOP_COOLDOWN = 1250; // ms
 const HIT_STOP_COOLDOWN = 1200;
 
 const GhostTypes = {
-  SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED * 0.85, drift: 0.09 },
-  MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.7, drift: -0.05 },
-  BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.6, drift: 0.02 }
+  SMALL: { animSpeed: 400, size: 50, speed: FireFly.MAX_SPEED * 0.8, drift: 0.09 },
+  MEDIUM: { animSpeed: 650, size: 75, speed: FireFly.MAX_SPEED * 0.65, drift: -0.05 },
+  BIG: { animSpeed: 750, size: 100, speed: FireFly.MAX_SPEED * 0.55, drift: 0.02 }
 };
 
 const GhostStates = {

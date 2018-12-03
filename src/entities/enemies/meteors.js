@@ -3,9 +3,9 @@ import Phaser from 'phaser';
 import Globals from '../../globals';
 
 const MeteorTypes = {
-  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 7 },
-  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 15 },
-  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 30 }
+  SMALL: { rotSpeed: 1.6, size: 0.2, speedx: 100, speedy: 100, hp: 5 },
+  MEDIUM: { rotSpeed: 0.8, size: 0.5, speedx: 60, speedy: 60, hp: 18 },
+  BIG: { rotSpeed: 0.2, size: 1, speedx: 40, speedy: 40, hp: 38 }
 };
 
 class Meteors {
@@ -93,13 +93,21 @@ class Meteors {
     this.meteors.killAndHide(meteor);
     // spawn another?
     if (meteor.type === MeteorTypes.BIG) {
-      this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, meteor.vx, meteor.vy, meteor.frameName);
-      this.spawn(MeteorTypes.MEDIUM, meteor.x, meteor.y, -meteor.vx, -meteor.vy, meteor.frameName);
+      const offset = 15;
+      this.spawn(MeteorTypes.MEDIUM, meteor.x + offset, meteor.y + offset, 
+        meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.MEDIUM, meteor.x - offset, meteor.y - offset, 
+        -meteor.vx, -meteor.vy, meteor.frameName);
     } else if (meteor.type === MeteorTypes.MEDIUM) {
-      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, meteor.vy, meteor.frameName);
-      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, -meteor.vy, meteor.frameName);
-      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, -meteor.vx, meteor.vy, meteor.frameName);
-      this.spawn(MeteorTypes.SMALL, meteor.x, meteor.y, meteor.vx, -meteor.vy, meteor.frameName);
+      const offset = 7;
+      this.spawn(MeteorTypes.SMALL, meteor.x + offset, meteor.y + offset, 
+        meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x - offset, meteor.y - offset, 
+        -meteor.vx, -meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x - offset, meteor.y + offset, 
+        -meteor.vx, meteor.vy, meteor.frameName);
+      this.spawn(MeteorTypes.SMALL, meteor.x + offset, meteor.y - offset, 
+        meteor.vx, -meteor.vy, meteor.frameName);
     }
   }
 

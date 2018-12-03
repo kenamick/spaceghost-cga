@@ -5,7 +5,7 @@ import Globals from '../../globals';
 const DEFAULT_SIZE = 50; // px
 const DEFAULT_SPEED = 120; // px
 const DEFAULT_ANIM_SPEED = 200; // ms
-const GROWTH_FACTOR = 0.3;
+const GROWTH_FACTOR = 0.35;
 // const GROWTH_FACTOR = 0.001;
 const WARP_OFFSET = 350; // min px, before warping past screen edge
 const HIT_STOP_COOLDOWN = 1500;
@@ -263,7 +263,7 @@ class Pacman {
         this.sprite.x, this.sprite.y, entity.x, entity.y);
 
       // pacman explosion range
-      let range = this.config.size * 2 + this._growthFactor * 2.3;
+      let range = (this.config.size + this._growthFactor) * 2.45;
       // console.log('DIST', range);
       range *= range;
 

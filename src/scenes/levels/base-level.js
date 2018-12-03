@@ -97,7 +97,7 @@ class BaseLevel extends BaseScene {
       this.tweens.add({
         targets: [bitmap],
         alpha: 1,
-        duration: 3000,
+        duration: 1500,
         ease: 'Easing.Bounce.Out',
         onComplete: () => {
           // fade out & switch to menu
@@ -126,7 +126,7 @@ class BaseLevel extends BaseScene {
     this.events.on('spawn-pacman', () => {
       this.pacman = new Pacman(this, this.audio, {
         x: this.player.sprite.x,
-        y: this.player.sprite.y + 100 // Globals.game.config.height - 50
+        y: this.player.sprite.y + 130 // Globals.game.config.height - 50
       });
     });
 
