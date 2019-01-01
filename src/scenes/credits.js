@@ -16,7 +16,6 @@ class Credits extends BaseScene {
 
     const { width, height } = Globals.game.config;
     const cx = width * 0.5;
-    const cy = height * 0.5;
 
     // background
     const backg = this.add.tileSprite(0, 0, width * 2, height * 2, 'bkg-blue');
@@ -51,7 +50,7 @@ class Credits extends BaseScene {
 
       this.addText(xpos, ypos, 'Music', fontSize);
       ypos += offset * 2;
-      this.addText(xpos + 25, ypos, 'Petar  Petrov  (soundcloud.com/pro-xex)', fontSize);
+      this.addText(xpos + 25, ypos, 'Petar  Petrov', fontSize);
      
       this.addText(cx - 330, height - 150, 'Press  SPACE  key  to  continue ...', 24);
 

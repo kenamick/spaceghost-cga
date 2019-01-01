@@ -1,4 +1,4 @@
-// put all available game states here
+// put all available game scenes here
 export * from './preloader';
 export * from './mainmenu';
 export * from './load-level';

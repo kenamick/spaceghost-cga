@@ -230,6 +230,7 @@ class BaseLevel extends BaseScene {
     // player can shoot the asteroids once all ghosts are dead
     if (ghostSprites.length === 0) {
       this.canShoot = true;
+      this.hud.showEnergy = true;
     }
 
     // this.physics.overlap(this.pacman.sprite, ghostSprites,

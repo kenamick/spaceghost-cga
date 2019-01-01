@@ -1,4 +1,4 @@
-// howtoplay.js - 
+// howtoplay.js - controls & gameplay info
 import BaseScene from './base-scene';
 import Globals from '../globals';
 import * as KPPL from '../shaders/pipeline';

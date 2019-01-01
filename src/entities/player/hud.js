@@ -20,6 +20,10 @@ class HUD {
     this.repaint(config.player.props);
   }
 
+  set showEnergy(value) {
+    this.config.showEnergy = value;
+  }
+
   repaint(props) {
     const { timerBar, energyBar, shieldsBar } = this;
 
